@@ -16,19 +16,29 @@ const Login = () => {
 
   const loginUser = async () => {
     try {
-      const response = await axios.post(`${url}/login`, {
-        userId,
-        password,
-      });
+      const response = await axios.post(
+        `${url}/login`,
+        {
+          userId,
+          password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
       console.log("response of login", response);
       Dispatch(setLoginToggle(true));
       setPassword("");
       setUserId("");
+
+      const cookies = document.cookie;
+      console.log("All cookies:", cookies); // This will log all cookies
+
+      // You can potentially search for the "Token" cookie here
     } catch (error) {
       console.log("error of login response", error);
     }
   };
-
   const productApi = async () => {
     try {
       const response = await axios.get(`${url}/product`, {
