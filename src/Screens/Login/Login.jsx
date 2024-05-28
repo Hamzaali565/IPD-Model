@@ -1,14 +1,18 @@
 import React, { useState } from "react";
-import LoginInput from "../../Components/LofginInput/LoginInput";
+import LoginInput from "../../Components/LoginInput/LoginInput";
 import "./Login.css";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SimpleButton from "../../Components/Button/SimpleButton";
+import { setLoginToggle } from "../../Store/action";
 const Login = () => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
 
   const url = useSelector((state) => state.url);
+  //   const check = useSelector((state) => state.toggle);
+
+  const Dispatch = useDispatch();
 
   const loginUser = async () => {
     try {
@@ -17,6 +21,7 @@ const Login = () => {
         password,
       });
       console.log("response of login", response);
+      Dispatch(setLoginToggle(true));
       setPassword("");
       setUserId("");
     } catch (error) {
@@ -24,6 +29,16 @@ const Login = () => {
     }
   };
 
+  const productApi = async () => {
+    try {
+      const response = await axios.get(`${url}/product`, {
+        withCredentials: true,
+      });
+      console.log("response of product api", response);
+    } catch (error) {
+      console.log("error of product api", error);
+    }
+  };
   return (
     <div className="h-screen grid place-items-center sm: same">
       <div className="grid gap-y-8 w-full  max-w-md mx-auto p-2 bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg rounded-3xl">
