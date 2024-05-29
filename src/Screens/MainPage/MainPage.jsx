@@ -1,8 +1,28 @@
 import React, { useState } from "react";
 import Sidebar from "../../Components/Sidebar/Sidebar";
+import SidebarItems from "../../Components/SidebarItems/SidebarItems";
+import SimpleButton from "../../Components/Button/SimpleButton";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { setLoginToggle } from "../../Store/action";
 
 const MainPage = () => {
   const [toggle, setToggle] = useState(false);
+  const Dispatch = useDispatch();
+  const url = useSelector((state) => state.url);
+  const logout = async () => {
+    try {
+      let response = await axios.post(
+        `${url}/logout`,
+        {},
+        { withCredentials: true }
+      );
+      Dispatch(setLoginToggle(false));
+      // console.log("resp", response);
+    } catch (error) {
+      // console.log(error);
+    }
+  };
 
   return (
     <div className="grid grid-rows-[3rem,1fr] h-screen overflow-hidden">
@@ -24,8 +44,25 @@ const MainPage = () => {
           toggle ? "w-32" : "w-0 overflow-hidden"
         }`}
       >
-        <Sidebar />
-        <Sidebar />
+        <Sidebar buttonTitle={"IPD DATA"}>
+          <SidebarItems title={"Master"} />
+          <SidebarItems title={"Transaction"} />
+          <SidebarItems title={"Patient"} />
+          <SidebarItems title={"Welfare"} />
+          <SidebarItems title={"Direct Services"} />
+          <SidebarItems title={"Reports"} />
+        </Sidebar>
+        <Sidebar buttonTitle={"IPD DATA"}>
+          <SidebarItems title={"Master"} />
+          <SidebarItems title={"Transaction"} />
+          <SidebarItems title={"Patient"} />
+          <SidebarItems title={"Welfare"} />
+          <SidebarItems title={"Direct Services"} />
+          <SidebarItems title={"Reports"} />
+        </Sidebar>
+        <div className="bottom-3 absolute flex ml-5">
+          <SimpleButton title={"Logout"} onClick={logout} />
+        </div>
       </div>
 
       {/* Main Content */}

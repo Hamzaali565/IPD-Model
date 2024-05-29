@@ -79,7 +79,7 @@ const Login = () => {
           />
         </div>
         <div className="justify-self-center">
-          <SimpleButton onClick={loginUser} />
+          <SimpleButton title={"Login"} onClick={loginUser} />
         </div>
         <div className="justify-self-center grid text-wrap">
           <p className="mt-20">
