@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import SidebarItems from "../../Components/SidebarItems/SidebarItems";
 import SimpleButton from "../../Components/Button/SimpleButton";
+import "./Main.css";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setLoginToggle } from "../../Store/action";
@@ -39,12 +40,13 @@ const MainPage = () => {
       </div>
 
       {/* Sidebar */}
+
       <div
-        className={`fixed top-10 left-0 bg-pink-500 h-[calc(100%-2rem)] transition-all duration-500 ease-in-out ${
-          toggle ? "w-32" : "w-0 overflow-hidden"
+        className={`sidebar fixed top-10 left-0 bg-pink-500 h-[calc(100%-2.5rem)] transition-all duration-500 ease-in-out ${
+          toggle ? "w-32 overflow-y-auto" : "w-0 overflow-hidden"
         }`}
       >
-        <Sidebar buttonTitle={"IPD DATA"}>
+        <Sidebar buttonTitle={"IPD"}>
           <SidebarItems title={"Master"} />
           <SidebarItems title={"Transaction"} />
           <SidebarItems title={"Patient"} />
@@ -52,15 +54,10 @@ const MainPage = () => {
           <SidebarItems title={"Direct Services"} />
           <SidebarItems title={"Reports"} />
         </Sidebar>
-        <Sidebar buttonTitle={"IPD DATA"}>
-          <SidebarItems title={"Master"} />
-          <SidebarItems title={"Transaction"} />
-          <SidebarItems title={"Patient"} />
-          <SidebarItems title={"Welfare"} />
-          <SidebarItems title={"Direct Services"} />
-          <SidebarItems title={"Reports"} />
-        </Sidebar>
-        <div className="bottom-3 absolute flex ml-5">
+
+        <div
+          className={` ${toggle === true ? "fixed bottom-3 ml-5" : "hidden"}`}
+        >
           <SimpleButton title={"Logout"} onClick={logout} />
         </div>
       </div>

@@ -6,7 +6,7 @@ const Sidebar = ({ children, buttonTitle }) => {
   const [showIpd, setShowIPD] = useState(false);
   return (
     <div>
-      <div className="border-b-2  transition-all duration-2000 ease-in ">
+      <div className="border-b-2  transition-all duration-2000 ease-in p-2 ">
         <SidebarButton
           title={buttonTitle}
           onClick={() => setShowIPD(!showIpd)}
