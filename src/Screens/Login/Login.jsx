@@ -5,6 +5,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import SimpleButton from "../../Components/Button/SimpleButton";
 import { setLoginToggle } from "../../Store/action";
+import { ErrorAlert } from "../../Components/Alert/Alert";
 const Login = () => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
@@ -37,18 +38,10 @@ const Login = () => {
       // You can potentially search for the "Token" cookie here
     } catch (error) {
       console.log("error of login response", error);
+      ErrorAlert({ text: error.response.data.message, timer: 1500 });
     }
   };
-  const productApi = async () => {
-    try {
-      const response = await axios.get(`${url}/product`, {
-        withCredentials: true,
-      });
-      console.log("response of product api", response);
-    } catch (error) {
-      console.log("error of product api", error);
-    }
-  };
+
   return (
     <div className="h-screen grid place-items-center sm: same">
       <div className="grid gap-y-8 w-full  max-w-md mx-auto p-2 bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg rounded-3xl">
