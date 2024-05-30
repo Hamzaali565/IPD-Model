@@ -17,7 +17,7 @@ const WardCharges = () => {
         <p>Charges</p>
         <p>Status</p>
       </div>
-      <div className="mt-3 grid grid-cols-3 text-xs justify-items-center ">
+      <div className="mt-3 grid grid-cols-3 text-xs justify-items-center items-center">
         <p>MGW-0001</p>
         <p>
           <input
