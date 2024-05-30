@@ -6,6 +6,7 @@ import "./Main.css";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setLoginToggle } from "../../Store/action";
+import IPDMaster from "../IPD/Masters/IPDMaster";
 
 const MainPage = () => {
   const [toggle, setToggle] = useState(false);
@@ -26,9 +27,9 @@ const MainPage = () => {
   };
 
   return (
-    <div className="grid grid-rows-[3rem,1fr] h-screen overflow-hidden">
+    <div className="grid grid-rows-[3rem,1fr] h-screen overflow-hidden bgImage ">
       {/* Header */}
-      <div className="flex justify-between bg-yellow-400 items-center p-2 fixed w-full top-0 left-0 z-20">
+      <div className="flex justify-between bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg items-center p-5 fixed w-full top-0 left-0 z-20">
         <button onClick={() => setToggle(!toggle)} className="font-extrabold">
           {toggle ? (
             <i className="bi bi-x-lg"></i>
@@ -42,7 +43,7 @@ const MainPage = () => {
       {/* Sidebar */}
 
       <div
-        className={`sidebar fixed top-10 left-0 bg-pink-500 h-[calc(100%-2.5rem)] transition-all duration-500 ease-in-out ${
+        className={`sidebar fixed top-16 left-0  h-[calc(100%-2.5rem)] transition-all duration-500 ease-in-out ${
           toggle ? "w-32 overflow-y-auto" : "w-0 overflow-hidden"
         }`}
       >
@@ -64,73 +65,11 @@ const MainPage = () => {
 
       {/* Main Content */}
       <div
-        className={`grid col-span-full row-span-full bg-orange-400 overflow-y-auto pt-12 ${
+        className={`grid col-span-full row-span-full overflow-y-auto pt-20 ${
           toggle ? "pl-36" : "pl-0"
         } transition-all duration-500 ease-in-out`}
       >
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
-        <p>i am body</p>
+        <IPDMaster />
       </div>
     </div>
   );
