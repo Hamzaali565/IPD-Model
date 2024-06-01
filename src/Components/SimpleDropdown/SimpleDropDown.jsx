@@ -1,21 +1,29 @@
 import React from "react";
 
-const SimpleDropDown = () => {
+const SimpleDropDown = ({ DropDownLabel, data, onChange, onClick }) => {
+  const handleChange = (event) => {
+    const selectedName = event.target.value;
+    onChange(selectedName);
+  };
   return (
     <div className="mt-3 flex justify-center items-center space-x-3">
       <label for="cars" className="font-bold underline">
-        Choose Page Type:
+        {DropDownLabel}
       </label>
 
       <select
         name="cars"
         id="cars"
         className="p-2 rounded-2xl bg-gray-800 bg-opacity-5 backdrop-blur-lg border border-white border-opacity-30 shadow-lg"
+        onChange={handleChange}
+        onClick={onClick}
       >
-        <option value="volvo">Volvo</option>
-        <option value="saab">Saab</option>
-        <option value="mercedes">Mercedes</option>
-        <option value="audi">Audi</option>
+        {data &&
+          data.map((item, index) => (
+            <option value={item?.name} key={index}>
+              {item?.name}
+            </option>
+          ))}
       </select>
     </div>
   );
