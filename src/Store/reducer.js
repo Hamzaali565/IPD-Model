@@ -1,4 +1,9 @@
-import { BASE_URL, SET_LOGIN, SET_LOGIN_TOGGLE } from "./actionType";
+import {
+  BASE_URL,
+  SET_LOGIN,
+  SET_LOGIN_TOGGLE,
+  SET_RESPONSE,
+} from "./actionType";
 
 const initialState = {
   login: null,
@@ -7,6 +12,7 @@ const initialState = {
       ? `http://localhost:3001/api/v1`
       : `https://ipd-server.vercel.app/api/v1`,
   toggle: null,
+  response: [], // Add response to the initial state
 };
 
 export const mainReducer = (state = initialState, action) => {
@@ -25,6 +31,11 @@ export const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         url: state.url,
+      };
+    case SET_RESPONSE:
+      return {
+        ...state,
+        response: action.payload,
       };
     default:
       return state;

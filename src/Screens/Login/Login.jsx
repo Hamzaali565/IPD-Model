@@ -4,7 +4,7 @@ import "./Login.css";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import SimpleButton from "../../Components/Button/SimpleButton";
-import { setLoginToggle } from "../../Store/action";
+import { setLoginToggle, setResponse } from "../../Store/action";
 import { ErrorAlert } from "../../Components/Alert/Alert";
 const Login = () => {
   const [userId, setUserId] = useState("");
@@ -29,6 +29,7 @@ const Login = () => {
       );
       console.log("response of login", response);
       Dispatch(setLoginToggle(true));
+      Dispatch(setResponse(response.data.data));
       setPassword("");
       setUserId("");
 

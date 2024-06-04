@@ -10,7 +10,7 @@ import axios from "axios";
 import "./App.css";
 import Login from "./Screens/Login/Login";
 import MainPage from "./Screens/MainPage/MainPage";
-import { setLoginToggle } from "./Store/action";
+import { setLoginToggle, setResponse } from "./Store/action";
 
 function App() {
   const dispatch = useDispatch();
@@ -29,6 +29,7 @@ function App() {
       });
       console.log("response of product api", response);
       dispatch(setLoginToggle(true));
+      dispatch(setResponse(response.data.data));
     } catch (error) {
       console.log("error of product api", error);
       dispatch(setLoginToggle(false));
