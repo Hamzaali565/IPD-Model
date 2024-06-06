@@ -29,7 +29,6 @@ const Login = () => {
       );
       console.log("response of login", response);
       Dispatch(setLoginToggle(true));
-      Dispatch(setResponse(response.data.data));
       setPassword("");
       setUserId("");
 
