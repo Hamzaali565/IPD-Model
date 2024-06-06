@@ -50,7 +50,12 @@ const MainPage = () => {
       >
         <Sidebar buttonTitle={"IPD"}>
           <Link to="/mainpage/ipdmaster">
-            <SidebarItems title={"Master"} />
+            <SidebarItems
+              title={"Master"}
+              onClick={() => {
+                setToggle(!toggle);
+              }}
+            />
           </Link>
           <SidebarItems title={"Patient"} />
           <SidebarItems title={"Welfare"} />
