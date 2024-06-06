@@ -11,6 +11,10 @@ import "./App.css";
 import Login from "./Screens/Login/Login";
 import MainPage from "./Screens/MainPage/MainPage";
 import { setLoginToggle, setResponse } from "./Store/action";
+import IPDMaster from "./Screens/IPD/Masters/IPDMaster";
+import WardCharges from "./Screens/IPD/Masters/Ward Charges/WardCharges";
+import ServiceCharges from "./Screens/IPD/Masters/Service Charges/ServiceCharges";
+import Port from "./Screens/PortScreen/Port";
 
 function App() {
   const dispatch = useDispatch();
@@ -41,16 +45,21 @@ function App() {
       <div>
         {LoginCheck === true ? (
           <Routes>
-            <Route path="mainpage" element={<MainPage />} />
+            <Route path="mainpage/*" element={<MainPage />}>
+              <Route index element={<Port />} />
+              <Route path="ipdmaster/*" element={<IPDMaster />}>
+                <Route path="wardcharges" element={<WardCharges />} />
+                <Route path="servicecharges" element={<ServiceCharges />} />
+              </Route>
+            </Route>
             <Route path="*" element={<Navigate to="/mainpage" replace />} />
           </Routes>
-        ) : null}
-        {LoginCheck === false ? (
+        ) : (
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
-        ) : null}
+        )}
       </div>
     </Router>
   );
