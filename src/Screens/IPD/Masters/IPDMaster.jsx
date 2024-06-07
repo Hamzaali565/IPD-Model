@@ -8,8 +8,8 @@ const IPDMaster = () => {
     { name: "--" },
     { name: "Ward Charges" },
     { name: "Service Charges" },
+    { name: "Consultant Charges" },
     { name: "Direct Service Charges" },
-    { name: "Procedure Charges" },
   ];
 
   let navigate = useNavigate();
@@ -22,6 +22,9 @@ const IPDMaster = () => {
       navigate(path);
     } else if (name === "Service Charges") {
       path = "servicecharges"; // Relative path
+      navigate(path);
+    } else if (name === "Consultant Charges") {
+      path = "consultantcharges";
       navigate(path);
     }
   };
