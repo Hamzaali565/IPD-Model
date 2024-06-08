@@ -17,6 +17,8 @@ import ServiceCharges from "./Screens/IPD/Masters/Service Charges/ServiceCharges
 import Port from "./Screens/PortScreen/Port";
 import ConsultantCharges from "./Screens/IPD/Masters/Consultant Charges/ConsultantCharges";
 import DSCharges from "./Screens/IPD/Masters/DS Charges/DSCharges";
+import IPDPatientMaster from "./Screens/IPD/Patient/IPDPatientMaster/IPDPatientMaster";
+import PatientRegistration from "./Screens/IPD/Patient/PatientRegistration/PatientRegistration";
 
 function App() {
   const dispatch = useDispatch();
@@ -53,6 +55,19 @@ function App() {
                 <Route path="wardcharges" element={<WardCharges />} />
                 <Route path="servicecharges" element={<ServiceCharges />} />
                 <Route path="dscharges" element={<DSCharges />} />
+                <Route
+                  path="consultantcharges"
+                  element={<ConsultantCharges />}
+                />
+              </Route>
+            </Route>
+            <Route path="mainpage/*" element={<MainPage />}>
+              <Route index element={<Port />} />
+              <Route path="ipdPatient/*" element={<IPDPatientMaster />}>
+                <Route
+                  path="patientRegistration"
+                  element={<PatientRegistration />}
+                />
                 <Route
                   path="consultantcharges"
                   element={<ConsultantCharges />}

@@ -57,7 +57,14 @@ const MainPage = () => {
               }}
             />
           </Link>
-          <SidebarItems title={"Patient"} />
+          <Link to="/mainpage/ipdPatient">
+            <SidebarItems
+              title={"Patient"}
+              onClick={() => {
+                setToggle(!toggle);
+              }}
+            />
+          </Link>
           <SidebarItems title={"Welfare"} />
           <SidebarItems title={"Direct Services"} />
           <SidebarItems title={"Reports"} />
