@@ -26,6 +26,9 @@ const IPDMaster = () => {
     } else if (name === "Consultant Charges") {
       path = "consultantcharges";
       navigate(path);
+    } else if (name === "Direct Service Charges") {
+      path = "dscharges";
+      navigate(path);
     }
   };
 

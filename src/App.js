@@ -16,6 +16,7 @@ import WardCharges from "./Screens/IPD/Masters/Ward Charges/WardCharges";
 import ServiceCharges from "./Screens/IPD/Masters/Service Charges/ServiceCharges";
 import Port from "./Screens/PortScreen/Port";
 import ConsultantCharges from "./Screens/IPD/Masters/Consultant Charges/ConsultantCharges";
+import DSCharges from "./Screens/IPD/Masters/DS Charges/DSCharges";
 
 function App() {
   const dispatch = useDispatch();
@@ -51,6 +52,7 @@ function App() {
               <Route path="ipdmaster/*" element={<IPDMaster />}>
                 <Route path="wardcharges" element={<WardCharges />} />
                 <Route path="servicecharges" element={<ServiceCharges />} />
+                <Route path="dscharges" element={<DSCharges />} />
                 <Route
                   path="consultantcharges"
                   element={<ConsultantCharges />}
