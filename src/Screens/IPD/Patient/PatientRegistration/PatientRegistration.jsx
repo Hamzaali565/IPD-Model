@@ -147,7 +147,7 @@ const PatientRegistration = () => {
                     patientStatus === "Prof" ||
                     patientStatus === "Master"
                     ? [{ name: "S/o" }]
-                    : patientStatus === "Miss" || patientStatus === "Baby of"
+                    : patientStatus === "Miss"
                     ? [{ name: "D/o" }]
                     : patientStatus === "Mrs."
                     ? [{ name: "W/o" }]
