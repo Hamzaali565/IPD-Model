@@ -4,12 +4,15 @@ import SimpleDropDown from "../../../../Components/SimpleDropdown/SimpleDropDown
 import CenterHeading from "../../../../Components/Center Heading/CenterHeading";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { ErrorAlert } from "../../../../Components/Alert/Alert";
+import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
+import SimpleButton from "../../../../Components/Button/SimpleButton";
 
 const ConsultantCharges = () => {
   const [ward, setWard] = useState([]);
   const [party, setParty] = useState("");
+  const [wardName, setWardName] = useState("");
   const [consultantDetails, setConsultantDetails] = useState([]);
+  const [toggle, setToggle] = useState(false);
 
   // redux details
   const data = [{ name: "--" }, { name: "Cash" }];
@@ -19,7 +22,7 @@ const ConsultantCharges = () => {
   //   useEffect
   useEffect(() => {
     wardNameResponse();
-  }, []);
+  }, [toggle]);
 
   // api(s)
   const wardNameResponse = async () => {
@@ -28,12 +31,18 @@ const ConsultantCharges = () => {
         withCredentials: true,
       });
       setWard(response.data.data);
+      console.log("response of ward names", response.data.data);
     } catch (error) {
       console.log("error of wardName", error);
     }
   };
 
   const handleCall = async (name) => {
+    setWardName(name);
+    if (name == "--") {
+      Empty2();
+      return;
+    }
     try {
       const response = await axios.get(
         `${url}/consultantcharges?party=${party}&wardName=${name}`,
@@ -46,17 +55,62 @@ const ConsultantCharges = () => {
     }
   };
 
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(
+        `${url}/consultantcharges`,
+        {
+          party,
+          wardName,
+          consultantDetails,
+          updatedUser: userId[0].userId,
+        },
+        { withCredentials: true }
+      );
+      console.log("response of submit handler", response);
+      Empty();
+      SuccessAlert({ text: "DATA SAVED SUCCESSFULLY", timer: 1500 });
+    } catch (error) {
+      console.log("Error of submit handler");
+    }
+  };
   // funstions
   const handleDropDownChange = (name) => {
     console.log("Selected Name:", name);
     setParty(name);
     // setSelectedName(name);
   };
+
   const previousCheck = () => {
     if (party === "") {
       ErrorAlert({ text: "PLEASE SELECT PARTY FIRST !!!" });
       return;
     }
+  };
+
+  const handlerEffect = (value, id, key) => {
+    const updatedData = consultantDetails.map((item) => {
+      if (item?.consultantId === id) {
+        if (key === "charges") {
+          return { ...item, charges: +value };
+        }
+        if (key === "status") {
+          return { ...item, status: value };
+        }
+      }
+      return item;
+    });
+    setConsultantDetails(updatedData);
+    console.log(updatedData);
+  };
+  const Empty = () => {
+    setConsultantDetails([]);
+    setWardName("");
+    setWard([]);
+    setToggle(!toggle);
+  };
+  const Empty2 = () => {
+    setConsultantDetails([]);
   };
   return (
     <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
@@ -67,6 +121,7 @@ const ConsultantCharges = () => {
           DropDownLabel={"Party"}
           data={data}
           onChange={handleDropDownChange}
+          onClick={Empty}
         />
         <SimpleDropDown
           DropDownLabel={"Ward"}
@@ -101,14 +156,13 @@ const ConsultantCharges = () => {
                     placeholder="Charges"
                     name=""
                     value={items?.charges}
-                    // onChange={(e) =>
-                    //   handlerEffect(
-                    //     e.target.value,
-                    //     item._id,
-                    //     "charges",
-                    //     item?.bedId
-                    //   )
-                    // }
+                    onChange={(e) =>
+                      handlerEffect(
+                        e.target.value,
+                        items.consultantId,
+                        "charges"
+                      )
+                    }
                     id=""
                   />
                 </p>
@@ -118,20 +172,24 @@ const ConsultantCharges = () => {
                     checked={items?.status}
                     name=""
                     id=""
-                    // onChange={(e) =>
-                    //   handlerEffect(
-                    //     e.target.checked,
-                    //     item._id,
-                    //     "status",
-                    //     item?.bedId
-                    //   )
-                    // }
+                    onChange={(e) =>
+                      handlerEffect(
+                        e.target.checked,
+                        items?.consultantId,
+                        "status"
+                      )
+                    }
                   />
                 </p>
               </div>
             </div>
           ))}
       </div>
+      {consultantDetails.length > 0 && (
+        <div className="flex justify-center my-4">
+          <SimpleButton title={"Submit"} onClick={handleSubmit} />
+        </div>
+      )}
     </div>
   );
 };

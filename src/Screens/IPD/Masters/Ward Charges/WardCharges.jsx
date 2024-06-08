@@ -12,13 +12,11 @@ const WardCharges = () => {
   const [wardName, setwardName] = useState("");
   const [wardCharges, setWardCharges] = useState([]);
   const [wardCharges_id, setWardCharges_id] = useState("");
+  const [toggle, setToggle] = useState(false);
 
   useEffect(() => {
     wardNames();
-  }, []);
-  useEffect(() => {
-    realCall();
-  }, [wardName]);
+  }, [toggle]);
 
   const url = useSelector((item) => item.url);
   const UserData = useSelector((item) => item.response);
@@ -46,13 +44,12 @@ const WardCharges = () => {
       return;
     }
   };
+
   const callData = async (name) => {
-    setwardName(name);
-  };
-  const realCall = async () => {
     try {
+      setwardName(name);
       const response = await axios.get(
-        `${url}/ipdwardcharges?party=${party}&wardName=${wardName}`,
+        `${url}/ipdwardcharges?party=${party}&wardName=${name}`,
         { withCredentials: true }
       );
       console.log("response of ward charges", response.data);
@@ -102,6 +99,8 @@ const WardCharges = () => {
       console.log("response of submit handler", response);
       SuccessAlert({ text: "DATA SAVED SUCCESSFULLY", timer: 1500 });
       setWardCharges([]);
+      setWard([]);
+      setToggle(!toggle);
       setWardCharges_id("");
     } catch (error) {
       console.log("Error of submit Handler", error);
@@ -125,56 +124,60 @@ const WardCharges = () => {
         />
       </div>
       {/* Charges table */}
-
-      <div className="mt-3 grid grid-cols-3 text-xs justify-items-center ">
-        <p>Bed No.</p>
-        <p>Charges</p>
-        <p>Status</p>
+      <div className="container mx-auto mt-3">
+        <div className="mt-3 grid grid-cols-3 text-xs justify-items-center items-center h-16 border border-gray-300">
+          <p>Bed No.</p>
+          <p>Charges</p>
+          <p>Status</p>
+        </div>
       </div>
-
       {wardCharges.length > 0 &&
         wardCharges.map((item, index) => (
-          <div className="mt-3 grid grid-cols-3 text-xs justify-items-center items-center">
-            <p>{item?.bedNumber}</p>
-            <p>
-              <input
-                type="number"
-                className="w-24 rounded-xl p-1"
-                placeholder="Charges"
-                name=""
-                value={item?.bedCharges}
-                onChange={(e) =>
-                  handlerEffect(
-                    e.target.value,
-                    item._id,
-                    "charges",
-                    item?.bedId
-                  )
-                }
-                id=""
-              />
-            </p>
-            <p>
-              <input
-                type="checkbox"
-                checked={item?.status}
-                name=""
-                id=""
-                onChange={(e) =>
-                  handlerEffect(
-                    e.target.checked,
-                    item._id,
-                    "status",
-                    item?.bedId
-                  )
-                }
-              />
-            </p>
+          <div className="container mx-auto mt-3">
+            <div className="mt-3 grid grid-cols-3 text-xs justify-items-center items-center h-10 border border-gray-300">
+              <p>{item?.bedNumber}</p>
+              <p>
+                <input
+                  type="number"
+                  className="w-24 rounded-xl p-1"
+                  placeholder="Charges"
+                  name=""
+                  value={item?.bedCharges}
+                  onChange={(e) =>
+                    handlerEffect(
+                      e.target.value,
+                      item._id,
+                      "charges",
+                      item?.bedId
+                    )
+                  }
+                  id=""
+                />
+              </p>
+              <p>
+                <input
+                  type="checkbox"
+                  checked={item?.status}
+                  name=""
+                  id=""
+                  onChange={(e) =>
+                    handlerEffect(
+                      e.target.checked,
+                      item._id,
+                      "status",
+                      item?.bedId
+                    )
+                  }
+                />
+              </p>
+            </div>
           </div>
         ))}
-      <div className="flex justify-center my-4">
-        <SimpleButton title={"Submit"} onClick={submitHandler} />
-      </div>
+      {wardCharges.length > 0 && (
+        <div className="flex justify-center my-4">
+          <SimpleButton title={"Submit"} onClick={submitHandler} />
+        </div>
+      )}
     </div>
   );
 };

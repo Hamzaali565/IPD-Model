@@ -183,55 +183,64 @@ const ServiceCharges = () => {
       </div>
       {serviceChargesData && (
         <div>
-          <div className="mt-3 grid grid-cols-4 text-xs justify-items-center ">
-            <p>Serial No.</p>
-            <p>Service Name</p>
-            <p>Charges</p>
-            <p>Status</p>
+          <div className="container mx-auto mt-3">
+            <div className="mt-3 grid grid-cols-4 text-xs justify-items-center  items-center h-16 border border-gray-300">
+              <p>Serial No.</p>
+              <p>Service Name</p>
+              <p>Charges</p>
+              <p>Status</p>
+            </div>
           </div>
-
           {serviceChargesData &&
             serviceChargesData.map((items, index) => (
-              <div
-                className="mt-3 grid grid-cols-4 text-xs justify-items-center "
-                key={index}
-              >
-                <p>{index + 1}</p>
-                <p>{items?.serviceName}</p>
-                <p>
-                  <input
-                    type="number"
-                    className="w-24 rounded-xl p-1 border-gray-900 border-2"
-                    placeholder="Charges"
-                    name=""
-                    value={items?.charges}
-                    onChange={(e) =>
-                      handlerEffect(
-                        e.target.value,
-                        items.serviceId,
-                        "charges"
-                        // items?.bedId
-                      )
-                    }
-                    // id=""
-                  />
-                </p>
-                <p>
-                  <input
-                    type="checkbox"
-                    checked={items?.status}
-                    name=""
-                    id=""
-                    onChange={(e) =>
-                      handlerEffect(e.target.checked, items.serviceId, "status")
-                    }
-                  />
-                </p>
+              <div className="container mx-auto mt-3">
+                <div
+                  className="mt-3 grid grid-cols-4 text-xs justify-items-center items-center h-10 border border-gray-300"
+                  key={index}
+                >
+                  <p>{index + 1}</p>
+                  <p>{items?.serviceName}</p>
+                  <p>
+                    <input
+                      type="number"
+                      className="w-24 rounded-xl p-1 border-gray-900 border-2"
+                      placeholder="Charges"
+                      name=""
+                      value={items?.charges}
+                      onChange={(e) =>
+                        handlerEffect(
+                          e.target.value,
+                          items.serviceId,
+                          "charges"
+                          // items?.bedId
+                        )
+                      }
+                      // id=""
+                    />
+                  </p>
+                  <p>
+                    <input
+                      type="checkbox"
+                      checked={items?.status}
+                      name=""
+                      id=""
+                      onChange={(e) =>
+                        handlerEffect(
+                          e.target.checked,
+                          items.serviceId,
+                          "status"
+                        )
+                      }
+                    />
+                  </p>
+                </div>
               </div>
             ))}
-          <div className="flex justify-center my-4">
-            <SimpleButton title={"Submit"} onClick={submitHandler} />
-          </div>
+          {serviceChargesData.length > 0 && (
+            <div className="flex justify-center my-4">
+              <SimpleButton title={"Submit"} onClick={submitHandler} />
+            </div>
+          )}
         </div>
       )}
     </div>

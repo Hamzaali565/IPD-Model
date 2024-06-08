@@ -29,6 +29,7 @@ const Login = () => {
       );
       console.log("response of login", response);
       Dispatch(setLoginToggle(true));
+      CheckLog();
       setPassword("");
       setUserId("");
 
@@ -39,6 +40,20 @@ const Login = () => {
     } catch (error) {
       console.log("error of login response", error);
       ErrorAlert({ text: error.response.data.message, timer: 1500 });
+    }
+  };
+
+  const CheckLog = async () => {
+    try {
+      const response = await axios.get(`${url}/product`, {
+        withCredentials: true,
+      });
+      console.log("response of product api", response);
+      Dispatch(setLoginToggle(true));
+      Dispatch(setResponse(response.data.data));
+    } catch (error) {
+      console.log("error of product api", error);
+      Dispatch(setLoginToggle(false));
     }
   };
 
