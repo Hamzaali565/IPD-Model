@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import CenterHeading from "../../../../Components/Center Heading/CenterHeading";
 import LabelledDropInput from "../../../../Components/LabelledDropInput/LabelledDropInput";
 import AgeInput from "../../../../Components/Age Input/AgeInput";
-import SimpleDropDown from "../../../../Components/SimpleDropdown/SimpleDropDown";
 import LabelledDropDown from "../../../../Components/LabelledDropDown/LabelledDropDown";
 import LabeledInput from "../../../../Components/LabelledInput/LabeledInput";
 import SimpleButton from "../../../../Components/Button/SimpleButton";
 import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import InputButton from "../../../../Components/InputButton/InputButton";
 
 const PatientRegistration = () => {
   const [patientName, setPatientName] = useState("");
@@ -115,6 +115,7 @@ const PatientRegistration = () => {
     setKinOccupation("");
     setKinRelation("");
     setParientStatus("");
+    setMrNo("");
     setToggle(!toggle);
   };
 
@@ -189,10 +190,30 @@ const PatientRegistration = () => {
       ErrorAlert({ text: error.response.data.message });
     }
   };
+
+  const getPatient = async () => {
+    try {
+      const response = await axios.get(`${url}/patientreg?MrNo=${MrNo}`, {
+        withCredentials: true,
+      });
+      console.log("response of getPatient", response);
+    } catch (error) {
+      console.log("Error of getPatient", error);
+      ErrorAlert({ text: error.response.data.message, timer: 2000 });
+    }
+  };
   return (
     <div>
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
         <CenterHeading title={"Patient Registration"} />
+
+        <InputButton
+          placeholder={"ENTER MR NO."}
+          onChange={(e) => setMrNo(e.target.value)}
+          value={MrNo}
+          onClick={getPatient}
+          type={"number"}
+        />
         {/* Patien profile */}
         <div className="container mx-auto">
           <div className="grid gap-y-2 md:grid md:grid-cols-2 md:h-auto md:justify-items-center md:gap-y-3">
