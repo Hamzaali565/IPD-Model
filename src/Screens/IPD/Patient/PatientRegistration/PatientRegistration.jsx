@@ -36,6 +36,7 @@ const PatientRegistration = () => {
   const [kinAddress, setKinAddress] = useState("");
   const [kinOccupation, setKinOccupation] = useState("");
   const [MrNo, setMrNo] = useState("");
+  const [mrData, setMrData] = useState([]);
   const [toggle, setToggle] = useState(false);
 
   useEffect(() => {
@@ -69,84 +70,16 @@ const PatientRegistration = () => {
   const url = useSelector((item) => item.url);
   const userData = useSelector((item) => item.response);
 
-  //   Functions
-  const patientNameF = async (name, key) => {
-    if (key === "patientName") {
-      setPatientName(name.toUpperCase());
-      return;
-    }
-    if (key === "Relative") {
-      setRelativeName(name.toUpperCase());
-      return;
-    }
-    if (key === "y") {
-      setYear(name);
-      return;
-    }
-    if (key === "m") {
-      setMonth(name);
-      return;
-    }
-    if (key === "d") {
-      setDay(name);
-      return;
-    }
-  };
-
-  const Refresh = () => {
-    setPatientName("");
-    setPatientType([]);
-    setRelativeName("");
-    setYear("");
-    setDay("");
-    setMonth("");
-    setFatherType([]);
-    setMaritalStatus([]);
-    setGender([]);
-    setOccupation("");
-    setEmail("");
-    setCellNo("");
-    setCnic("");
-    setAddress("");
-    setKinName("");
-    setKinAddress("");
-    setKinCell("");
-    setKinCnic("");
-    setKinOccupation("");
-    setKinRelation("");
-    setParientStatus("");
-    setMrNo("");
-    setToggle(!toggle);
-  };
-
-  const DropDownChange = (name) => {
-    setParientStatus(name);
-    if (
-      name === "Mr." ||
-      name === "Dr." ||
-      name === "Prof" ||
-      name === "Master"
-    ) {
-      setRelativeStatus("S/o");
-      setGenderData("Male");
-      setMaritalData("Single");
-      return;
-    } else if (name === "Mrs.") {
-      setRelativeStatus("W/o");
-      setGenderData("Female");
-      setMaritalData("Married");
-      return;
-    } else if (name === "Miss") {
-      setRelativeStatus("D/o");
-      setGenderData("Female");
-      setMaritalData("Single");
-      return;
-    }
-  };
-
   // api
   const submitHandler = async () => {
     try {
+      if (mrData.length > 0) {
+        ErrorAlert({
+          text: "KINDLY PRESS REFRESH BUTTON FIRST!!!",
+          timer: 2000,
+        });
+        return;
+      }
       const response = await axios.post(
         `${url}/patientreg`,
         {
@@ -190,18 +123,325 @@ const PatientRegistration = () => {
       ErrorAlert({ text: error.response.data.message });
     }
   };
+  const updateHandler = async () => {
+    try {
+      const newData = mrData.map((item) => {
+        return { ...item, updatedUser: userData[0].userId };
+      });
+      console.log(newData[0]);
+      const {
+        MrNo,
+        patientType,
+        patientName,
+        ageYear,
+        ageDay,
+        ageMonth,
+        relativeType,
+        gender,
+        occupation,
+        maritalStatus,
+        email,
+        cellNo,
+        cnicNo,
+        address,
+        kinName,
+        kinRelation,
+        kinCell,
+        kinCnic,
+        kinAddress,
+        kinOccupation,
+        relativeName,
+        updatedUser,
+      } = newData[0];
+      // return;
+      const response = await axios.put(
+        `${url}/patientreg`,
+        {
+          MrNo,
+          patientType,
+          patientName,
+          ageYear,
+          ageDay,
+          ageMonth,
+          relativeType,
+          gender,
+          occupation,
+          maritalStatus:
+            maritalData === "" ? mrData[0].maritalStatus : maritalData,
+          email,
+          cellNo,
+          cnicNo,
+          address,
+          kinName,
+          kinRelation,
+          kinCell,
+          kinCnic,
+          kinAddress,
+          kinOccupation,
+          relativeName,
+          updatedUser,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      SuccessAlert({
+        text: `MR NO. ${response.data.data.MrNo} HAS BEEN UPDATED !!!`,
+      });
+      Refresh();
+      console.log("response of update handler", response.data.data);
+    } catch (error) {
+      console.log("Error of update hanlder");
+    }
+  };
 
   const getPatient = async () => {
     try {
       const response = await axios.get(`${url}/patientreg?MrNo=${MrNo}`, {
         withCredentials: true,
       });
-      console.log("response of getPatient", response);
+      console.log("response of getPatient", response.data.data);
+      setMrData(response.data.data);
     } catch (error) {
       console.log("Error of getPatient", error);
       ErrorAlert({ text: error.response.data.message, timer: 2000 });
     }
   };
+
+  //   Functions
+
+  const Refresh = () => {
+    setPatientName("");
+    setPatientType([]);
+    setRelativeName("");
+    setYear("");
+    setDay("");
+    setMonth("");
+    setFatherType([]);
+    setMaritalStatus([]);
+    setGender([]);
+    setOccupation("");
+    setEmail("");
+    setCellNo("");
+    setCnic("");
+    setAddress("");
+    setKinName("");
+    setKinAddress("");
+    setKinCell("");
+    setKinCnic("");
+    setKinOccupation("");
+    setKinRelation("");
+    setParientStatus("");
+    setMrNo("");
+    setMrData([]);
+    setToggle(!toggle);
+  };
+
+  const DropDownChange = (name) => {
+    setParientStatus(name);
+    if (
+      name === "Mr." ||
+      name === "Dr." ||
+      name === "Prof" ||
+      name === "Master"
+    ) {
+      setRelativeStatus("S/o");
+      setGenderData("Male");
+      setMaritalData("Single");
+      return;
+    } else if (name === "Mrs.") {
+      setRelativeStatus("W/o");
+      setGenderData("Female");
+      setMaritalData("Married");
+      return;
+    } else if (name === "Miss") {
+      setRelativeStatus("D/o");
+      setGenderData("Female");
+      setMaritalData("Single");
+      return;
+    }
+  };
+
+  const inputChange = async (value, key) => {
+    let updatedData;
+    if (key === "patientName") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, patientName: value.toUpperCase() };
+        });
+      } else {
+        setPatientName(value.toUpperCase());
+        return;
+      }
+      setMrData(updatedData);
+    }
+    if (key === "Relative") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, relativeName: value.toUpperCase() };
+        });
+      } else {
+        setRelativeName(value.toUpperCase());
+        return;
+      }
+      setMrData(updatedData);
+    }
+    if (key === "y") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, ageYear: value };
+        });
+      } else {
+        setYear(value);
+        return;
+      }
+      setMrData(updatedData);
+    }
+    if (key === "m") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, ageMonth: value };
+        });
+      } else {
+        setMonth(value);
+        return;
+      }
+      setMrData(updatedData);
+    }
+    if (key === "d") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, ageDay: value };
+        });
+      } else {
+        setDay(value);
+        return;
+      }
+      setMrData(updatedData);
+    }
+    if (key === "occupation") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, occupation: value.toUpperCase() };
+        });
+      } else {
+        setOccupation(value.toUpperCase());
+        return;
+      }
+      setMrData(updatedData);
+    }
+    if (key === "email") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, email: value };
+        });
+      } else {
+        setEmail(value);
+        return;
+      }
+      setMrData(updatedData);
+    }
+    if (key === "cellNo") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, cellNo: value };
+        });
+      } else {
+        setCellNo(value);
+        return;
+      }
+      setMrData(updatedData);
+    }
+    if (key === "cnic") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, cnicNo: value };
+        });
+      } else {
+        setCnic(value);
+        return;
+      }
+      setMrData(updatedData);
+    }
+    if (key === "address") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, address: value.toUpperCase() };
+        });
+      } else {
+        setAddress(value.toUpperCase());
+        return;
+      }
+      setMrData(updatedData);
+    }
+    if (key === "kinName") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, kinName: value.toUpperCase() };
+        });
+      } else {
+        setKinName(value.toUpperCase());
+        return;
+      }
+      setMrData(updatedData);
+    }
+    if (key === "kinRelation") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, kinRelation: value.toUpperCase() };
+        });
+      } else {
+        setKinRelation(value.toUpperCase());
+        return;
+      }
+      setMrData(updatedData);
+    }
+    if (key === "kinCell") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, kinCell: value };
+        });
+      } else {
+        setKinCell(value);
+        return;
+      }
+      setMrData(updatedData);
+    }
+    if (key === "kinCnic") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, kinCnic: value };
+        });
+      } else {
+        setKinCnic(value);
+        return;
+      }
+      setMrData(updatedData);
+    }
+    if (key === "kinAddress") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, kinAddress: value.toUpperCase() };
+        });
+      } else {
+        setKinAddress(value.toUpperCase());
+        return;
+      }
+      setMrData(updatedData);
+    }
+    if (key === "kinOccupation") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, kinOccupation: value.toUpperCase() };
+        });
+      } else {
+        setKinOccupation(value.toUpperCase());
+        return;
+      }
+      setMrData(updatedData);
+    }
+  };
+
   return (
     <div>
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
@@ -222,23 +462,23 @@ const PatientRegistration = () => {
               data={patientType}
               placeholder={"Patient Name"}
               onChangeDrop={DropDownChange}
-              value={patientName}
+              value={mrData.length > 0 ? mrData[0]?.patientName : patientName}
               onChange={(e) => {
-                patientNameF(e.target.value, "patientName");
+                inputChange(e.target.value, "patientName");
               }}
             />
             <AgeInput
-              valueY={year}
-              valueM={month}
-              valueD={day}
+              valueY={mrData.length > 0 ? mrData[0]?.ageYear : year}
+              valueM={mrData.length > 0 ? mrData[0]?.ageMonth : month}
+              valueD={mrData.length > 0 ? mrData[0]?.ageDay : day}
               onChangeY={(e) => {
-                patientNameF(e.target.value, "y");
+                inputChange(e.target.value, "y");
               }}
               onChangeM={(e) => {
-                patientNameF(e.target.value, "m");
+                inputChange(e.target.value, "m");
               }}
               onChangeD={(e) => {
-                patientNameF(e.target.value, "d");
+                inputChange(e.target.value, "d");
               }}
             />
             <LabelledDropInput
@@ -258,10 +498,10 @@ const PatientRegistration = () => {
                   : fatherType
               }
               onChangeDrop={(name) => setRelativeStatus(name)}
-              value={relativeName}
+              value={mrData.length > 0 ? mrData[0]?.relativeName : relativeName}
               placeholder={"Relative Name"}
               onChange={(e) => {
-                patientNameF(e.target.value, "Relative");
+                inputChange(e.target.value, "Relative");
               }}
             />
             <LabelledDropDown
@@ -283,8 +523,8 @@ const PatientRegistration = () => {
             <LabeledInput
               label={"Occupation"}
               placeholder={"Occupation"}
-              onChange={(e) => setOccupation(e.target.value)}
-              value={occupation}
+              onChange={(e) => inputChange(e.target.value, "occupation")}
+              value={mrData.length > 0 ? mrData[0]?.occupation : occupation}
             />
             <LabelledDropDown
               label={"Marital Status"}
@@ -296,11 +536,11 @@ const PatientRegistration = () => {
                     patientStatus === "Miss" ||
                     patientStatus === "Master" ||
                     patientStatus === "Baby of"
-                    ? [{ name: "Single" }]
+                    ? [{ name: "Single" }, { name: "Married" }]
                     : patientStatus === "Mrs."
                     ? [{ name: "Married" }]
-                    : gender
-                  : gender
+                    : maritalStatus
+                  : maritalStatus
               }
               onChange={(name) => setMaritalData(name)}
             />
@@ -308,29 +548,29 @@ const PatientRegistration = () => {
               label={"Email"}
               type={"email"}
               placeholder={"Email"}
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
+              onChange={(e) => inputChange(e.target.value, "email")}
+              value={mrData.length > 0 ? mrData[0]?.email : email}
             />
             <LabeledInput
               label={"Cell No"}
               type={"number"}
               placeholder={"00000000000"}
               max={"11"}
-              onChange={(e) => setCellNo(e.target.value)}
-              value={cellNo}
+              onChange={(e) => inputChange(e.target.value, "cellNo")}
+              value={mrData.length > 0 ? mrData[0]?.cellNo : cellNo}
             />
             <LabeledInput
               label={"CNIC No"}
               type={"number"}
               placeholder={"0000000000000"}
-              onChange={(e) => setCnic(e.target.value)}
-              value={cnic}
+              onChange={(e) => inputChange(e.target.value, "cnic")}
+              value={mrData.length > 0 ? mrData[0]?.cnicNo : cnic}
             />
             <LabeledInput
               label={"Address"}
               placeholder={"Address"}
-              onChange={(e) => setAddress(e.target.value)}
-              value={address}
+              onChange={(e) => inputChange(e.target.value, "address")}
+              value={mrData.length > 0 ? mrData[0]?.address : address}
             />
           </div>
         </div>
@@ -346,49 +586,54 @@ const PatientRegistration = () => {
             <LabeledInput
               label={"Name"}
               placeholder={"Next of kin name"}
-              onChange={(e) => setKinName(e.target.value)}
-              value={kinName}
+              onChange={(e) => inputChange(e.target.value, "kinName")}
+              value={mrData.length > 0 ? mrData[0]?.kinName : kinName}
             />
             <LabeledInput
               label={"Relation with patient"}
               type={"text"}
               placeholder={"Relation with patient"}
-              onChange={(e) => setKinRelation(e.target.value)}
-              value={kinRelation}
+              onChange={(e) => inputChange(e.target.value, "kinRelation")}
+              value={mrData.length > 0 ? mrData[0]?.kinRelation : kinRelation}
             />
             <LabeledInput
               label={"Cell No"}
               type={"number"}
               placeholder={"00000000000"}
               max={"11"}
-              onChange={(e) => setKinCell(e.target.value)}
-              value={kinCell}
+              onChange={(e) => inputChange(e.target.value, "kinCell")}
+              value={mrData.length > 0 ? mrData[0]?.kinCell : kinCell}
             />
             <LabeledInput
               label={"CNIC No"}
               type={"number"}
               placeholder={"00000-0000000-0"}
-              onChange={(e) => setKinCnic(e.target.value)}
-              value={kinCnic}
+              onChange={(e) => inputChange(e.target.value, "kinCnic")}
+              value={mrData.length > 0 ? mrData[0]?.kinCnic : kinCnic}
             />
             <LabeledInput
               label={"Address"}
               placeholder={"Address"}
-              onChange={(e) => setKinAddress(e.target.value)}
-              value={kinAddress}
+              onChange={(e) => inputChange(e.target.value, "kinAddress")}
+              value={mrData.length > 0 ? mrData[0]?.kinAddress : kinAddress}
             />
             <LabeledInput
               label={"Occupation"}
               type={"text"}
               placeholder={"Occupation"}
-              onChange={(e) => setKinOccupation(e.target.value)}
-              value={kinOccupation}
+              onChange={(e) => inputChange(e.target.value, "kinOccupation")}
+              value={
+                mrData.length > 0 ? mrData[0]?.kinOccupation : kinOccupation
+              }
             />
           </div>
         </div>
       </div>
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl grid grid-cols-[5rem,5rem,5rem] justify-center gap-x-2">
-        <SimpleButton title={"Save"} onClick={submitHandler} />
+        <SimpleButton
+          title={"Save"}
+          onClick={mrData.length > 0 ? updateHandler : submitHandler}
+        />
         <SimpleButton title={"Print"} />
         <SimpleButton title={"Refresh"} onClick={Refresh} />
       </div>
