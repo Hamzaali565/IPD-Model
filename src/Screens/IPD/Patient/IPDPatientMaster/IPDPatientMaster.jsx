@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate, Outlet } from "react-router-dom";
-import PAgeTitle from "../../../../Components/Page Title/PAgeTitle";
 import DropDown from "../../../../Components/DropDown/DropDown";
 
 const IPDPatientMaster = () => {
@@ -21,11 +20,10 @@ const IPDPatientMaster = () => {
     if (name === "Patient Registration") {
       path = "patientRegistration"; // Relative path
       navigate(path);
+    } else if (name === "Reservation") {
+      path = "reservation"; // Relative path
+      navigate(path);
     }
-    // else if (name === "Service Charges") {
-    //   path = "servicecharges"; // Relative path
-    //   navigate(path);
-    // }
   };
 
   return (

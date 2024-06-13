@@ -19,6 +19,7 @@ import ConsultantCharges from "./Screens/IPD/Masters/Consultant Charges/Consulta
 import DSCharges from "./Screens/IPD/Masters/DS Charges/DSCharges";
 import IPDPatientMaster from "./Screens/IPD/Patient/IPDPatientMaster/IPDPatientMaster";
 import PatientRegistration from "./Screens/IPD/Patient/PatientRegistration/PatientRegistration";
+import Reservation from "./Screens/IPD/Patient/Reservation/Reservation";
 
 function App() {
   const dispatch = useDispatch();
@@ -68,10 +69,7 @@ function App() {
                   path="patientRegistration"
                   element={<PatientRegistration />}
                 />
-                <Route
-                  path="consultantcharges"
-                  element={<ConsultantCharges />}
-                />
+                <Route path="reservation" element={<Reservation />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/mainpage" replace />} />
