@@ -10,7 +10,7 @@ import axios from "axios";
 import "./App.css";
 import Login from "./Screens/Login/Login";
 import MainPage from "./Screens/MainPage/MainPage";
-import { setLoginToggle, setResponse } from "./Store/action";
+import { setLoginToggle, setResponse, setShift } from "./Store/action";
 import IPDMaster from "./Screens/IPD/Masters/IPDMaster";
 import WardCharges from "./Screens/IPD/Masters/Ward Charges/WardCharges";
 import ServiceCharges from "./Screens/IPD/Masters/Service Charges/ServiceCharges";
@@ -28,6 +28,7 @@ function App() {
 
   useEffect(() => {
     CheckLog();
+    getShift();
   }, []);
 
   const LoginCheck = useSelector((state) => state.toggle);
@@ -46,7 +47,17 @@ function App() {
       dispatch(setLoginToggle(false));
     }
   };
-
+  const getShift = async () => {
+    try {
+      const response = await axios.get(`${url}/shift`, {
+        withCredentials: true,
+      });
+      dispatch(setShift(response.data.data));
+      console.log("response of getData", response);
+    } catch (error) {
+      console.log("Error of getShift", error);
+    }
+  };
   return (
     <Router>
       <div>

@@ -4,7 +4,7 @@ import "./Login.css";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import SimpleButton from "../../Components/Button/SimpleButton";
-import { setLoginToggle, setResponse } from "../../Store/action";
+import { setLoginToggle, setResponse, setShift } from "../../Store/action";
 import { ErrorAlert } from "../../Components/Alert/Alert";
 const Login = () => {
   const [userId, setUserId] = useState("");
@@ -51,9 +51,21 @@ const Login = () => {
       console.log("response of product api", response);
       Dispatch(setLoginToggle(true));
       Dispatch(setResponse(response.data.data));
+      getShift();
     } catch (error) {
       console.log("error of product api", error);
       Dispatch(setLoginToggle(false));
+    }
+  };
+  const getShift = async () => {
+    try {
+      const response = await axios.get(`${url}/shift`, {
+        withCredentials: true,
+      });
+      Dispatch(setShift(response.data.data));
+      console.log("response of getData", response);
+    } catch (error) {
+      console.log("Error of getShift", error);
     }
   };
 

@@ -42,7 +42,7 @@ export const mainReducer = (state = initialState, action) => {
     case SET_SHIFT:
       return {
         ...state,
-        response: action.payload,
+        shift: action.payload,
       };
     default:
       return state;

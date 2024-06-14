@@ -7,6 +7,9 @@ import SimpleButton from "../../../../Components/Button/SimpleButton";
 import ButtonDis from "../../../../Components/Button/ButtonDis";
 import ConsultantModal from "../../../../Components/Modal/ConsultantModal";
 import moment from "moment";
+import axios from "axios";
+import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
+import MRModel from "../../../../Components/Modal/MRModal";
 
 const Reservation = () => {
   const [consultant, setConsultant] = useState(null);
@@ -16,8 +19,10 @@ const Reservation = () => {
   const [amount, setAmount] = useState("");
 
   const shifData = useSelector((state) => state.shift);
+  const url = useSelector((state) => state.url);
+  const userData = useSelector((state) => state.response);
   useEffect(() => {
-    console.log("Shift Data", shifData);
+    console.log("Shift Data", shifData[0]);
   }, []);
 
   // function
@@ -28,6 +33,7 @@ const Reservation = () => {
     setToDate("");
     setAmount("");
   };
+  // date Handler
   const handleDate = (value, key) => {
     const formattedDate = moment(value).format("DD/MM/YYYY"); // For display/logging
     const isoDate = moment(value).format("YYYY-MM-DD"); // For storing in state
@@ -38,6 +44,50 @@ const Reservation = () => {
     } else if (key === "fromDate") {
       console.log("fromDate:", formattedDate);
       setFromDate(isoDate);
+    }
+  };
+  const check = () => {
+    if (mrInfo === null) {
+      ErrorAlert({ text: "Please Select Mr Number.", timer: 1500 });
+      return;
+    }
+    if (!fromDate || !toDate) {
+      ErrorAlert({ text: "Please Select Both Dates.", timer: 1500 });
+      return;
+    }
+    if (consultant === null) {
+      ErrorAlert({ text: "Please Select Consultant.", timer: 1500 });
+      return;
+    }
+    if (amount === "") {
+      ErrorAlert({ text: "Please Enter Amount.", timer: 1500 });
+      return;
+    }
+    handleSubmit();
+  };
+  // api
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(
+        `${url}/reservation`,
+        {
+          mrNo: mrInfo.MrNo,
+          fromDate,
+          toDate,
+          consultantId: consultant?._id,
+          shiftNo: shifData[0]?.ShiftNo,
+          shiftId: shifData[0]?._id,
+          amount,
+          createdUser: userData[0]?.userId,
+        },
+        { withCredentials: true }
+      );
+      console.log("response of Submit Handler", response.data.data);
+      SuccessAlert({ text: "RESERVATION CREATED SUCCESSFULLY", timer: 1500 });
+      refresh();
+    } catch (error) {
+      console.log("Error of Submit Handler", error);
+      ErrorAlert({ text: error.response.data.message, timer: 1000 });
     }
   };
 
@@ -54,6 +104,7 @@ const Reservation = () => {
                 setMrInfo(e);
               }}
             />
+            <MRModel title={"Create MR No."} onClick={(e) => setMrInfo(e)} />
           </div>
           {mrInfo !== null && (
             <div className=" md:flex md:justify-between md:items-center">
@@ -113,7 +164,7 @@ const Reservation = () => {
           />
         </div>
         <div className="flex justify-center space-x-2 mt-3">
-          <ButtonDis title={"SUBMIT"} />
+          <ButtonDis title={"SUBMIT"} onClick={check} />
           <ButtonDis title={"Refresh"} onClick={refresh} />
           <ButtonDis title={"Print"} />
         </div>

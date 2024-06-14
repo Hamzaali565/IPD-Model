@@ -1,7 +1,15 @@
 import React from "react";
 import SimpleInput from "../SimpleInput/SimpleInput";
 
-const LabeledInput = ({ label, max, placeholder, type, onChange, value }) => {
+const LabeledInput = ({
+  label,
+  max,
+  placeholder,
+  type,
+  onChange,
+  value,
+  disabled,
+}) => {
   return (
     <div className="md:w-80 grid grid-cols-[5rem,auto] md:grid-cols-[10rem,auto] gap-x-2 items-center">
       <p className="text-sm">{label}:</p>
@@ -10,6 +18,7 @@ const LabeledInput = ({ label, max, placeholder, type, onChange, value }) => {
         placeholder={placeholder}
         type={type}
         onChange={onChange}
+        disabled={disabled}
         value={value}
       />
     </div>

@@ -24,7 +24,7 @@ export const setResponse = (response) => ({
   type: SET_RESPONSE,
   payload: response,
 });
-export const setShift = (response) => ({
+export const setShift = (shift) => ({
   type: SET_SHIFT,
-  payload: response,
+  payload: shift,
 });

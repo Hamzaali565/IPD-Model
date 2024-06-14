@@ -1,6 +1,6 @@
 import React from "react";
 
-const SimpleInput = ({ max, placeholder, type, onChange, value }) => {
+const SimpleInput = ({ max, placeholder, type, onChange, value, disabled }) => {
   return (
     <div>
       <input
@@ -11,6 +11,7 @@ const SimpleInput = ({ max, placeholder, type, onChange, value }) => {
         value={value}
         name=""
         maxLength={max}
+        disabled={disabled}
         id=""
       />
     </div>
