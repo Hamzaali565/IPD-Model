@@ -20,6 +20,8 @@ import DSCharges from "./Screens/IPD/Masters/DS Charges/DSCharges";
 import IPDPatientMaster from "./Screens/IPD/Patient/IPDPatientMaster/IPDPatientMaster";
 import PatientRegistration from "./Screens/IPD/Patient/PatientRegistration/PatientRegistration";
 import Reservation from "./Screens/IPD/Patient/Reservation/Reservation";
+import IPDShiftMaster from "./Screens/IPD/Shift/IPDShiftMaster";
+import CreateShift from "./Screens/IPD/Shift/CreateShift";
 
 function App() {
   const dispatch = useDispatch();
@@ -69,6 +71,13 @@ function App() {
                   path="patientRegistration"
                   element={<PatientRegistration />}
                 />
+                <Route path="reservation" element={<Reservation />} />
+              </Route>
+            </Route>
+            <Route path="mainpage/*" element={<MainPage />}>
+              <Route index element={<Port />} />
+              <Route path="ipdShift/*" element={<IPDShiftMaster />}>
+                <Route path="createShift" element={<CreateShift />} />
                 <Route path="reservation" element={<Reservation />} />
               </Route>
             </Route>

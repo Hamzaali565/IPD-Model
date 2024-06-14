@@ -20,7 +20,7 @@ const style = {
   overflowY: "auto", // Enable vertical scrolling
 };
 
-export default function BasicModal({ onClick, title }) {
+export default function ConsultantModal({ onClick, title }) {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
   const [toggle, setToggle] = useState(false);
@@ -61,7 +61,7 @@ export default function BasicModal({ onClick, title }) {
   // api
   const getData = async () => {
     try {
-      const response = await axios.get(`${url}/patientData`, {
+      const response = await axios.get(`${url}/getconsultant`, {
         withCredentials: true,
       });
       console.log(response.data.data);
@@ -95,10 +95,10 @@ export default function BasicModal({ onClick, title }) {
           </div>
           <div className="container mx-auto mt-3">
             <div className="grid grid-cols-4 text-xs justify-items-center items-center h-16 border border-gray-300">
-              <p className="">MR No.</p>
-              <p className="">Patient Name</p>
-              <p className="">Phone No</p>
-              <p className="">Cnic No</p>
+              <p className="">Serial No.</p>
+              <p className="">Consultant Name</p>
+              <p className="">Speciality</p>
+              <p className="">Status</p>
             </div>
           </div>
 
@@ -111,13 +111,10 @@ export default function BasicModal({ onClick, title }) {
                   onClick={() => SendData(item)}
                 >
                   <div className="grid grid-cols-4 text-xs justify-items-center items-center h-10 border border-gray-300">
-                    <p className="">{item.MrNo}</p>
-                    <p className="">
-                      {item.patientType} {item.patientName} {item.relativeType}{" "}
-                      {item.relativeName}
-                    </p>
-                    <p className="">{item.cellNo}</p>
-                    <p className="">{item.cnicNo}</p>
+                    <p className="">{index + 1}</p>
+                    <p className="">{item?.name}</p>
+                    <p className="">{item.speciality}</p>
+                    <p className="">Active</p>
                   </div>
                 </div>
               ))

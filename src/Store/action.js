@@ -3,6 +3,7 @@ import {
   SET_LOGIN,
   SET_LOGIN_TOGGLE,
   SET_RESPONSE,
+  SET_SHIFT,
 } from "./actionType";
 
 export const setLogin = (login) => ({
@@ -21,5 +22,9 @@ export const setLoginToggle = (toggle) => ({
 
 export const setResponse = (response) => ({
   type: SET_RESPONSE,
+  payload: response,
+});
+export const setShift = (response) => ({
+  type: SET_SHIFT,
   payload: response,
 });

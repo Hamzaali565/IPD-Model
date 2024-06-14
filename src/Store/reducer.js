@@ -3,6 +3,7 @@ import {
   SET_LOGIN,
   SET_LOGIN_TOGGLE,
   SET_RESPONSE,
+  SET_SHIFT,
 } from "./actionType";
 
 const initialState = {
@@ -13,6 +14,7 @@ const initialState = {
       : `https://ipd-server.vercel.app/api/v1`,
   toggle: null,
   response: [], // Add response to the initial state
+  shift: [],
 };
 
 export const mainReducer = (state = initialState, action) => {
@@ -33,6 +35,11 @@ export const mainReducer = (state = initialState, action) => {
         url: state.url,
       };
     case SET_RESPONSE:
+      return {
+        ...state,
+        response: action.payload,
+      };
+    case SET_SHIFT:
       return {
         ...state,
         response: action.payload,
