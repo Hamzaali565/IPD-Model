@@ -7,7 +7,7 @@ const IPDPatientMaster = () => {
     { name: "--" },
     { name: "Patient Registration" },
     { name: "Reservation" },
-    { name: "Addmission" },
+    { name: "Admission" },
     { name: "Bed Allocation" },
     { name: "New Born Baby" },
   ];
@@ -22,6 +22,9 @@ const IPDPatientMaster = () => {
       navigate(path);
     } else if (name === "Reservation") {
       path = "reservation"; // Relative path
+      navigate(path);
+    } else if (name === "Admission") {
+      path = "admission"; // Relative path
       navigate(path);
     }
   };
