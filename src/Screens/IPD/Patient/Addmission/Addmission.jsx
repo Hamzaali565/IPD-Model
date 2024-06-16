@@ -10,6 +10,7 @@ import ReservationModal from "../../../../Components/Modal/ReservationModal";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import ButtonDis from "../../../../Components/Button/ButtonDis";
+import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 
 const Addmission = () => {
   const [admissionType, setAdmissionType] = useState("");
@@ -19,8 +20,15 @@ const Addmission = () => {
   const [mrInfo, setMrInfo] = useState(null);
   const [party, setParty] = useState(null);
   const [consultant, setConsultant] = useState(null);
+  const [toggle, setToggle] = useState(false);
+  const [wardName, setWardName] = useState("");
+  const [bedNo, setBBedNo] = useState("");
+  const [bedId, setBedId] = useState("");
+  const [remarks, setRemarks] = useState("");
+  const [referedBy, setReferedBy] = useState("");
 
   const url = useSelector((state) => state.url);
+  const userData = useSelector((state) => state.response);
 
   const typeData = [
     { name: "--" },
@@ -30,7 +38,7 @@ const Addmission = () => {
   useEffect(() => {
     setADType(typeData);
     wardNames();
-  }, []);
+  }, [toggle]);
 
   // function
   const pickMr = (name) => {
@@ -46,9 +54,58 @@ const Addmission = () => {
     console.log(name);
     setConsultant(name);
   };
+
+  const validationCheck = () => {
+    if (mrInfo === null) {
+      ErrorAlert({
+        text: "PLEASE SELECT MR NUMBER / RESERVATION NO.",
+        timer: 2000,
+      });
+      return;
+    }
+    if (party === null) {
+      ErrorAlert({ text: "PLEASE SELECT PARTY", timer: 2000 });
+      return;
+    }
+    if (wardName === "") {
+      ErrorAlert({ text: "PLEASE SELECT WARD", timer: 2000 });
+      return;
+    }
+    if (bedNo === "") {
+      ErrorAlert({ text: "PLEASE SELECT BED NO", timer: 2000 });
+      return;
+    }
+    if (consultant === null) {
+      ErrorAlert({ text: "PLEASE SELECT CONSULTANT", timer: 2000 });
+      return;
+    }
+    admission();
+  };
+
+  const resetFlag = () => {
+    setMrInfo(null);
+    setParty(null);
+    setConsultant(null);
+    setBed([]);
+    setToggle(!toggle);
+    setReferedBy("");
+    setRemarks("");
+  };
+
+  const resetBed = () => {
+    setBed([]);
+  };
+
+  const checkbedId = (e) => {
+    const filteredData = bed.filter((items) => e === items?.name);
+    console.log("filterd Data", filteredData);
+    setBBedNo(e);
+    setBedId(filteredData[0]._id);
+  };
   //   api
   const wardNames = async () => {
     try {
+      setWard([]);
       const response = await axios.get(`${url}/ipdward`, {
         withCredentials: true,
       });
@@ -60,6 +117,7 @@ const Addmission = () => {
   };
 
   const bedName = async (name) => {
+    setWardName(name);
     try {
       const response = await axios.get(
         `${url}/ipdadmissionbed?wardName=${name}`,
@@ -69,6 +127,32 @@ const Addmission = () => {
       console.log("response of bedName", response.data.data);
     } catch (error) {
       console.log("Error of bedName", error);
+    }
+  };
+
+  const admission = async () => {
+    try {
+      const response = await axios.post(
+        `${url}/admission`,
+        {
+          wardName,
+          party: party?.name,
+          bedId,
+          admissionType,
+          mrNo: mrInfo?.MrNo,
+          createdUser: userData[0].userId,
+          remarks,
+          referedBy,
+          bedNo,
+          consultantId: consultant?._id,
+        },
+        { withCredentials: true }
+      );
+      console.log("response of admission", response.data.data);
+      resetFlag();
+      SuccessAlert({ text: "ADMISSION CREATED SUCCESSFULLY", timer: 3000 });
+    } catch (error) {
+      console.log("error of admission", error);
     }
   };
   return (
@@ -81,6 +165,7 @@ const Addmission = () => {
             DropDownLabel={"Select Admission Type"}
             data={ADType}
             onChange={(e) => setAdmissionType(e)}
+            onClick={resetFlag}
           />
 
           {admissionType === "Direct" ? (
@@ -106,10 +191,12 @@ const Addmission = () => {
               DropDownLabel={"Select Ward"}
               onChange={(e) => bedName(e)}
               data={ward.length > 0 ? ward : ""}
+              onClick={resetBed}
             />
             <SimpleDropDown
               DropDownLabel={"Select Bed"}
               data={bed.length > 0 ? bed : []}
+              onChange={(e) => checkbedId(e)}
             />
             <ConsultantModal
               title={"Select Consultant"}
@@ -155,12 +242,24 @@ const Addmission = () => {
               disabled={true}
               value={consultant !== null ? consultant?.name : ""}
             />
+            <LabeledInput
+              label={"Remarks"}
+              value={remarks}
+              onChange={(e) => setRemarks(e.target.value)}
+              placeholder={"Enter Remarks"}
+            />
+            <LabeledInput
+              label={"Refered By"}
+              value={referedBy}
+              placeholder={"Enter referal name"}
+              onChange={(e) => setReferedBy(e.target.value)}
+            />
           </div>
         </div>
       </div>
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl flex justify-center space-x-2">
-        <ButtonDis title={"Save"} />
-        <ButtonDis title={"Refresh"} />
+        <ButtonDis title={"Save"} onClick={validationCheck} />
+        <ButtonDis title={"Refresh"} onClick={resetFlag} />
       </div>
     </div>
   );
