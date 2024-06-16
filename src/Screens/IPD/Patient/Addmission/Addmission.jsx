@@ -26,7 +26,7 @@ const Addmission = () => {
   const [bedId, setBedId] = useState("");
   const [remarks, setRemarks] = useState("");
   const [referedBy, setReferedBy] = useState("");
-
+  const [buttonDis, setButtonDis] = useState(false);
   const url = useSelector((state) => state.url);
   const userData = useSelector((state) => state.response);
 
@@ -132,6 +132,7 @@ const Addmission = () => {
 
   const admission = async () => {
     try {
+      setButtonDis(true);
       const response = await axios.post(
         `${url}/admission`,
         {
@@ -139,20 +140,24 @@ const Addmission = () => {
           party: party?.name,
           bedId,
           admissionType,
-          mrNo: mrInfo?.MrNo,
+          mrNo: mrInfo?.MrNo ? mrInfo?.MrNo : mrInfo?.mrNo,
           createdUser: userData[0].userId,
           remarks,
           referedBy,
           bedNo,
           consultantId: consultant?._id,
+          reservationNo: mrInfo?.reservationNo ? mrInfo?.reservationNo : "",
         },
         { withCredentials: true }
       );
       console.log("response of admission", response.data.data);
       resetFlag();
       SuccessAlert({ text: "ADMISSION CREATED SUCCESSFULLY", timer: 3000 });
+      setButtonDis(false);
     } catch (error) {
       console.log("error of admission", error);
+      setButtonDis(false);
+      ErrorAlert({ text: error?.response?.data?.message });
     }
   };
   return (
@@ -258,7 +263,11 @@ const Addmission = () => {
         </div>
       </div>
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl flex justify-center space-x-2">
-        <ButtonDis title={"Save"} onClick={validationCheck} />
+        <ButtonDis
+          title={"Save"}
+          onClick={validationCheck}
+          disabled={buttonDis}
+        />
         <ButtonDis title={"Refresh"} onClick={resetFlag} />
       </div>
     </div>
