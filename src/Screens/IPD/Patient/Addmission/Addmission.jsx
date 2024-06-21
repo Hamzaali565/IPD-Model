@@ -250,14 +250,14 @@ const Addmission = () => {
             <LabeledInput
               label={"Remarks"}
               value={remarks}
-              onChange={(e) => setRemarks(e.target.value)}
+              onChange={(e) => setRemarks(e.target.value.toUpperCase())}
               placeholder={"Enter Remarks"}
             />
             <LabeledInput
               label={"Refered By"}
               value={referedBy}
               placeholder={"Enter referal name"}
-              onChange={(e) => setReferedBy(e.target.value)}
+              onChange={(e) => setReferedBy(e.target.value.toUpperCase())}
             />
           </div>
         </div>

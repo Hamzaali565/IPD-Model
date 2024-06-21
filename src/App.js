@@ -23,6 +23,9 @@ import Reservation from "./Screens/IPD/Patient/Reservation/Reservation";
 import IPDShiftMaster from "./Screens/IPD/Shift/IPDShiftMaster";
 import CreateShift from "./Screens/IPD/Shift/CreateShift";
 import Addmission from "./Screens/IPD/Patient/Addmission/Addmission";
+import IPDTransactionMaster from "./Screens/IPD/Transaction/IPDTransactionMaster/IPDTransactionMaster";
+import ConsultantVisit from "./Screens/IPD/Transaction/ConsultantVisit/ConsultantVisit";
+import IPDWardCharges from "./Screens/IPD/Transaction/WardCharges/IPDWardCharges";
 
 function App() {
   const dispatch = useDispatch();
@@ -91,6 +94,14 @@ function App() {
               <Route index element={<Port />} />
               <Route path="ipdShift/*" element={<IPDShiftMaster />}>
                 <Route path="createShift" element={<CreateShift />} />
+              </Route>
+            </Route>
+            <Route path="mainpage/*" element={<MainPage />}>
+              <Route index element={<Port />} />
+              <Route path="transaction/*" element={<IPDTransactionMaster />}>
+                <Route path="servicereversal" element={<CreateShift />} />
+                <Route path="consultantvisit" element={<ConsultantVisit />} />
+                <Route path="ipdwardcharges" element={<IPDWardCharges />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/mainpage" replace />} />
