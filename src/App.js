@@ -26,6 +26,7 @@ import Addmission from "./Screens/IPD/Patient/Addmission/Addmission";
 import IPDTransactionMaster from "./Screens/IPD/Transaction/IPDTransactionMaster/IPDTransactionMaster";
 import ConsultantVisit from "./Screens/IPD/Transaction/ConsultantVisit/ConsultantVisit";
 import IPDWardCharges from "./Screens/IPD/Transaction/WardCharges/IPDWardCharges";
+import ProcedureCharges from "./Screens/IPD/Transaction/ProcedureCharges/ProcedureCharges";
 
 function App() {
   const dispatch = useDispatch();
@@ -102,6 +103,7 @@ function App() {
                 <Route path="servicereversal" element={<CreateShift />} />
                 <Route path="consultantvisit" element={<ConsultantVisit />} />
                 <Route path="ipdwardcharges" element={<IPDWardCharges />} />
+                <Route path="procedurecharges" element={<ProcedureCharges />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/mainpage" replace />} />

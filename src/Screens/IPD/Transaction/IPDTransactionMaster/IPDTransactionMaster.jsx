@@ -8,6 +8,7 @@ const IPDTransactionMaster = () => {
     { name: "Service Reversal" },
     { name: "Constultant Visit" },
     { name: "Room Charges" },
+    { name: "Procedure Charges" },
   ];
 
   let navigate = useNavigate();
@@ -23,6 +24,9 @@ const IPDTransactionMaster = () => {
       navigate(path);
     } else if (name === "Room Charges") {
       path = "ipdwardcharges"; // Relative path
+      navigate(path);
+    } else if (name === "Procedure Charges") {
+      path = "procedurecharges"; // Relative path
       navigate(path);
     }
   };
