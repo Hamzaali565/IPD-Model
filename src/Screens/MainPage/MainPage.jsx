@@ -11,8 +11,9 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 const MainPage = () => {
   const [toggle, setToggle] = useState(false);
   const dispatch = useDispatch();
-  const url = useSelector((state) => state.url);
 
+  const url = useSelector((state) => state.url);
+  const userData = useSelector((state) => state.response);
   let navigate = useNavigate();
 
   const logout = async () => {
@@ -39,7 +40,7 @@ const MainPage = () => {
             <i className="bi bi-grid-3x3-gap-fill"></i>
           )}
         </button>
-        <h1>HAmza</h1>
+        <h1>{userData[0].userName}</h1>
       </div>
 
       {/* Sidebar */}
