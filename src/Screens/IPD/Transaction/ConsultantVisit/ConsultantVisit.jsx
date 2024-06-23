@@ -209,7 +209,7 @@ const ConsultantVisit = () => {
                 <p>{items?.charges}</p>
                 <p>{items?.visitDate}</p>
                 <p
-                  className="font-bold underline cursor-pointer"
+                  className="font-bold underline cursor-pointer hover:text-red-600"
                   onClick={() => deleteData(items)}
                 >
                   DELETE
