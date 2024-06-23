@@ -7,7 +7,7 @@ import ButtonDis from "../../../../Components/Button/ButtonDis";
 import AdmissionModal from "../../../../Components/Modal/AdmissionModal";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { ErrorAlert } from "../../../../Components/Alert/Alert";
+import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 
 const ConsultantVisit = () => {
   const [mrInfo, setMrInfo] = useState(null);
@@ -15,10 +15,12 @@ const ConsultantVisit = () => {
   const [visiDetails, setVisistDetails] = useState([]);
   const [date, setDate] = useState("");
   const [remarks, setRemarks] = useState("");
+  const [visitData, setVisitData] = useState([]);
 
   const url = useSelector((state) => state.url);
   const userId = useSelector((state) => state.response);
 
+  // api
   const checkItOut = async (data) => {
     try {
       setConsultant(data);
@@ -40,13 +42,96 @@ const ConsultantVisit = () => {
       console.log("Error of CheckItOut", error);
     }
   };
+  // api
+  const submitVisit = async () => {
+    try {
+      const response = await axios.post(
+        `${url}/consultantvisit`,
+        {
+          admissionNo: mrInfo?.admissionNo,
+          mrNo: mrInfo?.mrNo,
+          consultantId: consultant?._id,
+          consultantName: consultant?.name,
+          visitDate: date,
+          remarks,
+          createdUser: userId[0]?.userId,
+          charges: visiDetails[0]?.charges,
+        },
 
+        { withCredentials: true }
+      );
+      console.log("response of submitVisit", response?.data?.data);
+      refreshData2();
+      SuccessAlert({ text: "DATA SAVED SUCCESSFULLY!!!", timer: 1000 });
+      previousData(mrInfo);
+    } catch (error) {
+      console.log("error of submitVisit", error);
+      ErrorAlert({ text: error.response.data.message, timer: 2000 });
+    }
+  };
+  // api
+  const previousData = async (e) => {
+    try {
+      setMrInfo(e);
+      const response = await axios.get(
+        `${url}/consultantvisit?admissionNo=${e?.admissionNo}`,
+        { withCredentials: true }
+      );
+      console.log("response of previous data", response.data.data);
+      setVisitData(response?.data?.data);
+      refreshData2();
+    } catch (error) {
+      console.log("error of previous data", error.response.data);
+      setVisitData([]);
+    }
+  };
+
+  // api
+
+  const deleteData = async (item) => {
+    try {
+      console.log("Item", item);
+      const response = await axios.put(
+        `${url}/consultantvisit`,
+        {
+          isDeleted: true,
+          admissionNo: item?.admissionNo,
+          deletedUser: userId[0]?.userId,
+          _id: item?._id,
+        },
+        { withCredentials: true }
+      );
+      console.log("response of deleteData", response);
+      SuccessAlert({ text: "Visit Deleted Successfully", timer: 1000 });
+      previousData(mrInfo);
+    } catch (error) {
+      console.log("Error of delete data", error);
+    }
+  };
+
+  // function
   const updateCharges = (value) => {
     const newData = visiDetails.map((item) => {
       return { ...item, charges: +value };
     });
     setVisistDetails(newData);
   };
+
+  const refreshData = () => {
+    setMrInfo(null);
+    setConsultant(null);
+    setVisistDetails([]);
+    setDate("");
+    setRemarks("");
+    setVisitData([]);
+  };
+  const refreshData2 = () => {
+    setConsultant(null);
+    setVisistDetails([]);
+    setDate("");
+    setRemarks("");
+  };
+
   return (
     <div>
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
@@ -54,7 +139,7 @@ const ConsultantVisit = () => {
         <div className="flex justify-center items-center my-4">
           <AdmissionModal
             title={"Select Admission No."}
-            onClick={(e) => setMrInfo(e)}
+            onClick={(e) => previousData(e)}
           />
         </div>
         {mrInfo !== null && (
@@ -93,14 +178,19 @@ const ConsultantVisit = () => {
           <LabeledInput
             label={"Visit Date"}
             type={"date"}
+            value={date}
             onChange={(e) => setDate(e.target.value)}
           />
           <LabeledInput
             label={"Remarks"}
             placeholder={"Remarks"}
-            onChange={(e) => setRemarks(e.target.value)}
+            value={remarks}
+            onChange={(e) => setRemarks(e.target.value.toUpperCase())}
           />
-          <ButtonDis title={"Save"} />
+          <div className="flex space-x-2">
+            <ButtonDis title={"Save"} onClick={submitVisit} />
+            <ButtonDis title={"Refresh"} onClick={refreshData} />
+          </div>
         </div>
 
         <div className="container mx-auto mt-3">
@@ -108,17 +198,25 @@ const ConsultantVisit = () => {
             <p>Consultant Name</p>
             <p>Charges</p>
             <p>Date</p>
-            <p>Delete</p>
+            <p>Remove</p>
           </div>
         </div>
-        <div className="container mx-auto mt-3">
-          <div className="mt-3 grid grid-cols-4 text-xs justify-items-center items-center h-10 border border-gray-300">
-            <p>Dr. Muhammad Ali Memon</p>
-            <p>20000</p>
-            <p>20/10/2024</p>
-            <p>Added</p>
-          </div>
-        </div>
+        {visitData.length > 0 &&
+          visitData.map((items, index) => (
+            <div className="container mx-auto mt-3" key={index}>
+              <div className="mt-3 grid grid-cols-4 text-xs justify-items-center items-center h-10 border border-gray-300">
+                <p>{items?.consultantName}</p>
+                <p>{items?.charges}</p>
+                <p>{items?.visitDate}</p>
+                <p
+                  className="font-bold underline cursor-pointer"
+                  onClick={() => deleteData(items)}
+                >
+                  DELETE
+                </p>
+              </div>
+            </div>
+          ))}
       </div>
     </div>
   );
