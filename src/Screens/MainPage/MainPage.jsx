@@ -66,14 +66,6 @@ const MainPage = () => {
               }}
             />
           </Link>
-          <Link to={"/mainPage/ipdShift"}>
-            <SidebarItems
-              title={"Shift"}
-              onClick={() => {
-                setToggle(!toggle);
-              }}
-            />
-          </Link>
           <Link to={"/mainPage/transaction"}>
             <SidebarItems
               title={"Transaction"}
@@ -82,6 +74,15 @@ const MainPage = () => {
               }}
             />
           </Link>
+          <Link to={"/mainPage/ipdShift"}>
+            <SidebarItems
+              title={"Shift"}
+              onClick={() => {
+                setToggle(!toggle);
+              }}
+            />
+          </Link>
+
           <SidebarItems title={"Welfare"} />
           <SidebarItems title={"Direct Services"} />
           <SidebarItems title={"Reports"} />

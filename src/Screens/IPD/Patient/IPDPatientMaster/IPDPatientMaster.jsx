@@ -26,6 +26,9 @@ const IPDPatientMaster = () => {
     } else if (name === "Admission") {
       path = "admission"; // Relative path
       navigate(path);
+    } else if (name === "Bed Allocation") {
+      path = "bedallocation"; // Relative path
+      navigate(path);
     }
   };
 

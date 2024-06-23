@@ -27,6 +27,7 @@ import IPDTransactionMaster from "./Screens/IPD/Transaction/IPDTransactionMaster
 import ConsultantVisit from "./Screens/IPD/Transaction/ConsultantVisit/ConsultantVisit";
 import IPDWardCharges from "./Screens/IPD/Transaction/WardCharges/IPDWardCharges";
 import ProcedureCharges from "./Screens/IPD/Transaction/ProcedureCharges/ProcedureCharges";
+import BedAllocation from "./Screens/IPD/Patient/BedAllocation/BedAllocation";
 
 function App() {
   const dispatch = useDispatch();
@@ -68,6 +69,7 @@ function App() {
       <div>
         {LoginCheck === true ? (
           <Routes>
+            {/* master */}
             <Route path="mainpage/*" element={<MainPage />}>
               <Route index element={<Port />} />
               <Route path="ipdmaster/*" element={<IPDMaster />}>
@@ -80,6 +82,7 @@ function App() {
                 />
               </Route>
             </Route>
+            {/* patient */}
             <Route path="mainpage/*" element={<MainPage />}>
               <Route index element={<Port />} />
               <Route path="ipdPatient/*" element={<IPDPatientMaster />}>
@@ -89,14 +92,17 @@ function App() {
                 />
                 <Route path="reservation" element={<Reservation />} />
                 <Route path="admission" element={<Addmission />} />
+                <Route path="bedallocation" element={<BedAllocation />} />
               </Route>
             </Route>
+            {/* shift */}
             <Route path="mainpage/*" element={<MainPage />}>
               <Route index element={<Port />} />
               <Route path="ipdShift/*" element={<IPDShiftMaster />}>
                 <Route path="createShift" element={<CreateShift />} />
               </Route>
             </Route>
+            {/* transaction */}
             <Route path="mainpage/*" element={<MainPage />}>
               <Route index element={<Port />} />
               <Route path="transaction/*" element={<IPDTransactionMaster />}>
