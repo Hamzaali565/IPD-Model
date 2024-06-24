@@ -60,7 +60,11 @@ const BedAllocation = () => {
             bed.map((items, index) => (
               <BED
                 key={index}
-                patienName={`${items?.patientType} ${items?.patientName} ${items?.relativeType} ${items?.relativeName}`}
+                patienName={`${items?.patientType ? items?.patientType : ""} ${
+                  items?.patientName ? items?.patientName : ""
+                } ${items?.relativeType ? items?.relativeType : ""} ${
+                  items?.relativeName ? items?.relativeName : ""
+                }`}
                 bedNo={items?.bedNo}
                 admissionNo={items?.admissionNo}
                 onClick={(data) => console.log(data)}
