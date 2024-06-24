@@ -14,6 +14,7 @@ const MainPage = () => {
 
   const url = useSelector((state) => state.url);
   const userData = useSelector((state) => state.response);
+  console.log("userdata ", userData);
   let navigate = useNavigate();
 
   const logout = async () => {
@@ -40,7 +41,9 @@ const MainPage = () => {
             <i className="bi bi-grid-3x3-gap-fill"></i>
           )}
         </button>
-        <h1>{userData[0].userName}</h1>
+        <h1>
+          {userData[0]?.userName ? userData[0]?.userName : userData?.userName}
+        </h1>
       </div>
 
       {/* Sidebar */}
