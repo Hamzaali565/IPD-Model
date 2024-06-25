@@ -41,6 +41,10 @@ const BedAllocation = () => {
       console.log("error of check details", error);
     }
   };
+
+  const checkData = (name) => {
+    console.log(name);
+  };
   const ResetBed = () => {
     setBed([]);
   };
@@ -68,6 +72,7 @@ const BedAllocation = () => {
                 bedNo={items?.bedNo}
                 admissionNo={items?.admissionNo}
                 onClick={(data) => console.log(data)}
+                onClickModalItem={checkData}
               />
             ))}
         </div>

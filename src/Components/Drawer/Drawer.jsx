@@ -2,8 +2,14 @@ import * as React from "react";
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import ServiceModal from "../Modal/ServiceModal";
 
-export default function Drawer({ onClick }) {
+export default function Drawer({
+  onClick,
+  modalAdmissionNo,
+  patientName,
+  onClickModalItem,
+}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -11,7 +17,9 @@ export default function Drawer({ onClick }) {
   };
   const handleClose = (value) => {
     onClick(value);
-    setAnchorEl(null);
+    if (value === "Close") {
+      setAnchorEl(null);
+    }
   };
 
   return (
@@ -34,11 +42,24 @@ export default function Drawer({ onClick }) {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={() => handleClose("service")}>Services</MenuItem>
+        <MenuItem onClick={() => handleClose("service")}>
+          <ServiceModal
+            title={"Services"}
+            modalAdmissionNo={modalAdmissionNo}
+            patientName={patientName}
+            onClick={onClickModalItem}
+          />
+        </MenuItem>
         <MenuItem onClick={() => handleClose("lab")}>Laboratory</MenuItem>
         <MenuItem onClick={() => handleClose("med")}>Medicines</MenuItem>
         <MenuItem onClick={() => handleClose("radio")}>Radiology</MenuItem>
         <MenuItem onClick={() => handleClose("view")}>View History</MenuItem>
+        <MenuItem
+          onClick={() => handleClose("Close")}
+          style={{ fontWeight: "bold", color: "red" }}
+        >
+          Close Menu
+        </MenuItem>
       </Menu>
     </div>
   );
