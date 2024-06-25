@@ -5,6 +5,8 @@ import Modal from "@mui/material/Modal";
 import SimpleInput from "../SimpleInput/SimpleInput";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import CenterHeading from "../Center Heading/CenterHeading";
+import ButtonDis from "../Button/ButtonDis";
 
 const style = {
   position: "absolute",
@@ -29,12 +31,17 @@ export default function ServiceModal({
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
   const [toggle, setToggle] = useState(false);
+  const [serviceDetails, setServiceDetails] = useState([]);
   const inputRef = useRef(null); // Reference for the input element
 
   React.useEffect(() => {
     getData();
   }, [toggle]);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setData([]);
+    setServiceDetails([]);
+  };
 
   const url = useSelector((state) => state.url);
 
@@ -60,9 +67,19 @@ export default function ServiceModal({
   };
 
   const SendData = (item) => {
-    onClick(item);
-    handleClose();
+    for (const existingItem of serviceDetails) {
+      if (existingItem?.serviceId === item?.serviceId) {
+        console.log("Item already exists");
+        return;
+      }
+    }
+    item.amount = item.charges;
+    item.quantity = 1;
+    setServiceDetails((prevServiceDetails) => [...prevServiceDetails, item]);
+    console.log("serviceDetails", serviceDetails);
+    // handleClose();
   };
+
   // api
   const getData = async () => {
     try {
@@ -83,6 +100,20 @@ export default function ServiceModal({
       inputRef.current.focus();
     }
   }, [open]);
+  const updateSD = (value, data) => {
+    const updatedData = serviceDetails?.map((item) => {
+      if (item.serviceId === data.serviceId) {
+        return {
+          ...item,
+          quantity: +value,
+          amount: value * item?.charges,
+        };
+      }
+      return item;
+    });
+    setServiceDetails(updatedData);
+    console.log(updatedData);
+  };
 
   return (
     <div>
@@ -92,6 +123,10 @@ export default function ServiceModal({
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        BackdropProps={{
+          style: { cursor: "default" }, // Change cursor style
+          onClick: (e) => e.stopPropagation(), // Prevent closing on backdrop click
+        }}
       >
         <Box sx={style}>
           <div className="flex justify-around mb-3">
@@ -109,35 +144,84 @@ export default function ServiceModal({
           <div className="flex justify-center">
             <SimpleInput
               ref={inputRef}
-              placeholder={"Input Patient Data"}
+              placeholder={"Search Services . . ."}
               onChange={(e) => filterNames(e.target.value)}
             />
           </div>
-          <div className="container mx-auto mt-3">
-            <div className="grid grid-cols-2 text-xs justify-items-center items-center h-16 border border-gray-300">
-              <p className="">Service Name</p>
-              <p className="">Amount</p>
+          {/* main */}
+          <div className="grid grid-cols-2 gap-x-2">
+            {/* service names */}
+            <div>
+              <CenterHeading title={"Services"} />
+              <div className="container mx-auto mt-3">
+                <div className="grid grid-cols-2 text-xs justify-items-center items-center h-16 border border-gray-300">
+                  <p className="">Service Name</p>
+                  <p className="">Amount</p>
+                </div>
+              </div>
+
+              <div className="max-h-96">
+                {data.length > 0 ? (
+                  data.map((item, index) => (
+                    <div
+                      className="container mx-auto mt-3 cursor-pointer"
+                      key={index}
+                      onClick={() => SendData(item)}
+                    >
+                      <div className="grid grid-cols-2 text-xs justify-items-center items-center h-10 border border-gray-300">
+                        <p className="">{item?.serviceName}</p>
+
+                        <p className="">{item?.charges}</p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="flex justify-center">NO Data Loaded...</div>
+                )}
+              </div>
             </div>
-          </div>
+            {/* service details */}
+            <div>
+              <CenterHeading title={"Service Details"} />
 
-          <div className="max-h-96">
-            {data.length > 0 ? (
-              data.map((item, index) => (
-                <div
-                  className="container mx-auto mt-3 cursor-pointer"
-                  key={index}
-                  onClick={() => SendData(item)}
-                >
-                  <div className="grid grid-cols-2 text-xs justify-items-center items-center h-10 border border-gray-300">
-                    <p className="">{item?.serviceName}</p>
-
-                    <p className="">{item?.charges}</p>
+              <div className="container mx-auto mt-3">
+                <div className="grid grid-cols-3 text-xs justify-items-center items-center h-16 border border-gray-300">
+                  <p className="">Service Name</p>
+                  <p className="">No. of Times</p>
+                  <p className="">Amount</p>
+                </div>
+                <div className="container mx-auto mt-3">
+                  {serviceDetails?.length > 0 &&
+                    serviceDetails?.map((items, index) => (
+                      <div className="grid grid-cols-3 text-xs justify-items-center items-center h-10 mt-2 border border-gray-300">
+                        <p className="">{items?.serviceName}</p>
+                        <p className="">
+                          <input
+                            type="number"
+                            className="w-16 border-2 p-1 border-gray-600 rounded-xl"
+                            placeholder="Qty"
+                            value={items?.quantity}
+                            name=""
+                            id=""
+                            onChange={(e) => updateSD(e.target.value, items)}
+                          />
+                        </p>
+                        <p className="">{items?.amount}</p>
+                      </div>
+                    ))}
+                  <div className="flex justify-center space-x-2 mt-2">
+                    <ButtonDis title={"Save"} />
+                    <ButtonDis
+                      title={"Refresh"}
+                      onClick={() =>
+                        console.log("service", setServiceDetails([]))
+                      }
+                    />
+                    <ButtonDis title={"Cancel"} onClick={handleClose} />
                   </div>
                 </div>
-              ))
-            ) : (
-              <div className="flex justify-center">NO Data Loaded...</div>
-            )}
+              </div>
+            </div>
           </div>
         </Box>
       </Modal>
