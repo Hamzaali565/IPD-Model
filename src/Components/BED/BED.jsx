@@ -21,8 +21,12 @@ const BED = ({
         />
       </div>
       <p className="text-center text-xs">BED NO. {bedNo}</p>
-      <p className="text-center text-xs mt-1">ADM NO. {admissionNo}</p>
-      <p className="text-center text-xs mt-1">{patienName}</p>
+      <p className="text-center text-xs mt-1">
+        ADM NO. <span className="text-red-600">{admissionNo}</span>
+      </p>
+      <p className="text-center text-xs mt-1 text-red-600 font-bold">
+        {patienName}
+      </p>
     </div>
   );
 };
