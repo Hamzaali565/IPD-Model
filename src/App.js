@@ -29,6 +29,7 @@ import IPDWardCharges from "./Screens/IPD/Transaction/WardCharges/IPDWardCharges
 import ProcedureCharges from "./Screens/IPD/Transaction/ProcedureCharges/ProcedureCharges";
 import BedAllocation from "./Screens/IPD/Patient/BedAllocation/BedAllocation";
 import ServiceReversal from "./Screens/IPD/Transaction/ServiceReversal.jsx/ServiceReversal";
+import WardTransfer from "./Screens/IPD/Transaction/WardTransfer/WardTransfer";
 
 function App() {
   const dispatch = useDispatch();
@@ -111,6 +112,7 @@ function App() {
                 <Route path="consultantvisit" element={<ConsultantVisit />} />
                 <Route path="ipdwardcharges" element={<IPDWardCharges />} />
                 <Route path="procedurecharges" element={<ProcedureCharges />} />
+                <Route path="wardtransfer" element={<WardTransfer />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/mainpage" replace />} />
