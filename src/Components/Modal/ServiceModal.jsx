@@ -7,6 +7,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import CenterHeading from "../Center Heading/CenterHeading";
 import ButtonDis from "../Button/ButtonDis";
+import { ErrorAlert, SuccessAlert } from "../Alert/Alert";
 
 const style = {
   position: "absolute",
@@ -44,6 +45,7 @@ export default function ServiceModal({
   };
 
   const url = useSelector((state) => state.url);
+  const userData = useSelector((item) => item?.response);
 
   const OpenData = () => {
     setToggle(!toggle);
@@ -75,9 +77,25 @@ export default function ServiceModal({
     }
     item.amount = item.charges;
     item.quantity = 1;
+    item.createdUser = userData[0]?.userId;
     setServiceDetails((prevServiceDetails) => [...prevServiceDetails, item]);
     console.log("serviceDetails", serviceDetails);
     // handleClose();
+  };
+
+  const updateSD = (value, data) => {
+    const updatedData = serviceDetails?.map((item) => {
+      if (item.serviceId === data.serviceId) {
+        return {
+          ...item,
+          quantity: +value,
+          amount: value * item?.charges,
+        };
+      }
+      return item;
+    });
+    setServiceDetails(updatedData);
+    console.log(updatedData);
   };
 
   // api
@@ -95,25 +113,33 @@ export default function ServiceModal({
       console.log("error of get data", error);
     }
   };
+
+  const createService = async () => {
+    try {
+      if (serviceDetails.length <= 0)
+        throw new Error("PLEASE SELECT SERVICE !!!");
+      const response = await axios.post(
+        `${url}/internalservice`,
+        {
+          admissionNo: modalAdmissionNo,
+          serviceDetails: serviceDetails,
+        },
+        { withCredentials: true }
+      );
+      console.log("response of createService", response.data);
+      handleClose();
+      SuccessAlert({ text: "Service added successfully", timer: 2000 });
+    } catch (error) {
+      console.log("Error of createService", error);
+      ErrorAlert({ text: error.message, timer: 2000 });
+    }
+  };
+
   useEffect(() => {
     if (open && inputRef.current) {
       inputRef.current.focus();
     }
   }, [open]);
-  const updateSD = (value, data) => {
-    const updatedData = serviceDetails?.map((item) => {
-      if (item.serviceId === data.serviceId) {
-        return {
-          ...item,
-          quantity: +value,
-          amount: value * item?.charges,
-        };
-      }
-      return item;
-    });
-    setServiceDetails(updatedData);
-    console.log(updatedData);
-  };
 
   return (
     <div>
@@ -210,7 +236,7 @@ export default function ServiceModal({
                       </div>
                     ))}
                   <div className="flex justify-center space-x-2 mt-2">
-                    <ButtonDis title={"Save"} />
+                    <ButtonDis title={"Save"} onClick={createService} />
                     <ButtonDis
                       title={"Refresh"}
                       onClick={() =>
