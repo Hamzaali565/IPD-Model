@@ -85,7 +85,14 @@ const MainPage = () => {
               }}
             />
           </Link>
-
+          <Link to={"/mainPage/payments"}>
+            <SidebarItems
+              title={"Payments"}
+              onClick={() => {
+                setToggle(!toggle);
+              }}
+            />
+          </Link>
           <SidebarItems title={"Welfare"} />
           <SidebarItems title={"Direct Services"} />
           <SidebarItems title={"Reports"} />

@@ -7,7 +7,7 @@ const SimpleDropDown = ({ DropDownLabel, data, onChange, onClick }) => {
   };
   return (
     <div className="mt-3 flex justify-center items-center space-x-3">
-      <label for="cars" className="font-bold underline">
+      <label for="cars" className="font-bold underline text-sm">
         {DropDownLabel}
       </label>
 
