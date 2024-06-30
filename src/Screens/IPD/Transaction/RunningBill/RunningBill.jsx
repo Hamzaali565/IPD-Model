@@ -102,6 +102,8 @@ const RunningBill = () => {
         ward={wardCharges}
         procedure={procedureCharges}
         visit={visitCharges}
+        totalCharges={total}
+        depositAmount={deposit}
       />
     ).toBlob();
 

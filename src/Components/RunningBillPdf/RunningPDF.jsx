@@ -9,7 +9,15 @@ import {
 } from "@react-pdf/renderer";
 import logo from "../../Images/ZMCLogo-2.png";
 
-const RunningPDF = ({ billData, service, ward, procedure, visit }) => {
+const RunningPDF = ({
+  billData,
+  service,
+  ward,
+  procedure,
+  visit,
+  totalCharges,
+  depositAmount,
+}) => {
   console.log("BillData", billData);
   const MyPage = ({ children }) => (
     <Page style={styles.page}>
@@ -289,6 +297,120 @@ const RunningPDF = ({ billData, service, ward, procedure, visit }) => {
                 </Text>
               </View>
             ))}
+        </View>
+        <View
+          style={{
+            width: "60%",
+            border: "2px solid black",
+            marginTop: "3",
+            display: "flex",
+            padding: "2",
+            alignSelf: "flex-end",
+          }}
+        >
+          <View style={styles.headC1}>
+            <Text>Cash Detail</Text>
+          </View>
+          <View
+            style={{ display: "flex", flexDirection: "row", marginTop: "2" }}
+          >
+            <Text
+              style={{
+                width: "50%",
+                textAlign: "center",
+                border: "1px solid black",
+                fontSize: "12",
+              }}
+            >
+              Total Amount
+            </Text>
+            <Text
+              style={{
+                width: "50%",
+                textAlign: "center",
+                border: "1px solid black",
+                fontSize: "12",
+              }}
+            >
+              {totalCharges}
+            </Text>
+          </View>
+          <View
+            style={{ display: "flex", flexDirection: "row", marginTop: "2" }}
+          >
+            <Text
+              style={{
+                width: "50%",
+                textAlign: "center",
+                border: "1px solid black",
+                fontSize: "12",
+              }}
+            >
+              Deposit Amount
+            </Text>
+            <Text
+              style={{
+                width: "50%",
+                textAlign: "center",
+                border: "1px solid black",
+                fontSize: "12",
+              }}
+            >
+              {depositAmount}
+            </Text>
+          </View>
+          <View
+            style={{ display: "flex", flexDirection: "row", marginTop: "2" }}
+          >
+            <Text
+              style={{
+                width: "50%",
+                textAlign: "center",
+                border: "1px solid black",
+                fontSize: "12",
+              }}
+            >
+              Recievable Amount
+            </Text>
+            <Text
+              style={{
+                width: "50%",
+                textAlign: "center",
+                border: "1px solid black",
+                fontSize: "12",
+              }}
+            >
+              {totalCharges - depositAmount > 0
+                ? totalCharges - depositAmount
+                : 0}
+            </Text>
+          </View>
+          <View
+            style={{ display: "flex", flexDirection: "row", marginTop: "2" }}
+          >
+            <Text
+              style={{
+                width: "50%",
+                textAlign: "center",
+                border: "1px solid black",
+                fontSize: "12",
+              }}
+            >
+              Refunded Amount
+            </Text>
+            <Text
+              style={{
+                width: "50%",
+                textAlign: "center",
+                border: "1px solid black",
+                fontSize: "12",
+              }}
+            >
+              {totalCharges - depositAmount > 0
+                ? 0
+                : totalCharges - depositAmount}
+            </Text>
+          </View>
         </View>
       </MyPage>
     </Document>
