@@ -5,6 +5,9 @@ import ButtonDis from "../../../../Components/Button/ButtonDis";
 import AdmissionModal from "../../../../Components/Modal/AdmissionModal";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { pdf } from "@react-pdf/renderer";
+import { v4 as uuidv4 } from "uuid";
+import RunningPDF from "../../../../Components/RunningBillPdf/RunningPDF";
 
 const RunningBill = () => {
   const [runningData, setRunningData] = useState([]);
@@ -85,8 +88,27 @@ const RunningBill = () => {
     setVisitCharges(0);
     setTotal(0);
   };
-  const firstClear = () => {
-    refreshData();
+  const handleButtonClick = async () => {
+    // Generate a unique key to force re-render
+
+    const key = uuidv4();
+
+    // Create a PDF document as a Blob
+    const blob = await pdf(
+      <RunningPDF
+        key={key}
+        billData={runningData}
+        service={serviceCharges}
+        ward={wardCharges}
+        procedure={procedureCharges}
+        visit={visitCharges}
+      />
+    ).toBlob();
+
+    // Create a Blob URL and open it in a new tab
+    let url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    url = "";
   };
   return (
     <div>
@@ -218,7 +240,7 @@ const RunningBill = () => {
             </div>
             <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl md:col-span-2">
               <div className="flex flex-col items-center space-y-2 md:flex-row justify-center space-x-2">
-                <ButtonDis title={"Print"} />
+                <ButtonDis title={"Print"} onClick={handleButtonClick} />
                 <ButtonDis title={"Refresh"} onClick={() => refreshData()} />
               </div>
             </div>

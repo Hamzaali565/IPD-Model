@@ -6,6 +6,11 @@ import reportWebVitals from "./reportWebVitals";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { Provider } from "react-redux";
 import { store } from "./Store/store";
+import { ReadableStream } from "stream-browserify";
+import { Buffer } from "buffer";
+
+window.Buffer = Buffer;
+window.ReadableStream = ReadableStream;
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
