@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CenterHeading from "../../../../Components/Center Heading/CenterHeading";
 import LabeledInput from "../../../../Components/LabelledInput/LabeledInput";
 import ButtonDis from "../../../../Components/Button/ButtonDis";
@@ -8,17 +8,66 @@ import axios from "axios";
 
 const RunningBill = () => {
   const [runningData, setRunningData] = useState([]);
+  const [serviceCharges, setServiceCharges] = useState(0);
+  const [wardCharges, setWardCharges] = useState(0);
+  const [procedureCharges, setProcedureCharges] = useState(0);
+  const [visitCharges, setVisitCharges] = useState(0);
+  const [deposit, setDeposit] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [toggle, setToggle] = useState(false);
 
   const url = useSelector((item) => item?.url);
 
+  useEffect(() => {
+    setTotal(wardCharges + visitCharges + procedureCharges + serviceCharges);
+  }, [toggle]);
+
   const getData = async (e) => {
+    refreshData();
     try {
       const response = await axios.get(
         `${url}/runningbill?admissionNo=${e?.admissionNo}&mrNo=${e?.mrNo}`,
         { withCredentials: true }
       );
       console.log(response.data);
-      setRunningData(response.data.data);
+      setRunningData(response?.data?.data);
+      if (response?.data?.data?.serviceCharges?.length > 0) {
+        const totalCharges = response?.data?.data?.serviceCharges.reduce(
+          (accumulator, item) => accumulator + item?.amount,
+          0
+        );
+        setServiceCharges(totalCharges);
+        console.log("totalCharges", totalCharges);
+      }
+      if (response?.data?.data?.wardCharges?.length > 0) {
+        const totalCharges = response?.data?.data?.wardCharges.reduce(
+          (accumulator, item) => accumulator + item?.amount,
+          0
+        );
+        setWardCharges(totalCharges);
+      }
+      if (response?.data?.data?.procedureCharges?.length > 0) {
+        const totalCharges = response?.data?.data?.procedureCharges.reduce(
+          (accumulator, item) => accumulator + item?.amount,
+          0
+        );
+        setProcedureCharges(totalCharges);
+      }
+      if (response?.data?.data?.consultantVisit?.length > 0) {
+        const totalCharges = response?.data?.data?.consultantVisit.reduce(
+          (accumulator, item) => accumulator + item?.charges,
+          0
+        );
+        setVisitCharges(totalCharges);
+      }
+      if (response?.data?.data?.depositDetails?.length > 0) {
+        const totalCharges = response?.data?.data?.depositDetails.reduce(
+          (accumulator, item) => accumulator + item?.amount,
+          0
+        );
+        setDeposit(totalCharges);
+      }
+      setToggle(!toggle);
     } catch (error) {
       console.log("Error of Get Data", error);
     }
@@ -26,6 +75,18 @@ const RunningBill = () => {
   const checkArray = () => {
     console.log("setRunningData", runningData);
     console.log("setRunningData", runningData.patientData.length);
+  };
+
+  const refreshData = () => {
+    setRunningData([]);
+    setServiceCharges(0);
+    setWardCharges(0);
+    setProcedureCharges(0);
+    setVisitCharges(0);
+    setTotal(0);
+  };
+  const firstClear = () => {
+    refreshData();
   };
   return (
     <div>
@@ -84,21 +145,25 @@ const RunningBill = () => {
                   disabled={true}
                   placeholder={"Service Charges"}
                   label={"Service Charges"}
+                  value={serviceCharges}
                 />
                 <LabeledInput
                   disabled={true}
                   placeholder={"Ward Charges"}
                   label={"Ward Charges"}
+                  value={wardCharges}
                 />
                 <LabeledInput
                   disabled={true}
                   placeholder={"Procedure Charges"}
                   label={"Procedure Charges"}
+                  value={procedureCharges}
                 />
                 <LabeledInput
                   disabled={true}
                   placeholder={"Consultant Visit Charges"}
                   label={"Consultant Visit Charges"}
+                  value={visitCharges}
                 />
               </div>
             </div>
@@ -129,29 +194,32 @@ const RunningBill = () => {
                   placeholder={"Total Amount"}
                   label={"Total Amount"}
                   disabled={true}
+                  value={total}
                 />
                 <LabeledInput
                   placeholder={"Deposit Amount"}
                   label={"Deposit Amount"}
                   disabled={true}
+                  value={deposit}
                 />
                 <LabeledInput
                   placeholder={"Recievable Amount"}
                   label={"Recievable Amount"}
                   disabled={true}
+                  value={total - deposit > 0 ? total - deposit : 0}
                 />
                 <LabeledInput
                   placeholder={"Refunded Amount"}
                   label={"Refunded Amount"}
                   disabled={true}
+                  value={total - deposit < 0 ? total - deposit : 0}
                 />
               </div>
             </div>
             <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl md:col-span-2">
               <div className="flex flex-col items-center space-y-2 md:flex-row justify-center space-x-2">
-                <ButtonDis title={"Save"} onClick={checkArray} />
                 <ButtonDis title={"Print"} />
-                <ButtonDis title={"Refresh"} />
+                <ButtonDis title={"Refresh"} onClick={() => refreshData()} />
               </div>
             </div>
           </div>
