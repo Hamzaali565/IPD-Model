@@ -32,6 +32,7 @@ import ServiceReversal from "./Screens/IPD/Transaction/ServiceReversal.jsx/Servi
 import WardTransfer from "./Screens/IPD/Transaction/WardTransfer/WardTransfer";
 import IPDPaymentMaster from "./Screens/IPD/Payments/IPDPaymentMaster/IPDPaymentMaster";
 import PaymentReciept from "./Screens/IPD/Payments/PaymentReciept/PaymentReciept";
+import RunningBill from "./Screens/IPD/Transaction/RunningBill/RunningBill";
 
 function App() {
   const dispatch = useDispatch();
@@ -115,6 +116,7 @@ function App() {
                 <Route path="ipdwardcharges" element={<IPDWardCharges />} />
                 <Route path="procedurecharges" element={<ProcedureCharges />} />
                 <Route path="wardtransfer" element={<WardTransfer />} />
+                <Route path="runningbill" element={<RunningBill />} />
               </Route>
             </Route>
             {/* Payments */}
