@@ -10,6 +10,7 @@ import moment from "moment";
 import axios from "axios";
 import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import MRModel from "../../../../Components/Modal/MRModal";
+import Loader from "../../../../Components/Modal/Loader";
 
 const Reservation = () => {
   const [consultant, setConsultant] = useState(null);
@@ -17,6 +18,7 @@ const Reservation = () => {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [amount, setAmount] = useState("");
+  const [open, setOpen] = useState(false);
 
   const shifData = useSelector((state) => state.shift);
   const url = useSelector((state) => state.url);
@@ -67,6 +69,7 @@ const Reservation = () => {
   };
   // api
   const handleSubmit = async () => {
+    setOpen(true);
     try {
       const response = await axios.post(
         `${url}/reservation`,
@@ -85,9 +88,11 @@ const Reservation = () => {
       console.log("response of Submit Handler", response.data.data);
       SuccessAlert({ text: "RESERVATION CREATED SUCCESSFULLY", timer: 1500 });
       refresh();
+      setOpen(false);
     } catch (error) {
       console.log("Error of Submit Handler", error);
       ErrorAlert({ text: error.response.data.message, timer: 1000 });
+      setOpen(false);
     }
   };
 
@@ -169,6 +174,7 @@ const Reservation = () => {
           <ButtonDis title={"Print"} />
         </div>
       </div>
+      <Loader onClick={open} title={"Please Wait"} />
     </div>
   );
 };

@@ -9,6 +9,7 @@ import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import InputButton from "../../../../Components/InputButton/InputButton";
+import Loader from "../../../../Components/Modal/Loader";
 
 const PatientRegistration = () => {
   const [patientName, setPatientName] = useState("");
@@ -38,6 +39,7 @@ const PatientRegistration = () => {
   const [MrNo, setMrNo] = useState("");
   const [mrData, setMrData] = useState([]);
   const [toggle, setToggle] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     setPatientType([
@@ -80,6 +82,7 @@ const PatientRegistration = () => {
         });
         return;
       }
+      setOpen(true);
       const response = await axios.post(
         `${url}/patientreg`,
         {
@@ -110,6 +113,7 @@ const PatientRegistration = () => {
       );
       console.log("response of Submit Handler", response);
       Refresh();
+      setOpen(false);
       if (response.data.data1) {
         SuccessAlert({ text: "DATA UPDATED SUCCESSFULLY", timer: 2000 });
         return;
@@ -121,6 +125,7 @@ const PatientRegistration = () => {
     } catch (error) {
       console.log("Error of submit handler", error);
       ErrorAlert({ text: error.response.data.message });
+      setOpen(false);
     }
   };
   const updateHandler = async () => {
@@ -196,15 +201,18 @@ const PatientRegistration = () => {
   };
 
   const getPatient = async () => {
+    setOpen(true);
     try {
       const response = await axios.get(`${url}/patientreg?MrNo=${MrNo}`, {
         withCredentials: true,
       });
       console.log("response of getPatient", response.data.data);
       setMrData(response.data.data);
+      setOpen(false);
     } catch (error) {
       console.log("Error of getPatient", error);
       ErrorAlert({ text: error.response.data.message, timer: 2000 });
+      setOpen(false);
     }
   };
 
@@ -637,6 +645,7 @@ const PatientRegistration = () => {
         <SimpleButton title={"Print"} />
         <SimpleButton title={"Refresh"} onClick={Refresh} />
       </div>
+      <Loader onClick={open} title={"Please Wait"} />
     </div>
   );
 };

@@ -11,6 +11,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import ButtonDis from "../../../../Components/Button/ButtonDis";
 import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
+import Loader from "../../../../Components/Modal/Loader";
 
 const Addmission = () => {
   const [admissionType, setAdmissionType] = useState("");
@@ -27,6 +28,7 @@ const Addmission = () => {
   const [remarks, setRemarks] = useState("");
   const [referedBy, setReferedBy] = useState("");
   const [buttonDis, setButtonDis] = useState(false);
+  const [open, setOpen] = useState(false);
   const url = useSelector((state) => state.url);
   const userData = useSelector((state) => state.response);
 
@@ -131,6 +133,7 @@ const Addmission = () => {
   };
 
   const admission = async () => {
+    setOpen(true);
     try {
       setButtonDis(true);
       const response = await axios.post(
@@ -154,10 +157,12 @@ const Addmission = () => {
       resetFlag();
       SuccessAlert({ text: "ADMISSION CREATED SUCCESSFULLY", timer: 3000 });
       setButtonDis(false);
+      setOpen(false);
     } catch (error) {
       console.log("error of admission", error);
       setButtonDis(false);
       ErrorAlert({ text: error?.response?.data?.message });
+      setOpen(false);
     }
   };
   return (
@@ -270,6 +275,7 @@ const Addmission = () => {
         />
         <ButtonDis title={"Refresh"} onClick={resetFlag} />
       </div>
+      <Loader onClick={open} title={"Please Wait"} />
     </div>
   );
 };

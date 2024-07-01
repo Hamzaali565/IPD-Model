@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import SimpleButton from "../../../../Components/Button/SimpleButton";
+import Loader from "../../../../Components/Modal/Loader";
 
 const ConsultantCharges = () => {
   const [ward, setWard] = useState([]);
@@ -13,6 +14,7 @@ const ConsultantCharges = () => {
   const [wardName, setWardName] = useState("");
   const [consultantDetails, setConsultantDetails] = useState([]);
   const [toggle, setToggle] = useState(false);
+  const [open, setOpen] = useState(false);
 
   // redux details
   const data = [{ name: "--" }, { name: "Cash" }];
@@ -56,6 +58,7 @@ const ConsultantCharges = () => {
   };
 
   const handleSubmit = async () => {
+    setOpen(true);
     try {
       const response = await axios.post(
         `${url}/consultantcharges`,
@@ -70,8 +73,10 @@ const ConsultantCharges = () => {
       console.log("response of submit handler", response);
       Empty();
       SuccessAlert({ text: "DATA SAVED SUCCESSFULLY", timer: 1500 });
+      setOpen(false);
     } catch (error) {
       console.log("Error of submit handler");
+      setOpen(false);
     }
   };
   // funstions
@@ -190,6 +195,7 @@ const ConsultantCharges = () => {
           <SimpleButton title={"Submit"} onClick={handleSubmit} />
         </div>
       )}
+      <Loader onClick={open} title={"Please Wait"} />
     </div>
   );
 };

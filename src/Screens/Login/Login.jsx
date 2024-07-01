@@ -6,9 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import SimpleButton from "../../Components/Button/SimpleButton";
 import { setLoginToggle, setResponse, setShift } from "../../Store/action";
 import { ErrorAlert } from "../../Components/Alert/Alert";
+import Loader from "../../Components/Modal/Loader";
 const Login = () => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
+  const [open, setOpen] = useState(false);
 
   const url = useSelector((state) => state.url);
   //   const check = useSelector((state) => state.toggle);
@@ -16,6 +18,7 @@ const Login = () => {
   const Dispatch = useDispatch();
 
   const loginUser = async () => {
+    setOpen(true);
     try {
       const response = await axios.post(
         `${url}/login`,
@@ -28,6 +31,7 @@ const Login = () => {
         }
       );
       console.log("response of login", response);
+      setOpen(false);
       Dispatch(setLoginToggle(true));
       Dispatch(setResponse(response.data.data));
       CheckLog();
@@ -41,6 +45,7 @@ const Login = () => {
     } catch (error) {
       console.log("error of login response", error);
       ErrorAlert({ text: error.response.data.message, timer: 1500 });
+      setOpen(false);
     }
   };
 
@@ -109,6 +114,7 @@ const Login = () => {
           </p>
         </div>
       </div>
+      <Loader onClick={open} title={"Please Wait..."} />
     </div>
   );
 };

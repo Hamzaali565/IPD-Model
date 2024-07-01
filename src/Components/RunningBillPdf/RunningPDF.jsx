@@ -28,6 +28,7 @@ const RunningPDF = ({
       <View style={styles.pageNumber}>
         <Text>Printed User: {userName}</Text>
         <Text
+          style={{ textDecoration: "underline" }}
           render={({ pageNumber, totalPages }) =>
             `Page ${pageNumber} of ${totalPages}`
           }

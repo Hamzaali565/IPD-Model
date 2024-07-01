@@ -5,6 +5,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import SimpleButton from "../../../../Components/Button/SimpleButton";
+import Loader from "../../../../Components/Modal/Loader";
 
 const WardCharges = () => {
   const [ward, setWard] = useState([]);
@@ -13,6 +14,7 @@ const WardCharges = () => {
   const [wardCharges, setWardCharges] = useState([]);
   const [wardCharges_id, setWardCharges_id] = useState("");
   const [toggle, setToggle] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     wardNames();
@@ -84,6 +86,7 @@ const WardCharges = () => {
 
   const submitHandler = async () => {
     console.log("userData", UserData);
+    setOpen(true);
     try {
       const response = await axios.post(
         `${url}/ipdwardcharges`,
@@ -98,6 +101,7 @@ const WardCharges = () => {
       );
       console.log("response of submit handler", response);
       SuccessAlert({ text: "DATA SAVED SUCCESSFULLY", timer: 1500 });
+      setOpen(false);
       setWardCharges([]);
       setWard([]);
       setToggle(!toggle);
@@ -105,6 +109,7 @@ const WardCharges = () => {
     } catch (error) {
       console.log("Error of submit Handler", error);
       ErrorAlert({ text: error.response.data.message, timer: 1500 });
+      setOpen(false);
     }
   };
   return (
@@ -178,6 +183,7 @@ const WardCharges = () => {
           <SimpleButton title={"Submit"} onClick={submitHandler} />
         </div>
       )}
+      <Loader onClick={open} title={"Please Wait"} />
     </div>
   );
 };

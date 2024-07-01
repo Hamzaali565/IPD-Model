@@ -5,6 +5,7 @@ import SimpleButton from "../../../../Components/Button/SimpleButton";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
+import Loader from "../../../../Components/Modal/Loader";
 
 const ServiceCharges = () => {
   // state variables
@@ -17,6 +18,7 @@ const ServiceCharges = () => {
   const [_id, set_id] = useState("");
   const [parentName, setParentName] = useState("");
   const [response, setResponse] = useState(false);
+  const [open, setOpen] = useState(false);
 
   // useEffects
   useEffect(() => {
@@ -73,6 +75,7 @@ const ServiceCharges = () => {
   };
 
   const submitHandler = async () => {
+    setOpen(true);
     try {
       const submitData = await axios.post(
         `${url}/servicecharges`,
@@ -94,8 +97,10 @@ const ServiceCharges = () => {
       set_id("");
       setResponse(!response);
       SuccessAlert({ text: "DATA SAVED SUCCESSFULLY 🎉🎉" });
+      setOpen(false);
     } catch (error) {
       console.log("Error Of Handler Submit", error);
+      setOpen(false);
     }
   };
 
@@ -243,6 +248,7 @@ const ServiceCharges = () => {
           )}
         </div>
       )}
+      <Loader onClick={open} title={"Please Wait"} />
     </div>
   );
 };
