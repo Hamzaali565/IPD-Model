@@ -8,6 +8,7 @@ import AdmissionModal from "../../../../Components/Modal/AdmissionModal";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
+import Loader from "../../../../Components/Modal/Loader";
 
 const ConsultantVisit = () => {
   const [mrInfo, setMrInfo] = useState(null);
@@ -16,6 +17,7 @@ const ConsultantVisit = () => {
   const [date, setDate] = useState("");
   const [remarks, setRemarks] = useState("");
   const [visitData, setVisitData] = useState([]);
+  const [open, setOpen] = useState(false);
 
   const url = useSelector((state) => state.url);
   const userId = useSelector((state) => state.response);
@@ -44,6 +46,7 @@ const ConsultantVisit = () => {
   };
   // api
   const submitVisit = async () => {
+    setOpen(true);
     try {
       const response = await axios.post(
         `${url}/consultantvisit`,
@@ -64,9 +67,11 @@ const ConsultantVisit = () => {
       refreshData2();
       SuccessAlert({ text: "DATA SAVED SUCCESSFULLY!!!", timer: 1000 });
       previousData(mrInfo);
+      setOpen(false);
     } catch (error) {
       console.log("error of submitVisit", error);
       ErrorAlert({ text: error.response.data.message, timer: 2000 });
+      setOpen(false);
     }
   };
   // api
@@ -218,6 +223,7 @@ const ConsultantVisit = () => {
             </div>
           ))}
       </div>
+      <Loader onClick={open} title={"Please Wait"} />
     </div>
   );
 };

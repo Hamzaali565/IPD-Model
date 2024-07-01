@@ -6,6 +6,7 @@ import AdmissionModal from "../../../../Components/Modal/AdmissionModal";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
+import Loader from "../../../../Components/Modal/Loader";
 
 const IPDWardCharges = () => {
   const [mrInfo, setMrInfo] = useState(null);
@@ -13,6 +14,7 @@ const IPDWardCharges = () => {
   const [date, setDate] = useState("");
   const [remarks, setRemarks] = useState("");
   const [prevDetails, setprevDetails] = useState([]);
+  const [open, setOpen] = useState(false);
 
   const url = useSelector((item) => item.url);
   const userData = useSelector((item) => item.response);
@@ -33,6 +35,7 @@ const IPDWardCharges = () => {
   };
   // api
   const submitHandler = async () => {
+    setOpen(true);
     try {
       const response = await axios.post(
         `${url}/admissionwardcharges`,
@@ -54,9 +57,11 @@ const IPDWardCharges = () => {
       previousData(mrInfo);
       setDate("");
       setRemarks("");
+      setOpen(false);
     } catch (error) {
       console.log("Error of Submit Handler", error.response.data);
       ErrorAlert({ text: error.response.data.message });
+      setOpen(false);
     }
   };
   // api
@@ -202,6 +207,7 @@ const IPDWardCharges = () => {
             </div>
           ))}
       </div>
+      <Loader onClick={open} title={"Please Wait"} />
     </div>
   );
 };

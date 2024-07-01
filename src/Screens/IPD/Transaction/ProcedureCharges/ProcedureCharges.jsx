@@ -8,6 +8,7 @@ import AdmissionModal from "../../../../Components/Modal/AdmissionModal";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
+import Loader from "../../../../Components/Modal/Loader";
 
 const ProcedureCharges = () => {
   const [mrInfo, setMrInfo] = useState(null);
@@ -17,6 +18,7 @@ const ProcedureCharges = () => {
   const [amount, setAmount] = useState("");
   const [procedureDate, setProcedreDate] = useState("");
   const [remarks, setRemarks] = useState("");
+  const [open, setOpen] = useState(false);
 
   const url = useSelector((state) => state.url);
   const userData = useSelector((state) => state.response);
@@ -37,6 +39,7 @@ const ProcedureCharges = () => {
   };
   //api
   const submitHandler = async () => {
+    setOpen(true);
     try {
       const response = await axios.post(
         `${url}/procedurecharges`,
@@ -57,8 +60,10 @@ const ProcedureCharges = () => {
       SuccessAlert({ text: "PROCEDURE ADDED SUCCESSFULLY", timer: 2000 });
       refreshData2();
       previousData(mrInfo);
+      setOpen(false);
     } catch (error) {
       console.log("error of submit Handler", error.response.data);
+      setOpen(false);
     }
   };
   //api
@@ -205,6 +210,7 @@ const ProcedureCharges = () => {
             </div>
           ))}
       </div>
+      <Loader onClick={open} title={"Please Wait"} />
     </div>
   );
 };

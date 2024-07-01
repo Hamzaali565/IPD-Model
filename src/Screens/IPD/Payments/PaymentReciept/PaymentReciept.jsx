@@ -8,6 +8,7 @@ import ButtonDis from "../../../../Components/Button/ButtonDis";
 import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import Loader from "../../../../Components/Modal/Loader";
 
 const PaymentReciept = () => {
   const [paymentType, setPaymentType] = useState("");
@@ -20,6 +21,7 @@ const PaymentReciept = () => {
   const [paymentTypeData, setPaymentTypeData] = useState([]);
   const [locationData, setLocationData] = useState([]);
   const [toggle, setToggle] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const userData = useSelector((state) => state.response);
   const url = useSelector((state) => state.url);
@@ -80,6 +82,7 @@ const PaymentReciept = () => {
 
   // api
   const submitPayment = async () => {
+    setOpen(true);
     try {
       const response = await axios.post(
         `${url}/paymentreciept`,
@@ -99,9 +102,11 @@ const PaymentReciept = () => {
       console.log("response of submitPayment", response.data.data);
       SuccessAlert({ text: "PAYMENT CREATED SUCCESSFULLY !!!", timer: 2000 });
       resetData();
+      setOpen(false);
     } catch (error) {
       console.log("Error of submitPayment", error.response);
       ErrorAlert({ text: "SOMETHING WENT WRONG !!!", timer: 2000 });
+      setOpen(false);
     }
   };
 
@@ -179,6 +184,7 @@ const PaymentReciept = () => {
           </div>
         </div>
       </div>
+      <Loader onClick={open} title={"Please Wait"} />
     </div>
   );
 };

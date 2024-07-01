@@ -4,16 +4,19 @@ import AdmissionModal from "../../../../Components/Modal/AdmissionModal";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { SuccessAlert } from "../../../../Components/Alert/Alert";
+import Loader from "../../../../Components/Modal/Loader";
 
 const ServiceReversal = () => {
   const [mrInfo, setmrInfo] = useState(null);
   const [serviceDetails, setServiceDetails] = useState([]);
+  const [open, setOpen] = useState(false);
 
   const url = useSelector((item) => item?.url);
   const userData = useSelector((state) => state?.response);
 
   // api
   const PickDetail = async (e) => {
+    setOpen(true);
     try {
       setmrInfo(e);
       const response = await axios.get(
@@ -22,9 +25,11 @@ const ServiceReversal = () => {
       );
       console.log("Response of pick details", response.data.data);
       setServiceDetails(response.data.data);
+      setOpen(false);
     } catch (error) {
       console.log("Error of pick details", error);
       setServiceDetails([]);
+      setOpen(false);
     }
   };
   //   api
@@ -97,6 +102,7 @@ const ServiceReversal = () => {
             </div>
           ))}
       </div>
+      <Loader onClick={open} title={"Please Wait"} />
     </div>
   );
 };

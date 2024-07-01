@@ -6,9 +6,12 @@ import ButtonDis from "../../../Components/Button/ButtonDis";
 import axios from "axios";
 import { setShift } from "../../../Store/action";
 import { ErrorAlert, SuccessAlert } from "../../../Components/Alert/Alert";
+import Loader from "../../../Components/Modal/Loader";
 
 const CreateShift = () => {
   const [shiftRes, setShiftRes] = useState([]);
+  const [open, setOpen] = useState(false);
+
   const userData = useSelector((state) => state.response);
   const url = useSelector((state) => state.url);
   let shiftData = useSelector((state) => state.shift);
@@ -19,6 +22,7 @@ const CreateShift = () => {
   console.log("shiftRes", shiftRes.createdOn);
   const createShift = async () => {
     try {
+      setOpen(true);
       const response = await axios.post(
         `${url}/shift`,
         { userName: userData[0].userName, userId: userData[0].userId },
@@ -28,9 +32,11 @@ const CreateShift = () => {
       setShiftRes(response.data.data);
       Dispatch(setShift(response.data.data));
       SuccessAlert({ text: "SHIFT CREATED SUCCESSFULLY!!!", timer: 1500 });
+      setOpen(false);
     } catch (error) {
       console.log("Error of Create Shift", error);
       ErrorAlert({ text: error.response.data.message });
+      setOpen(false);
     }
   };
 
@@ -63,6 +69,7 @@ const CreateShift = () => {
           <ButtonDis title={"CREATE"} onClick={createShift} />
         </div>
       </div>
+      <Loader onClick={open} title={"Please Wait"} />
     </div>
   );
 };

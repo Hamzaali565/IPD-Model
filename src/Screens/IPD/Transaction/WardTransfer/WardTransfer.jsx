@@ -9,6 +9,7 @@ import SimpleDropDown from "../../../../Components/SimpleDropdown/SimpleDropDown
 import ButtonDis from "../../../../Components/Button/ButtonDis";
 import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import SimpleBackdrop from "../../../../Components/CenterLoader/CenterLoader";
+import Loader from "../../../../Components/Modal/Loader";
 
 const WardTransfer = () => {
   const [mrInfo, setmrInfo] = useState(null);
@@ -18,6 +19,7 @@ const WardTransfer = () => {
   const [bedNo, setBBedNo] = useState("");
   const [bedId, setBedId] = useState("");
   const [wardName, setWardName] = useState("");
+  const [open, setOpen] = useState(false);
 
   const url = useSelector((item) => item?.url);
   const userData = useSelector((state) => state?.response);
@@ -79,6 +81,7 @@ const WardTransfer = () => {
         ErrorAlert({ text: "PLEASE SELECT NEW BED", timer: 2000 });
         return;
       }
+      setOpen(true);
       const response = await axios.post(
         `${url}/wardChange`,
         {
@@ -94,9 +97,11 @@ const WardTransfer = () => {
       console.log("response of changeBed", response.data.data);
       SuccessAlert({ text: "WARD CHANGE SUCCESSFULLLY", timer: 2000 });
       ResetPage();
+      setOpen(false);
     } catch (error) {
       console.log("Error of bedChange", error);
       ErrorAlert({ text: error?.response?.data?.message });
+      setOpen(false);
     }
   };
 
@@ -201,6 +206,7 @@ const WardTransfer = () => {
           <ButtonDis title={"Refresh"} onClick={ResetPage} />
         </div>
       </div>
+      <Loader onClick={open} title={"Please Wait"} />
     </div>
   );
 };
