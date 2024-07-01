@@ -8,6 +8,7 @@ import axios from "axios";
 import { pdf } from "@react-pdf/renderer";
 import { v4 as uuidv4 } from "uuid";
 import RunningPDF from "../../../../Components/RunningBillPdf/RunningPDF";
+import Loader from "../../../../Components/Modal/Loader";
 
 const RunningBill = () => {
   const [runningData, setRunningData] = useState([]);
@@ -18,6 +19,7 @@ const RunningBill = () => {
   const [deposit, setDeposit] = useState(0);
   const [total, setTotal] = useState(0);
   const [toggle, setToggle] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const url = useSelector((item) => item?.url);
   const userData = useSelector((item) => item?.response);
@@ -28,6 +30,7 @@ const RunningBill = () => {
 
   const getData = async (e) => {
     refreshData();
+    setOpen(true);
     try {
       const response = await axios.get(
         `${url}/runningbill?admissionNo=${e?.admissionNo}&mrNo=${e?.mrNo}`,
@@ -72,8 +75,10 @@ const RunningBill = () => {
         setDeposit(totalCharges);
       }
       setToggle(!toggle);
+      setOpen(false);
     } catch (error) {
       console.log("Error of Get Data", error);
+      setOpen(false);
     }
   };
   const checkArray = () => {
@@ -251,6 +256,7 @@ const RunningBill = () => {
           </div>
         )}
       </div>
+      <Loader title={"Data Loading ..."} onClick={open} />
     </div>
   );
 };
