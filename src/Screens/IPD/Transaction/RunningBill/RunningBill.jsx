@@ -20,6 +20,7 @@ const RunningBill = () => {
   const [toggle, setToggle] = useState(false);
 
   const url = useSelector((item) => item?.url);
+  const userData = useSelector((item) => item?.response);
 
   useEffect(() => {
     setTotal(wardCharges + visitCharges + procedureCharges + serviceCharges);
@@ -104,6 +105,7 @@ const RunningBill = () => {
         visit={visitCharges}
         totalCharges={total}
         depositAmount={deposit}
+        userName={userData[0]?.userId}
       />
     ).toBlob();
 

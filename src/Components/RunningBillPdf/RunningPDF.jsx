@@ -17,17 +17,23 @@ const RunningPDF = ({
   visit,
   totalCharges,
   depositAmount,
+  userName,
 }) => {
   console.log("BillData", billData);
   const MyPage = ({ children }) => (
     <Page style={styles.page}>
       <Image src={logo} style={styles.Image} />
       <View style={styles.content}>{children}</View>
-      <Text
-        style={styles.pageNumber}
-        render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`}
-        fixed
-      />
+      <View style={styles.footer} />
+      <View style={styles.pageNumber}>
+        <Text>Printed User: {userName}</Text>
+        <Text
+          render={({ pageNumber, totalPages }) =>
+            `Page ${pageNumber} of ${totalPages}`
+          }
+          fixed
+        />
+      </View>
     </Page>
   );
 
@@ -60,7 +66,7 @@ const RunningPDF = ({
                 Contact: {billData?.patientData[0]?.cellNo}
               </Text>
               <Text fixed style={[styles.font, styles.ml2, styles.wid1]}>
-                Consultant: Dr. Noushad Baig
+                Consultant: {billData?.ConsultantName[0]?.name}
               </Text>
             </View>
             <View style={styles.headC2}>
@@ -127,7 +133,7 @@ const RunningPDF = ({
         </View>
 
         <View style={styles.headC1}>
-          <Text>Bill Detail</Text>
+          <Text>Services Detail</Text>
         </View>
         <View style={styles.head}>
           <View
@@ -309,7 +315,7 @@ const RunningPDF = ({
           }}
         >
           <View style={styles.headC1}>
-            <Text>Cash Detail</Text>
+            <Text>Bill Detail</Text>
           </View>
           <View
             style={{ display: "flex", flexDirection: "row", marginTop: "2" }}
@@ -429,10 +435,22 @@ const styles = StyleSheet.create({
   pageNumber: {
     left: 0,
     right: 0,
+    bottom: 10,
+    position: "absolute",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+    fontSize: "10",
+  },
+  footer: {
+    left: 8,
+    right: 0,
     bottom: 30,
     position: "absolute",
-    textAlign: "center",
     width: "100%",
+    height: "2",
+    backgroundColor: "black",
   },
   head: {
     border: "1px solid black",
