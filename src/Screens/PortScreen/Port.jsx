@@ -1,7 +1,7 @@
 import React from "react";
 
 const Port = () => {
-  return <div>HAMZA ALI</div>;
+  return <div>Welcome to FIQOTECH</div>;
 };
 
 export default Port;

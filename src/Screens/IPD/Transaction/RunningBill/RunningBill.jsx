@@ -93,6 +93,7 @@ const RunningBill = () => {
     setProcedureCharges(0);
     setVisitCharges(0);
     setTotal(0);
+    setDeposit(0);
   };
   const handleButtonClick = async () => {
     // Generate a unique key to force re-render

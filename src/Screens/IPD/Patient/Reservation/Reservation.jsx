@@ -11,6 +11,7 @@ import axios from "axios";
 import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import MRModel from "../../../../Components/Modal/MRModal";
 import Loader from "../../../../Components/Modal/Loader";
+import SimpleDropDown from "../../../../Components/SimpleDropdown/SimpleDropDown";
 
 const Reservation = () => {
   const [consultant, setConsultant] = useState(null);
@@ -18,14 +19,44 @@ const Reservation = () => {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [amount, setAmount] = useState("");
+  const [location, setlocation] = useState("");
+  const [paymentType, setPaymentType] = useState("");
+  const [locationData, setLocationData] = useState([]);
+  const [paymentData, setPaymentData] = useState([]);
   const [open, setOpen] = useState(false);
+  const [toggle, setToggle] = useState(false);
 
   const shifData = useSelector((state) => state.shift);
   const url = useSelector((state) => state.url);
   const userData = useSelector((state) => state.response);
   useEffect(() => {
     console.log("Shift Data", shifData[0]);
-  }, []);
+    setPaymentData([
+      { name: "--" },
+      { name: "Cash" },
+      { name: "Cheque" },
+      { name: "Credit Card" },
+      { name: "Pay Order" },
+      { name: "Online" },
+    ]);
+    setLocationData([
+      { name: "--" },
+      { name: "Main Reception" },
+      { name: "OPD Reception" },
+    ]);
+  }, [!toggle]);
+
+  const delateCollection = async () => {
+    try {
+      const response = await axios.delete(
+        `${url}/deleteCollectionReservation`,
+        { withCredentials: true }
+      );
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // function
   const refresh = () => {
@@ -34,6 +65,11 @@ const Reservation = () => {
     setFromDate("");
     setToDate("");
     setAmount("");
+    setPaymentType("");
+    setlocation("");
+    setLocationData([]);
+    setPaymentData([]);
+    setToggle(!toggle);
   };
   // date Handler
   const handleDate = (value, key) => {
@@ -82,6 +118,8 @@ const Reservation = () => {
           shiftId: shifData[0]?._id,
           amount,
           createdUser: userData[0]?.userId,
+          location,
+          paymentType,
         },
         { withCredentials: true }
       );
@@ -159,7 +197,7 @@ const Reservation = () => {
       {/* paymnet */}
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
         <CenterHeading title={"PAYMENT"} />
-        <div className="flex justify-center mt-3">
+        <div className="flex flex-col items-center space-y-2 mt-3">
           <LabeledInput
             label={"AMOUNT"}
             placeholder={2000}
@@ -167,11 +205,21 @@ const Reservation = () => {
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
+          <SimpleDropDown
+            DropDownLabel={"Location"}
+            data={locationData}
+            onChange={(e) => setlocation(e)}
+          />
+          <SimpleDropDown
+            DropDownLabel={"Payment Type"}
+            data={paymentData}
+            onChange={(e) => setPaymentType(e)}
+          />
         </div>
         <div className="flex justify-center space-x-2 mt-3">
           <ButtonDis title={"SUBMIT"} onClick={check} />
           <ButtonDis title={"Refresh"} onClick={refresh} />
-          <ButtonDis title={"Print"} />
+          <ButtonDis title={"Print"} onClick={delateCollection} />
         </div>
       </div>
       <Loader onClick={open} title={"Please Wait"} />
