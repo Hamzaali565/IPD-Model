@@ -12,6 +12,7 @@ import Loader from "../../../../Components/Modal/Loader";
 import ServicesPDF from "../../../../Components/RunningBillPdf/ServicesPDF";
 import WardChargesPDF from "../../../../Components/RunningBillPdf/WardChargesPDF";
 import ProcedurePDF from "../../../../Components/RunningBillPdf/ProcedurePDF";
+import VisitPDF from "../../../../Components/RunningBillPdf/VisitPDF";
 
 const RunningBill = () => {
   const [runningData, setRunningData] = useState([]);
@@ -199,6 +200,31 @@ const RunningBill = () => {
     window.open(url, "_blank");
     url = "";
   };
+  const PrintVisit = async () => {
+    // Generate a unique key to force re-render
+
+    const key = uuidv4();
+
+    // Create a PDF document as a Blob
+    const blob = await pdf(
+      <VisitPDF
+        key={key}
+        billData={runningData}
+        service={serviceCharges}
+        ward={wardCharges}
+        procedure={procedureCharges}
+        visit={visitCharges}
+        totalCharges={total}
+        depositAmount={deposit}
+        userName={userData[0]?.userId}
+      />
+    ).toBlob();
+
+    // Create a Blob URL and open it in a new tab
+    let url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    url = "";
+  };
   return (
     <div>
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
@@ -287,6 +313,10 @@ const RunningBill = () => {
                   placeholder={"Consultant Visit Charges"}
                   label={"Consultant Visit Charges"}
                   value={visitCharges}
+                  className={
+                    "hover:text-blue-600 hover:underline cursor-pointer"
+                  }
+                  onClick={PrintVisit}
                 />
               </div>
             </div>
