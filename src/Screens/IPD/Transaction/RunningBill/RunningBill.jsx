@@ -9,6 +9,7 @@ import { pdf } from "@react-pdf/renderer";
 import { v4 as uuidv4 } from "uuid";
 import RunningPDF from "../../../../Components/RunningBillPdf/RunningPDF";
 import Loader from "../../../../Components/Modal/Loader";
+import ServicesPDF from "../../../../Components/RunningBillPdf/ServicesPDF";
 
 const RunningBill = () => {
   const [runningData, setRunningData] = useState([]);
@@ -120,6 +121,32 @@ const RunningBill = () => {
     window.open(url, "_blank");
     url = "";
   };
+
+  const PrintServices = async () => {
+    // Generate a unique key to force re-render
+
+    const key = uuidv4();
+
+    // Create a PDF document as a Blob
+    const blob = await pdf(
+      <ServicesPDF
+        key={key}
+        billData={runningData}
+        service={serviceCharges}
+        ward={wardCharges}
+        procedure={procedureCharges}
+        visit={visitCharges}
+        totalCharges={total}
+        depositAmount={deposit}
+        userName={userData[0]?.userId}
+      />
+    ).toBlob();
+
+    // Create a Blob URL and open it in a new tab
+    let url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    url = "";
+  };
   return (
     <div>
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
@@ -178,6 +205,10 @@ const RunningBill = () => {
                   placeholder={"Service Charges"}
                   label={"Service Charges"}
                   value={serviceCharges}
+                  className={
+                    "hover:text-blue-600 hover:underline cursor-pointer"
+                  }
+                  onClick={PrintServices}
                 />
                 <LabeledInput
                   disabled={true}
