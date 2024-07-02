@@ -33,6 +33,8 @@ import WardTransfer from "./Screens/IPD/Transaction/WardTransfer/WardTransfer";
 import IPDPaymentMaster from "./Screens/IPD/Payments/IPDPaymentMaster/IPDPaymentMaster";
 import PaymentReciept from "./Screens/IPD/Payments/PaymentReciept/PaymentReciept";
 import RunningBill from "./Screens/IPD/Transaction/RunningBill/RunningBill";
+import DischargeMaster from "./Screens/IPD/Discharge/DischargeMaster/DischargeMaster";
+import DischargeSummary from "./Screens/IPD/Discharge/DischargeSummary/DischargeSummary";
 
 function App() {
   const dispatch = useDispatch();
@@ -124,6 +126,13 @@ function App() {
               <Route index element={<Port />} />
               <Route path="payments/*" element={<IPDPaymentMaster />}>
                 <Route path="paymentReciept" element={<PaymentReciept />} />
+              </Route>
+            </Route>
+            {/* Discharge */}
+            <Route path="mainpage/*" element={<MainPage />}>
+              <Route index element={<Port />} />
+              <Route path="discharge/*" element={<DischargeMaster />}>
+                <Route path="dischargesummary" element={<DischargeSummary />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/mainpage" replace />} />
