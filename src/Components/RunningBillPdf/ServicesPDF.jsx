@@ -216,7 +216,7 @@ const ServicesPDF = ({
           }}
         >
           <View style={styles.headC1}>
-            <Text>Sum Of Charges</Text>
+            <Text>Sum Of Amount</Text>
           </View>
           <View
             style={{ display: "flex", flexDirection: "row", marginTop: "2" }}
@@ -229,7 +229,7 @@ const ServicesPDF = ({
                 fontSize: "12",
               }}
             >
-              Total Charges
+              Total Amount
             </Text>
             <Text
               style={{

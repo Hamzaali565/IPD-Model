@@ -48,7 +48,7 @@ const MainPage = () => {
 
       {/* Sidebar */}
       <div
-        className={`sidebar fixed top-16 left-0 h-[calc(100%-2.5rem)] transition-all duration-500 ease-in-out ${
+        className={`sidebar fixed top-16 left-0 h-[calc(100%-2.5rem)] transition-all duration-100 ease-in-out ${
           toggle ? "w-32 overflow-y-auto" : "w-0 overflow-hidden"
         }`}
       >
