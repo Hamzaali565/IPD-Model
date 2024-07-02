@@ -9,7 +9,7 @@ import {
 } from "@react-pdf/renderer";
 import logo from "../../Images/ZMCLogo-2.png";
 
-const VisitPDF = ({
+const DepositPDF = ({
   billData,
   service,
   ward,
@@ -134,7 +134,7 @@ const VisitPDF = ({
         </View>
 
         <View style={styles.headC1}>
-          <Text>Visit Details</Text>
+          <Text>Deposit Details</Text>
         </View>
         <View style={styles.head}>
           <View
@@ -147,22 +147,24 @@ const VisitPDF = ({
               padding: "2",
             }}
           >
-            <Text style={{ fontSize: "10", width: "30%", textAlign: "left" }}>
-              Consultant Name
+            <Text style={{ fontSize: "10", width: "20%", textAlign: "left" }}>
+              Payment Against
             </Text>
             <Text style={{ fontSize: "10", width: "20%", textAlign: "center" }}>
-              Charges
+              Payment No.
             </Text>
-            <Text style={{ fontSize: "10", width: "25%", textAlign: "center" }}>
-              Visit Date
+            <Text style={{ fontSize: "10", width: "20%", textAlign: "center" }}>
+              Amount
             </Text>
-            <Text style={{ fontSize: "10", width: "25%", textAlign: "center" }}>
-              {" "}
-              User{" "}
+            <Text style={{ fontSize: "10", width: "20%", textAlign: "center" }}>
+              Date
+            </Text>
+            <Text style={{ fontSize: "10", width: "20%", textAlign: "center" }}>
+              User
             </Text>
           </View>
           {/* service Charges8 */}
-          {billData?.consultantVisit?.map((items, index) => (
+          {billData?.depositDetails?.map((items, index) => (
             <View
               style={{
                 display: "flex",
@@ -172,21 +174,26 @@ const VisitPDF = ({
                 borderBottom: "1px solid lightgray", // Change 'lightgray' to your desired color
               }}
             >
-              <Text style={{ fontSize: "10", width: "30%", textAlign: "left" }}>
-                {items?.consultantName}
+              <Text style={{ fontSize: "10", width: "20%", textAlign: "left" }}>
+                {items?.paymentAgainst}
               </Text>
               <Text
                 style={{ fontSize: "10", width: "20%", textAlign: "center" }}
               >
-                {items?.charges}
+                {items?.paymentNo}
               </Text>
               <Text
-                style={{ fontSize: "10", width: "25%", textAlign: "center" }}
+                style={{ fontSize: "10", width: "20%", textAlign: "center" }}
               >
-                {items?.visitDate}
+                {items?.amount}
               </Text>
               <Text
-                style={{ fontSize: "10", width: "25%", textAlign: "center" }}
+                style={{ fontSize: "10", width: "20%", textAlign: "center" }}
+              >
+                {items?.createdOn}
+              </Text>
+              <Text
+                style={{ fontSize: "10", width: "20%", textAlign: "center" }}
               >
                 {items?.createdUser}
               </Text>
@@ -205,7 +212,7 @@ const VisitPDF = ({
           }}
         >
           <View style={styles.headC1}>
-            <Text>Sum Of Charges</Text>
+            <Text>Sum Of Amount</Text>
           </View>
           <View
             style={{ display: "flex", flexDirection: "row", marginTop: "2" }}
@@ -218,7 +225,7 @@ const VisitPDF = ({
                 fontSize: "12",
               }}
             >
-              Total Charges
+              Total Amount
             </Text>
             <Text
               style={{
@@ -228,7 +235,7 @@ const VisitPDF = ({
                 fontSize: "12",
               }}
             >
-              {visit}
+              {depositAmount}
             </Text>
           </View>
         </View>
@@ -343,4 +350,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VisitPDF;
+export default DepositPDF;
