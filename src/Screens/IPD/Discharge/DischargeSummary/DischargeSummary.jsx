@@ -9,6 +9,8 @@ import LabelledTextArea from "../../../../Components/LabeledTextArea/LabelledTex
 import ButtonDis from "../../../../Components/Button/ButtonDis";
 const DischargeSummary = () => {
   const [dischargeType, setDischargeType] = useState([]);
+  const [mrInfo, setMrInfo] = useState(null);
+  const [dcConsultant, setDcConsultant] = useState(null);
   useEffect(() => {
     setDischargeType([
       { name: "--" },
@@ -24,7 +26,10 @@ const DischargeSummary = () => {
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
         <CenterHeading title={"Discharge Summary"} />
         <div className="flex justify-center">
-          <AdmissionModal title={"Select Admission No."} />
+          <AdmissionModal
+            title={"Select Admission No."}
+            onClick={(e) => setMrInfo(e)}
+          />
         </div>
         <div className="md:grid md:grid-cols-2">
           {/* Patient Details */}
@@ -35,16 +40,23 @@ const DischargeSummary = () => {
                 disabled={true}
                 label={"Patient Name"}
                 placeholder={"Patient Name"}
+                value={
+                  mrInfo !== null
+                    ? `${mrInfo?.patientType} ${mrInfo?.patientName} ${mrInfo?.relativeType} ${mrInfo?.relativeName}`
+                    : ""
+                }
               />
               <LabeledInput
                 disabled={true}
                 label={"Admission No"}
                 placeholder={"Admission No"}
+                value={mrInfo !== null ? mrInfo?.admissionNo : ""}
               />
               <LabeledInput
                 disabled={true}
                 label={"Mr No"}
                 placeholder={"Mr No"}
+                value={mrInfo !== null ? mrInfo?.mrNo : ""}
               />
               <LabeledInput
                 disabled={true}
@@ -62,11 +74,15 @@ const DischargeSummary = () => {
           <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
             <CenterHeading title={"Discharge Details"} />
             <div className="flex flex-col items-center space-y-2">
-              <ConsultantModal title={"Select Consultant Name"} />
+              <ConsultantModal
+                title={"Select Consultant Name"}
+                onClick={(e) => setDcConsultant(e)}
+              />
               <LabeledInput
                 disabled={true}
                 label={"Discharge Consultant"}
                 placeholder={"Discharge Consultant"}
+                value={dcConsultant !== null ? dcConsultant?.name : ""}
               />
               <SimpleDropDown
                 DropDownLabel={"Discharge Condition"}
