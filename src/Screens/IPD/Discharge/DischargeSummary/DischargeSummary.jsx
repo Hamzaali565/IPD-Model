@@ -6,7 +6,7 @@ import SimpleDropDown from "../../../../Components/SimpleDropdown/SimpleDropDown
 import ConsultantModal from "../../../../Components/Modal/ConsultantModal";
 import AdmissionModal from "../../../../Components/Modal/AdmissionModal";
 import LabelledTextArea from "../../../../Components/LabeledTextArea/LabelledTextArea";
-
+import ButtonDis from "../../../../Components/Button/ButtonDis";
 const DischargeSummary = () => {
   const [dischargeType, setDischargeType] = useState([]);
   useEffect(() => {
@@ -77,31 +77,52 @@ const DischargeSummary = () => {
         </div>
       </div>
 
-      <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
-        <LabelledTextArea
-          label={"Presenting Complaints"}
-          placeholder={"Presenting Complaints"}
-        />
-        <LabelledTextArea
-          label={"Presenting Complaints"}
-          placeholder={"Presenting Complaints"}
-        />
-        <LabelledTextArea
-          label={"Presenting Complaints"}
-          placeholder={"Presenting Complaints"}
-        />
-        <LabelledTextArea
-          label={"Presenting Complaints"}
-          placeholder={"Presenting Complaints"}
-        />
-        <LabelledTextArea
-          label={"Presenting Complaints"}
-          placeholder={"Presenting Complaints"}
-        />
-        <LabelledTextArea
-          label={"Presenting Complaints"}
-          placeholder={"Presenting Complaints"}
-        />
+      <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl ">
+        <div className="sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
+          <LabelledTextArea
+            label={"Presenting Complaints"}
+            placeholder={"Presenting Complaints"}
+          />
+          <LabelledTextArea label={"Diagnosis"} placeholder={"Diagnosis"} />
+          <LabelledTextArea
+            label={"Relevant Investigation"}
+            placeholder={"Relevant Investigation"}
+          />
+          <LabelledTextArea
+            label={"Hospital Course"}
+            placeholder={"Hospital Course"}
+          />
+          <LabelledTextArea
+            label={"Date of Surgery"}
+            placeholder={"Date of Surgery"}
+          />
+          <LabelledTextArea
+            label={"Operative Procedure"}
+            placeholder={"Operative Procedure"}
+          />
+          <LabelledTextArea
+            label={"Pending Reports"}
+            placeholder={"Pending Reports"}
+          />
+          <LabelledTextArea
+            label={"Instruction on Discharge"}
+            placeholder={"Instruction on Discharge"}
+          />
+          <LabelledTextArea
+            label={"Medication on Discharge"}
+            placeholder={"Medication on Discharge"}
+          />
+          <LabelledTextArea label={"Follow Up"} placeholder={"Follow Up"} />
+          <LabelledTextArea
+            label={"Condition on Discharge"}
+            placeholder={"Condition on Discharge"}
+          />
+        </div>
+        <div className="flex flex-col items-center space-y-2 mt-2 md:flex-row md:justify-center md:items-center md:space-x-2 md:space-y-0">
+          <ButtonDis title="Save" />
+          <ButtonDis title="Print" />
+          <ButtonDis title="Refresh" />
+        </div>
       </div>
     </div>
   );

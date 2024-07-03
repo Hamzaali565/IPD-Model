@@ -401,7 +401,7 @@ const RunningBill = () => {
               </div>
             </div>
             <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl md:col-span-2">
-              <div className="flex flex-col items-center space-y-2 md:flex-row justify-center space-x-2">
+              <div className="flex flex-col items-center space-y-2 md:flex-row md:justify-center md:space-x-2 md:space-y-0">
                 <ButtonDis title={"Print"} onClick={handleButtonClick} />
                 <ButtonDis title={"Refresh"} onClick={() => refreshData()} />
               </div>
