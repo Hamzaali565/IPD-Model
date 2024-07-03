@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   BrowserRouter as Router,
@@ -35,9 +35,11 @@ import PaymentReciept from "./Screens/IPD/Payments/PaymentReciept/PaymentReciept
 import RunningBill from "./Screens/IPD/Transaction/RunningBill/RunningBill";
 import DischargeMaster from "./Screens/IPD/Discharge/DischargeMaster/DischargeMaster";
 import DischargeSummary from "./Screens/IPD/Discharge/DischargeSummary/DischargeSummary";
+import Loader from "./Components/Modal/Loader";
 
 function App() {
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     CheckLog();
@@ -48,6 +50,7 @@ function App() {
   const url = useSelector((state) => state.url);
 
   const CheckLog = async () => {
+    setOpen(true);
     try {
       const response = await axios.get(`${url}/product`, {
         withCredentials: true,
@@ -55,9 +58,11 @@ function App() {
       console.log("response of product api", response);
       dispatch(setLoginToggle(true));
       dispatch(setResponse(response.data.data));
+      setOpen(false);
     } catch (error) {
       console.log("error of product api", error);
       dispatch(setLoginToggle(false));
+      setOpen(false);
     }
   };
   const getShift = async () => {
@@ -144,6 +149,7 @@ function App() {
           </Routes>
         )}
       </div>
+      <Loader onClick={open} title={"Login Check"} />
     </Router>
   );
 }
