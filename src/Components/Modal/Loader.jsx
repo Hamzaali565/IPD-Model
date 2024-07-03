@@ -8,10 +8,8 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 800,
-  height: 500,
   p: 4,
-  overflowY: "auto", // Enable vertical scrolling
+  border: "none",
 };
 
 export default function Loader({ onClick, title }) {
@@ -30,7 +28,7 @@ export default function Loader({ onClick, title }) {
         <Box sx={style}>
           <div className="flex justify-center flex-col h-full items-center">
             <CircularProgress />
-            <p className="mt-2 font-bold">{title}</p>
+            <p className="mt-2 font-bold text-white">{title}</p>
           </div>
         </Box>
       </Modal>
