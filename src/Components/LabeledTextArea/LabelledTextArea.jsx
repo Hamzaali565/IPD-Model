@@ -1,6 +1,6 @@
 import React from "react";
 
-const LabelledTextArea = ({ label, placeholder, onChange }) => {
+const LabelledTextArea = ({ label, placeholder, onChange, value }) => {
   return (
     <div className="flex flex-col items-center space-y-1">
       <p className="font-bold text-xl">{label}</p>
@@ -12,6 +12,7 @@ const LabelledTextArea = ({ label, placeholder, onChange }) => {
         className="border-2 border-black bg-transparent rounded-xl p-2 placeholder:text-gray-900"
         placeholder={placeholder}
         onChange={onChange}
+        value={value}
       ></textarea>
     </div>
   );
