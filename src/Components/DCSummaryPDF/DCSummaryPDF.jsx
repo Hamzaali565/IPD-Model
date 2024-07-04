@@ -93,7 +93,7 @@ const DCSummary = ({ summaryData, mrData, userName, consultant, ward }) => {
                 Discharge Condition: {summaryData[0]?.dischargeCondition}
               </Text>
               <Text fixed style={[styles.font, styles.wid1]}>
-                Discharge Date: {summaryData[0]?.createdOn}
+                Discharge Summary Date: {summaryData[0]?.createdOn}
               </Text>
             </View>
             <View style={styles.headC2}>
@@ -104,6 +104,228 @@ const DCSummary = ({ summaryData, mrData, userName, consultant, ward }) => {
                 Created User: {summaryData[0]?.createUser}
               </Text>
             </View>
+          </View>
+        </View>
+        <View style={styles.headC1}>
+          <Text>Discharge Summary Details</Text>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: "2",
+          }}
+        >
+          <View
+            style={{
+              width: "48%",
+              border: "1px solid black",
+              borderRadius: "2",
+              marginTop: "3",
+            }}
+          >
+            <View style={styles.headC3}>
+              <Text style={{ fontSize: "10" }}>Presenting Complaints</Text>
+            </View>
+            <Text style={{ fontSize: "8", padding: "2" }}>
+              {summaryData[0]?.dischargeSummaryData[0].pComplaints}
+            </Text>
+          </View>
+          <View
+            style={{
+              width: "48%",
+              border: "1px solid black",
+              borderRadius: "2",
+              marginTop: "3",
+            }}
+          >
+            <View style={styles.headC3}>
+              <Text style={{ fontSize: "10" }}>Diagnosis</Text>
+            </View>
+            <Text style={{ fontSize: "8", padding: "2" }}>
+              {summaryData[0]?.dischargeSummaryData[1].diagnosis}
+            </Text>
+          </View>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: "2",
+          }}
+        >
+          <View
+            style={{
+              width: "48%",
+              border: "1px solid black",
+              borderRadius: "2",
+              marginTop: "3",
+            }}
+          >
+            <View style={styles.headC3}>
+              <Text style={{ fontSize: "10" }}>Relevant Investigation</Text>
+            </View>
+            <Text style={{ fontSize: "8", padding: "2" }}>
+              {summaryData[0]?.dischargeSummaryData[2].rInvestigation}
+            </Text>
+          </View>
+          <View
+            style={{
+              width: "48%",
+              border: "1px solid black",
+              borderRadius: "2",
+              marginTop: "3",
+            }}
+          >
+            <View style={styles.headC3}>
+              <Text style={{ fontSize: "10" }}>Hospital Course</Text>
+            </View>
+            <Text style={{ fontSize: "8", padding: "2" }}>
+              {summaryData[0]?.dischargeSummaryData[3].hCourse}
+            </Text>
+          </View>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: "2",
+          }}
+        >
+          <View
+            style={{
+              width: "48%",
+              border: "1px solid black",
+              borderRadius: "2",
+              marginTop: "3",
+            }}
+          >
+            <View style={styles.headC3}>
+              <Text style={{ fontSize: "10" }}>Date Of Surgery</Text>
+            </View>
+            <Text style={{ fontSize: "8", padding: "2" }}>
+              {summaryData[0]?.dischargeSummaryData[4].DOSurgery}
+            </Text>
+          </View>
+          <View
+            style={{
+              width: "48%",
+              border: "1px solid black",
+              borderRadius: "2",
+              marginTop: "3",
+            }}
+          >
+            <View style={styles.headC3}>
+              <Text style={{ fontSize: "10" }}>Operative Procedure</Text>
+            </View>
+            <Text style={{ fontSize: "8", padding: "2" }}>
+              {summaryData[0]?.dischargeSummaryData[5].oProcedure}
+            </Text>
+          </View>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: "2",
+          }}
+        >
+          <View
+            style={{
+              width: "48%",
+              border: "1px solid black",
+              borderRadius: "2",
+              marginTop: "3",
+            }}
+          >
+            <View style={styles.headC3}>
+              <Text style={{ fontSize: "10" }}>Pending Reports</Text>
+            </View>
+            <Text style={{ fontSize: "8", padding: "2" }}>
+              {summaryData[0]?.dischargeSummaryData[6].pReports}
+            </Text>
+          </View>
+          <View
+            style={{
+              width: "48%",
+              border: "1px solid black",
+              borderRadius: "2",
+              marginTop: "3",
+            }}
+          >
+            <View style={styles.headC3}>
+              <Text style={{ fontSize: "10" }}>Instruction On Discharge</Text>
+            </View>
+            <Text style={{ fontSize: "8", padding: "2" }}>
+              {summaryData[0]?.dischargeSummaryData[7].IODischarge}
+            </Text>
+          </View>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: "2",
+          }}
+        >
+          <View
+            style={{
+              width: "48%",
+              border: "1px solid black",
+              borderRadius: "2",
+              marginTop: "3",
+            }}
+          >
+            <View style={styles.headC3}>
+              <Text style={{ fontSize: "10" }}>Madication On Discharge</Text>
+            </View>
+            <Text style={{ fontSize: "8", padding: "2" }}>
+              {summaryData[0]?.dischargeSummaryData[8].MODischarge}
+            </Text>
+          </View>
+          <View
+            style={{
+              width: "48%",
+              border: "1px solid black",
+              borderRadius: "2",
+              marginTop: "3",
+            }}
+          >
+            <View style={styles.headC3}>
+              <Text style={{ fontSize: "10" }}>Follow Up</Text>
+            </View>
+            <Text style={{ fontSize: "8", padding: "2" }}>
+              {summaryData[0]?.dischargeSummaryData[9].FollowUp}
+            </Text>
+          </View>
+        </View>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            marginTop: "2",
+          }}
+        >
+          <View
+            style={{
+              width: "48%",
+              border: "1px solid black",
+              borderRadius: "2",
+              marginTop: "3",
+            }}
+          >
+            <View style={styles.headC3}>
+              <Text style={{ fontSize: "10" }}>Condition On Discharge</Text>
+            </View>
+            <Text style={{ fontSize: "8", padding: "2" }}>
+              {summaryData[0]?.dischargeSummaryData[10].CODischarge}
+            </Text>
           </View>
         </View>
       </MyPage>
@@ -214,6 +436,14 @@ const styles = StyleSheet.create({
   },
   wid1: {
     width: "40%",
+  },
+  headC3: {
+    border: "1px solid black",
+    color: "white",
+    backgroundColor: "#454545",
+    textAlign: "center",
+    padding: "1",
+    marginTop: "1",
   },
 });
 

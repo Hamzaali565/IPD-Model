@@ -9,10 +9,11 @@ import LabelledTextArea from "../../../../Components/LabeledTextArea/LabelledTex
 import ButtonDis from "../../../../Components/Button/ButtonDis";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { SuccessAlert } from "../../../../Components/Alert/Alert";
+import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import DCSummary from "../../../../Components/DCSummaryPDF/DCSummaryPDF";
 import { pdf } from "@react-pdf/renderer";
 import { v4 as uuidv4 } from "uuid";
+import Loader from "../../../../Components/Modal/Loader";
 
 const DischargeSummary = () => {
   const [dischargeType, setDischargeType] = useState([]);
@@ -22,6 +23,10 @@ const DischargeSummary = () => {
   const [dischargeSummary, setDischargeSummary] = useState([]);
   const [dischargeCondition, setDischargeCondition] = useState("");
   const [toggle, setToggle] = useState(false);
+  const [updateConsultant, setUpdateConsultant] = useState("");
+  const [prevSummary, setPrevSummary] = useState([]);
+  const [wardDetails, setWardDetails] = useState([]);
+  const [open, setOpen] = useState(false);
 
   const url = useSelector((state) => state.url);
   const userData = useSelector((state) => state.response);
@@ -66,24 +71,35 @@ const DischargeSummary = () => {
     setMrInfo(null);
     setDcConsultant(null);
     setConsultant([]);
-    setToggle(!toggle);
-    console.log(dischargeSummary.length);
+    setDischargeType([]);
     setDischargeCondition("");
+    setUpdateConsultant("");
+    setToggle(!toggle);
   };
 
-  const PrintDCSummary = async (data, PCData, e, wardData) => {
+  const PrintDCSummary = async () => {
     // Generate a unique key to force re-render
-
+    // data, PCData, e, wardData
+    // key={key}
+    // mrData={e}
+    // summaryData={data}
+    // consultant={PCData}
+    // ward={wardData}
+    // userName={userData[0]?.userId}
+    if (mrInfo === null) {
+      ErrorAlert({ text: "NO DATA TO BE PRINT !!!", timer: 2000 });
+      return;
+    }
     const key = uuidv4();
 
     // Create a PDF document as a Blob
     const blob = await pdf(
       <DCSummary
         key={key}
-        mrData={e}
-        summaryData={data}
-        consultant={PCData}
-        ward={wardData}
+        mrData={mrInfo}
+        summaryData={prevSummary}
+        consultant={consultant}
+        ward={wardDetails}
         userName={userData[0]?.userId}
       />
     ).toBlob();
@@ -96,6 +112,7 @@ const DischargeSummary = () => {
 
   // api
   const getConsultant = async (e) => {
+    setOpen(true);
     try {
       setMrInfo(e);
       const response = await axios.get(
@@ -105,20 +122,32 @@ const DischargeSummary = () => {
       console.log("Response of get consultant", response);
       setConsultant(response?.data?.data);
       if (response?.data?.data2) {
-        PrintDCSummary(
-          response?.data?.data2,
-          response?.data?.data,
-          e,
-          response?.data?.data3
-        );
+        // PrintDCSummary(
+        //   response?.data?.data2,
+        //   response?.data?.data,
+        //   e,
+        //   response?.data?.data3
+        // );
+        setPrevSummary(response?.data?.data2);
+        setWardDetails(response?.data?.data3);
+        setDischargeSummary(response?.data?.data2[0]?.dischargeSummaryData);
+        setUpdateConsultant(response?.data?.data2[0]?.dischargeDoctor);
       }
+      setOpen(false);
     } catch (error) {
       console.log("Error of get consultant", error);
+      setOpen(false);
     }
   };
   // api
   const submitHandler = async () => {
     try {
+      if (mrInfo === null) throw new Error("PLEASE SELECT PATIENT !!!");
+      if (dcConsultant === "")
+        throw new Error("PLLEASE SELECT DISCHARGE DOCTOR!!!");
+      if (dischargeCondition === "")
+        throw new Error("PLEASE SELECT DISCHARGE TYPE!!!");
+      setOpen(true);
       const response = await axios.post(
         `${url}/ipddischargeSummary`,
         {
@@ -126,7 +155,9 @@ const DischargeSummary = () => {
           admissionNo: mrInfo?.admissionNo,
           createUser: userData[0]?.userId,
           dischargeCondition,
-          dischargeDoctor: dcConsultant?.name,
+          dischargeDoctor: dcConsultant?.name
+            ? dcConsultant?.name
+            : updateConsultant,
           dischargeSummaryData: dischargeSummary,
         },
         { withCredentials: true }
@@ -134,8 +165,11 @@ const DischargeSummary = () => {
       SuccessAlert({ text: "DISCHARGE SUMMARY CREATED SUCCESSFULLY" });
       refreshData();
       console.log("response of submit handler", response);
+      setOpen(false);
     } catch (error) {
       console.log("Error of submit handler", error.response);
+      ErrorAlert({ text: error.message, timer: 1500 });
+      setOpen(false);
     }
   };
   return (
@@ -201,7 +235,13 @@ const DischargeSummary = () => {
                 disabled={true}
                 label={"Discharge Consultant"}
                 placeholder={"Discharge Consultant"}
-                value={dcConsultant !== null ? dcConsultant?.name : ""}
+                value={
+                  dcConsultant !== null
+                    ? dcConsultant?.name
+                    : updateConsultant !== ""
+                    ? updateConsultant
+                    : ""
+                }
               />
               <SimpleDropDown
                 DropDownLabel={"Discharge Condition"}
@@ -328,10 +368,11 @@ const DischargeSummary = () => {
         </div>
         <div className="flex flex-col items-center space-y-2 mt-2 md:flex-row md:justify-center md:items-center md:space-x-2 md:space-y-0">
           <ButtonDis title="Save" onClick={submitHandler} />
-          <ButtonDis title="Print" />
+          <ButtonDis title="Print" onClick={PrintDCSummary} />
           <ButtonDis title="Refresh" onClick={refreshData} />
         </div>
       </div>
+      <Loader onClick={open} title={"Data Loading ..."} />
     </div>
   );
 };
