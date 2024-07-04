@@ -111,7 +111,7 @@ const VisitPDF = ({
                 Days
               </Text>
               <Text fixed style={[styles.font, styles.wid1]}>
-                DischargeDate: ""
+                DischargeDate: {billData?.admissionData[0]?.dischargeDate}
               </Text>
             </View>
             <View style={styles.headC2}>
