@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import CenterHeading from "../../../../Components/Center Heading/CenterHeading";
-import SimpleInput from "../../../../Components/SimpleInput/SimpleInput";
 import LabeledInput from "../../../../Components/LabelledInput/LabeledInput";
 import SimpleDropDown from "../../../../Components/SimpleDropdown/SimpleDropDown";
 import ConsultantModal from "../../../../Components/Modal/ConsultantModal";

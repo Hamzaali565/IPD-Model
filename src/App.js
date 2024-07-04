@@ -36,6 +36,7 @@ import RunningBill from "./Screens/IPD/Transaction/RunningBill/RunningBill";
 import DischargeMaster from "./Screens/IPD/Discharge/DischargeMaster/DischargeMaster";
 import DischargeSummary from "./Screens/IPD/Discharge/DischargeSummary/DischargeSummary";
 import Loader from "./Components/Modal/Loader";
+import PatientDischarge from "./Screens/IPD/Discharge/PatientDischarge/PatientDischarge";
 
 function App() {
   const dispatch = useDispatch();
@@ -138,6 +139,7 @@ function App() {
               <Route index element={<Port />} />
               <Route path="discharge/*" element={<DischargeMaster />}>
                 <Route path="dischargesummary" element={<DischargeSummary />} />
+                <Route path="patientdischarge" element={<PatientDischarge />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/mainpage" replace />} />
