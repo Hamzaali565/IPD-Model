@@ -63,7 +63,7 @@ const DischargeSummary = () => {
       }
       return items;
     });
-    console.log("updated data", newData);
+
     // Update the state with the new data
     setDischargeSummary(newData);
   };
@@ -119,7 +119,7 @@ const DischargeSummary = () => {
         `${url}/dischargeconsultant?admissionNo=${e?.admissionNo}`,
         { withCredentials: true }
       );
-      console.log("Response of get consultant", response);
+
       setConsultant(response?.data?.data);
       if (response?.data?.data2) {
         // PrintDCSummary(
@@ -164,7 +164,7 @@ const DischargeSummary = () => {
       );
       SuccessAlert({ text: "DISCHARGE SUMMARY CREATED SUCCESSFULLY" });
       refreshData();
-      console.log("response of submit handler", response);
+
       setOpen(false);
     } catch (error) {
       console.log("Error of submit handler", error.response);
