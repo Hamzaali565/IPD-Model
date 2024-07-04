@@ -37,6 +37,7 @@ import DischargeMaster from "./Screens/IPD/Discharge/DischargeMaster/DischargeMa
 import DischargeSummary from "./Screens/IPD/Discharge/DischargeSummary/DischargeSummary";
 import Loader from "./Components/Modal/Loader";
 import PatientDischarge from "./Screens/IPD/Discharge/PatientDischarge/PatientDischarge";
+import ReAdmission from "./Screens/IPD/Discharge/ReAdmission/ReAdmission";
 
 function App() {
   const dispatch = useDispatch();
@@ -140,6 +141,7 @@ function App() {
               <Route path="discharge/*" element={<DischargeMaster />}>
                 <Route path="dischargesummary" element={<DischargeSummary />} />
                 <Route path="patientdischarge" element={<PatientDischarge />} />
+                <Route path="readmission" element={<ReAdmission />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/mainpage" replace />} />
