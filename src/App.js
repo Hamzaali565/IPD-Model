@@ -38,6 +38,7 @@ import DischargeSummary from "./Screens/IPD/Discharge/DischargeSummary/Discharge
 import Loader from "./Components/Modal/Loader";
 import PatientDischarge from "./Screens/IPD/Discharge/PatientDischarge/PatientDischarge";
 import ReAdmission from "./Screens/IPD/Discharge/ReAdmission/ReAdmission";
+import FinalBill from "./Screens/IPD/Discharge/FinalBill/FinalBill";
 
 function App() {
   const dispatch = useDispatch();
@@ -142,6 +143,7 @@ function App() {
                 <Route path="dischargesummary" element={<DischargeSummary />} />
                 <Route path="patientdischarge" element={<PatientDischarge />} />
                 <Route path="readmission" element={<ReAdmission />} />
+                <Route path="finalbill" element={<FinalBill />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/mainpage" replace />} />
