@@ -7,8 +7,8 @@ const IPDPaymentMaster = () => {
     { name: "--" },
     { name: "Payment Reciept" },
     { name: "Payment Cancellation" },
-    { name: "Credit Voucher" },
-    { name: "Payment Reciept Party" },
+    { name: "Payment Refund" },
+    { name: "Panels Payment" },
   ];
 
   let navigate = useNavigate();
@@ -22,11 +22,11 @@ const IPDPaymentMaster = () => {
     } else if (name === "Payment Cancellation") {
       path = "paymentcancellation"; // Relative path
       navigate(path);
-    } else if (name === "Credit Voucher") {
-      path = "creditvoucher"; // Relative path
+    } else if (name === "Payment Refund") {
+      path = "paymentrefund"; // Relative path
       navigate(path);
-    } else if (name === "Payment Reciept Party") {
-      path = "paymentrecieptparty"; // Relative path
+    } else if (name === "Panels Payment") {
+      path = "panelpayment"; // Relative path
       navigate(path);
     }
   };

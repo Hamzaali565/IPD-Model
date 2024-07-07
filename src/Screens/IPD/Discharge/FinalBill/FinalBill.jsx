@@ -205,7 +205,7 @@ const FinalBill = () => {
     } catch (error) {
       setOpen(false);
       console.log("Error of bill Delete", error);
-      ErrorAlert({ text: "BILL BOT DELETED" });
+      ErrorAlert({ text: error.response.data.message });
     }
   };
 

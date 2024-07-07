@@ -20,7 +20,7 @@ const style = {
   overflowY: "auto", // Enable vertical scrolling
 };
 
-export default function AdmissionBillModal({ onClick, title }) {
+export default function BillToRefundModal({ onClick, title }) {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
   const [toggle, setToggle] = useState(false);
@@ -61,7 +61,7 @@ export default function AdmissionBillModal({ onClick, title }) {
   // api
   const getData = async () => {
     try {
-      const response = await axios.get(`${url}/billadm`, {
+      const response = await axios.get(`${url}/billadmref`, {
         withCredentials: true,
       });
       console.log(response.data.data);

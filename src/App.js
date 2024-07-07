@@ -39,6 +39,7 @@ import Loader from "./Components/Modal/Loader";
 import PatientDischarge from "./Screens/IPD/Discharge/PatientDischarge/PatientDischarge";
 import ReAdmission from "./Screens/IPD/Discharge/ReAdmission/ReAdmission";
 import FinalBill from "./Screens/IPD/Discharge/FinalBill/FinalBill";
+import PaymentRefund from "./Screens/IPD/Payments/CreaditVoucher/PaymentRefund";
 
 function App() {
   const dispatch = useDispatch();
@@ -134,6 +135,7 @@ function App() {
               <Route index element={<Port />} />
               <Route path="payments/*" element={<IPDPaymentMaster />}>
                 <Route path="paymentReciept" element={<PaymentReciept />} />
+                <Route path="paymentrefund" element={<PaymentRefund />} />
               </Route>
             </Route>
             {/* Discharge */}

@@ -138,7 +138,7 @@ const ReAdmission = () => {
   return (
     <div>
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
-        <CenterHeading title={"Patient Discharge"} />
+        <CenterHeading title={"Re-Admit Pateint"} />
         <div className="flex flex-col items-center space-y-2">
           <ReAdmissionModal
             title={"Select Admission No"}
