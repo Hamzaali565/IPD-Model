@@ -12,10 +12,14 @@ import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import MRModel from "../../../../Components/Modal/MRModal";
 import Loader from "../../../../Components/Modal/Loader";
 import SimpleDropDown from "../../../../Components/SimpleDropdown/SimpleDropDown";
+import ReservationModal from "../../../../Components/Modal/ReservationModal";
+import AllReservationModal from "../../../../Components/Modal/AllReservationModal";
+import SimpleInput from "../../../../Components/SimpleInput/SimpleInput";
 
 const Reservation = () => {
   const [consultant, setConsultant] = useState(null);
   const [mrInfo, setMrInfo] = useState(null);
+  const [reservationInfo, setReservationInfo] = useState(null);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [amount, setAmount] = useState("");
@@ -62,6 +66,7 @@ const Reservation = () => {
   const refresh = () => {
     setConsultant(null);
     setMrInfo(null);
+    setReservationInfo(null);
     setFromDate("");
     setToDate("");
     setAmount("");
@@ -149,14 +154,44 @@ const Reservation = () => {
             />
             <MRModel title={"Create MR No."} onClick={(e) => setMrInfo(e)} />
           </div>
-          {mrInfo !== null && (
-            <div className=" md:flex md:justify-between md:items-center">
-              <p className="text-justify">
-                Patient Name: {mrInfo.patientType} {mrInfo.patientName}{" "}
-                {mrInfo.relativeType} {mrInfo.relativeName}
-              </p>
-              <p className="text-center">Gender: {mrInfo.gender} </p>
-              <p className="text-center">Cell No.: {mrInfo.cellNo}</p>
+          <div className="flex justify-center">
+            <AllReservationModal
+              title={"Select Reservation No."}
+              onClick={(e) => setReservationInfo(e)}
+            />
+          </div>
+          {(mrInfo !== null || reservationInfo !== null) && (
+            <div className="flex items-center flex-col space-y-2 mt-2">
+              <LabeledInput
+                disabled={true}
+                placeholder={"Patient Name"}
+                label={"Patient Name"}
+                value={
+                  mrInfo !== null
+                    ? `${mrInfo?.patientType} ${mrInfo?.patientName} ${mrInfo?.relativeType} ${mrInfo?.relativeName}`
+                    : `${reservationInfo?.patientType} ${reservationInfo?.patientName} ${reservationInfo?.relativeType} ${reservationInfo?.relativeName}`
+                }
+              />
+              <LabeledInput
+                disabled={true}
+                placeholder={"Gender"}
+                label={"Gender"}
+                value={
+                  mrInfo !== null ? mrInfo?.gender : reservationInfo?.gender
+                }
+              />
+              <LabeledInput
+                disabled={true}
+                placeholder={"Cell No"}
+                label={"Cell No"}
+                value={mrInfo !== null ? mrInfo?.cellNo : "oho"}
+              />
+              <LabeledInput
+                disabled={true}
+                placeholder={"Mr No"}
+                label={"Mr No"}
+                value={mrInfo !== null ? mrInfo?.MrNo : reservationInfo?.mrNo}
+              />
             </div>
           )}
         </div>
@@ -168,13 +203,13 @@ const Reservation = () => {
             label={"From Date"}
             type={"date"}
             onChange={(e) => handleDate(e.target.value, "fromDate")}
-            value={fromDate}
+            value={fromDate ? fromDate : reservationInfo?.fromDate}
           />
           <LabeledInput
             label={"To Date"}
             type={"date"}
             onChange={(e) => handleDate(e.target.value, "toDate")}
-            value={toDate}
+            value={toDate ? toDate : reservationInfo?.toDate}
           />
         </div>
       </div>
@@ -189,8 +224,18 @@ const Reservation = () => {
             }}
           />
         </div>
-        {consultant !== null && (
-          <p className="text-center">Consultant Name: {consultant?.name}</p>
+        {(consultant !== null || reservationInfo !== null) && (
+          <div className="flex justify-center">
+            <LabeledInput
+              placeholder={"Consultant Name"}
+              label={"Consultant Name"}
+              value={
+                consultant?.name
+                  ? consultant?.name
+                  : reservationInfo?.consultantName
+              }
+            />
+          </div>
         )}
       </div>
 
@@ -202,7 +247,7 @@ const Reservation = () => {
             label={"AMOUNT"}
             placeholder={2000}
             type={"number"}
-            value={amount}
+            value={amount ? amount : reservationInfo?.amount}
             onChange={(e) => setAmount(e.target.value)}
           />
           <SimpleDropDown
