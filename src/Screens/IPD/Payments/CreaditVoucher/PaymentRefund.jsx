@@ -113,7 +113,7 @@ const PaymentRefund = () => {
         { withCredentials: true }
       );
       console.log("response of submitPayment", response.data.data);
-      SuccessAlert({ text: "PAYMENT CREATED SUCCESSFULLY !!!", timer: 2000 });
+      SuccessAlert({ text: "REFUND CREATED SUCCESSFULLY !!!", timer: 2000 });
       resetData();
       setOpen(false);
     } catch (error) {
