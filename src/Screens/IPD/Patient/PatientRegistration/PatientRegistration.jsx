@@ -10,6 +10,10 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import InputButton from "../../../../Components/InputButton/InputButton";
 import Loader from "../../../../Components/Modal/Loader";
+import MRRegPDF from "../../../../Components/PDFDetails/MRRegisPDF";
+import { pdf } from "@react-pdf/renderer";
+import { v4 as uuidv4 } from "uuid";
+import ButtonDis from "../../../../Components/Button/ButtonDis";
 
 const PatientRegistration = () => {
   const [patientName, setPatientName] = useState("");
@@ -72,6 +76,20 @@ const PatientRegistration = () => {
   const url = useSelector((item) => item.url);
   const userData = useSelector((item) => item.response);
 
+  const printMRCard = async (data) => {
+    const key = uuidv4();
+    const myData = [data];
+    // Create a PDF document as a Blob
+    const blob = await pdf(
+      <MRRegPDF key={key} mrData={mrData.length > 0 ? mrData : myData} />
+    ).toBlob();
+
+    // Create a Blob URL and open it in a new tab
+    let url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    url = "";
+  };
+
   // api
   const submitHandler = async () => {
     try {
@@ -111,7 +129,7 @@ const PatientRegistration = () => {
         },
         { withCredentials: true }
       );
-      console.log("response of Submit Handler", response);
+      printMRCard(response?.data?.data);
       Refresh();
       setOpen(false);
       if (response.data.data1) {
@@ -129,6 +147,7 @@ const PatientRegistration = () => {
     }
   };
   const updateHandler = async () => {
+    setOpen(true);
     try {
       const newData = mrData.map((item) => {
         return { ...item, updatedUser: userData[0].userId };
@@ -194,9 +213,11 @@ const PatientRegistration = () => {
         text: `MR NO. ${response.data.data.MrNo} HAS BEEN UPDATED !!!`,
       });
       Refresh();
-      console.log("response of update handler", response.data.data);
+      setOpen(false);
+      printMRCard(response?.data?.data);
     } catch (error) {
       console.log("Error of update hanlder");
+      setOpen(false);
     }
   };
 
@@ -637,13 +658,17 @@ const PatientRegistration = () => {
           </div>
         </div>
       </div>
-      <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl grid grid-cols-[5rem,5rem,5rem] justify-center gap-x-2">
-        <SimpleButton
+      <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl flex items-center flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 md:justify-center">
+        <ButtonDis
           title={"Save"}
           onClick={mrData.length > 0 ? updateHandler : submitHandler}
         />
-        <SimpleButton title={"Print"} />
-        <SimpleButton title={"Refresh"} onClick={Refresh} />
+        <ButtonDis
+          title={"Print"}
+          onClick={printMRCard}
+          disabled={mrData.length <= 0 ? true : false}
+        />
+        <ButtonDis title={"Refresh"} onClick={Refresh} />
       </div>
       <Loader onClick={open} title={"Please Wait"} />
     </div>
