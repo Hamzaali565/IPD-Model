@@ -9,12 +9,7 @@ import {
 } from "@react-pdf/renderer";
 import logo from "../../Images/ZMCLogo-2.png";
 
-const DepositPDF = ({
-  billData,
-
-  userName,
-}) => {
-  console.log("BillData", billData);
+const ReservationPDF = ({ billData, userName }) => {
   const MyPage = ({ children }) => (
     <Page style={styles.page}>
       <Image src={logo} style={styles.Image} />
@@ -48,21 +43,19 @@ const DepositPDF = ({
                 fixed
                 style={[styles.font, { fontWeight: "bold" }, styles.wid]}
               >
-                Patient Name: {billData?.patientData[0]?.patientType}{" "}
-                {billData?.patientData[0]?.patientName}{" "}
-                {billData?.patientData[0]?.relativeType}{" "}
-                {billData?.patientData[0]?.relativeName}
+                Patient Name: {billData?.patientType} {billData?.patientName}{" "}
+                {billData?.relativeType} {billData?.relativeName}
               </Text>
               <Text fixed style={[styles.font, styles.ml1, styles.wid1]}>
-                Gender: {billData?.patientData[0]?.gender}
+                Gender: {billData?.gender}
               </Text>
             </View>
             <View style={styles.headC2}>
               <Text fixed style={[styles.font, styles.wid]}>
-                Contact: {billData?.patientData[0]?.cellNo}
+                Contact: {billData.cellNo}
               </Text>
               <Text fixed style={[styles.font, styles.ml2, styles.wid1]}>
-                Consultant: {billData?.ConsultantName[0]?.name}
+                Consultant: {billData?.consultantName}
               </Text>
             </View>
             <View style={styles.headC2}>
@@ -70,44 +63,34 @@ const DepositPDF = ({
                 Party: Cash
               </Text>
               <Text fixed style={[styles.font, styles.ml3, styles.wid1]}>
-                Reservation No: {billData?.activeParty[0]?.admissionNo}
+                Reservation No: {billData?.reservationNo}
               </Text>
             </View>
             <View style={styles.headC2}>
               <Text fixed style={[styles.font, styles.wid]}>
-                Mr No: {billData?.activeParty[0]?.mrNo}
+                Mr No: {billData?.mrNo}
               </Text>
               <Text fixed style={[styles.font, styles.ml3, styles.wid1]}>
-                Reservation User: {billData?.admissionData[0]?.createdUser}
+                Reservation User: {billData?.createdUser}
               </Text>
             </View>
             <View style={styles.headC2}>
               <Text fixed style={[styles.font, styles.ml4, styles.wid]}>
-                Address: {billData?.patientData[0]?.address}
+                Address: {billData?.address}
               </Text>
               <Text fixed style={[styles.font, styles.wid1]}>
-                Reservation Date: {billData?.admissionData[0]?.createdOn}
+                Reservation Date: {billData?.createdOn}
               </Text>
             </View>
             <View style={styles.headC2}>
               <Text fixed style={[styles.font, styles.ml5, styles.wid]}>
-                Age:{" "}
-                {billData?.patientData[0]?.ageYear
-                  ? billData?.patientData[0]?.ageYear
-                  : "0"}{" "}
-                Years{" "}
-                {billData?.patientData[0]?.ageMonth
-                  ? billData?.patientData[0]?.ageMonth
-                  : "0"}{" "}
-                Months{" "}
-                {billData?.patientData[0]?.ageDay
-                  ? billData?.patientData[0]?.ageDay
-                  : "0"}{" "}
-                Days
+                Age: {billData?.ageYear ? billData?.ageYear : "0"} Years{" "}
+                {billData?.ageMonth ? billData?.ageMonth : "0"} Months{" "}
+                {billData?.ageDay ? billData?.ageDay : "0"} Days
               </Text>
 
               <Text fixed style={[styles.font, styles.wid1]}>
-                Remarks: {billData?.admissionData[0]?.remarks}
+                Remarks: "Hello"
               </Text>
             </View>
           </View>
@@ -223,4 +206,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DepositPDF;
+export default ReservationPDF;

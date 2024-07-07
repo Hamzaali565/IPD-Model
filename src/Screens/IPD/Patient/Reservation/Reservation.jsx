@@ -3,7 +3,6 @@ import CenterHeading from "../../../../Components/Center Heading/CenterHeading";
 import FullScreenModal from "../../../../Components/Modal/FullScreenModal";
 import LabeledInput from "../../../../Components/LabelledInput/LabeledInput";
 import { useSelector } from "react-redux";
-import SimpleButton from "../../../../Components/Button/SimpleButton";
 import ButtonDis from "../../../../Components/Button/ButtonDis";
 import ConsultantModal from "../../../../Components/Modal/ConsultantModal";
 import moment from "moment";
@@ -12,9 +11,10 @@ import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import MRModel from "../../../../Components/Modal/MRModal";
 import Loader from "../../../../Components/Modal/Loader";
 import SimpleDropDown from "../../../../Components/SimpleDropdown/SimpleDropDown";
-import ReservationModal from "../../../../Components/Modal/ReservationModal";
 import AllReservationModal from "../../../../Components/Modal/AllReservationModal";
-import SimpleInput from "../../../../Components/SimpleInput/SimpleInput";
+import ReservationPDF from "../../../../Components/PDFDetails/ReservationPDF";
+import { pdf } from "@react-pdf/renderer";
+import { v4 as uuidv4 } from "uuid";
 
 const Reservation = () => {
   const [consultant, setConsultant] = useState(null);
@@ -76,6 +76,24 @@ const Reservation = () => {
     setPaymentData([]);
     setToggle(!toggle);
   };
+
+  const printMRCard = async (data) => {
+    const key = uuidv4();
+    const myData = data;
+    // Create a PDF document as a Blob
+    const blob = await pdf(
+      <ReservationPDF
+        key={key}
+        billData={reservationInfo !== null ? reservationInfo : myData}
+      />
+    ).toBlob();
+
+    // Create a Blob URL and open it in a new tab
+    let url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    url = "";
+  };
+
   // date Handler
   const handleDate = (value, key) => {
     const formattedDate = moment(value).format("DD/MM/YYYY"); // For display/logging
@@ -264,7 +282,7 @@ const Reservation = () => {
         <div className="flex justify-center space-x-2 mt-3">
           <ButtonDis title={"SUBMIT"} onClick={check} />
           <ButtonDis title={"Refresh"} onClick={refresh} />
-          <ButtonDis title={"Print"} onClick={delateCollection} />
+          <ButtonDis title={"Print"} onClick={printMRCard} />
         </div>
       </div>
       <Loader onClick={open} title={"Please Wait"} />
