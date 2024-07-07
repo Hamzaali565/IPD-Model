@@ -16,10 +16,13 @@ import VisitPDF from "../../../../Components/RunningBillPdf/VisitPDF";
 import DepositPDF from "../../../../Components/RunningBillPdf/DepositPDF";
 import ReAdmissionModal from "../../../../Components/Modal/ReAmissionModal";
 import FinallBillPDF from "../../../../Components/RunningBillPdf/FinallBillPDF";
+import AdmissionBillModal from "../../../../Components/Modal/AdmissionBillModal";
+import { SuccessAlert, ErrorAlert } from "../../../../Components/Alert/Alert";
+import Swal from "sweetalert2";
 
 const FinalBill = () => {
   const [runningData, setRunningData] = useState([]);
-  const [billData, setBillData] = useState([]);
+  const [billData, setBillData] = useState(null);
   const [mrInfo, setMrInfo] = useState(null);
   const [serviceCharges, setServiceCharges] = useState(0);
   const [wardCharges, setWardCharges] = useState(0);
@@ -91,8 +94,64 @@ const FinalBill = () => {
       setOpen(false);
     }
   };
+  const getBillData = async (e) => {
+    refreshData();
+    setOpen(true);
+    setMrInfo(e);
+    try {
+      const response = await axios.get(
+        `${url}/finalbill?admissionNo=${e?.admissionNo}&mrNo=${e?.mrNo}`,
+        { withCredentials: true }
+      );
+      console.log(response?.data?.data?.BilData[0]);
+      setRunningData(response?.data?.data);
+      if (response?.data?.data?.serviceCharges?.length > 0) {
+        const totalCharges = response?.data?.data?.serviceCharges.reduce(
+          (accumulator, item) => accumulator + item?.amount,
+          0
+        );
+        setServiceCharges(totalCharges);
+        console.log("totalCharges", totalCharges);
+      }
+      if (response?.data?.data?.wardCharges?.length > 0) {
+        const totalCharges = response?.data?.data?.wardCharges.reduce(
+          (accumulator, item) => accumulator + item?.amount,
+          0
+        );
+        setWardCharges(totalCharges);
+      }
+      if (response?.data?.data?.procedureCharges?.length > 0) {
+        const totalCharges = response?.data?.data?.procedureCharges.reduce(
+          (accumulator, item) => accumulator + item?.amount,
+          0
+        );
+        setProcedureCharges(totalCharges);
+      }
+      if (response?.data?.data?.consultantVisit?.length > 0) {
+        const totalCharges = response?.data?.data?.consultantVisit.reduce(
+          (accumulator, item) => accumulator + item?.charges,
+          0
+        );
+        setVisitCharges(totalCharges);
+      }
+      if (response?.data?.data?.depositDetails?.length > 0) {
+        const totalCharges = response?.data?.data?.depositDetails.reduce(
+          (accumulator, item) => accumulator + item?.amount,
+          0
+        );
+        setDeposit(totalCharges);
+      }
+      setBillData(response?.data?.data?.BilData[0]);
+      setToggle(!toggle);
+      setOpen(false);
+    } catch (error) {
+      console.log("Error of Get Data", error);
+      setOpen(false);
+    }
+  };
 
   const SubmitHandler = async () => {
+    setOpen(true);
     try {
       const response = await axios.post(
         `${url}/finalbill`,
@@ -123,14 +182,52 @@ const FinalBill = () => {
       console.log("Response of Submit handler", response.data);
       setBillData(response?.data?.data);
       printFinallBill(response?.data?.data);
+      refreshData();
+      setOpen(false);
     } catch (error) {
       console.log("Error of Submit Handler", error);
+      setOpen(false);
     }
+  };
+
+  const billDelete = async () => {
+    setOpen(true);
+    try {
+      const response = await axios.put(
+        `${url}/billdelete`,
+        { admissionNo: mrInfo?.admissionNo },
+        { withCredentials: true }
+      );
+      console.log("Response of Delete Bill", response.data);
+      setOpen(false);
+      SuccessAlert({ text: "BILL DELETED SUCCESSFULLY", timer: 1500 });
+      refreshData();
+    } catch (error) {
+      setOpen(false);
+      console.log("Error of bill Delete", error);
+      ErrorAlert({ text: "BILL BOT DELETED" });
+    }
+  };
+
+  const ResureAlert = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        billDelete();
+      }
+    });
   };
 
   const refreshData = () => {
     setRunningData([]);
-    setBillData([]);
+    setBillData(null);
     setServiceCharges(0);
     setWardCharges(0);
     setProcedureCharges(0);
@@ -291,6 +388,7 @@ const FinalBill = () => {
     url = "";
   };
   const printFinallBill = async (data) => {
+    console.log(" data", data);
     // Generate a unique key to force re-render
 
     const key = uuidv4();
@@ -300,7 +398,7 @@ const FinalBill = () => {
       <FinallBillPDF
         key={key}
         billData={runningData}
-        FinalBillD={data}
+        FinalBillD={billData !== null ? billData : data}
         service={serviceCharges}
         ward={wardCharges}
         procedure={procedureCharges}
@@ -320,8 +418,9 @@ const FinalBill = () => {
     <div>
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
         <CenterHeading title={"Final Bill"} />
-        <div className="flex justify-center">
+        <div className="flex justify-center space-x-2">
           <ReAdmissionModal title={"Select Admission No"} onClick={getData} />
+          <AdmissionBillModal title={"Select Bill No"} onClick={getBillData} />
         </div>
         {runningData?.patientData?.length > 0 && (
           <div className="md:grid md:grid-cols-2">
@@ -470,10 +569,14 @@ const FinalBill = () => {
                 <ButtonDis
                   title={"Print"}
                   onClick={
-                    billData.length < 0 ? handleButtonClick : printFinallBill
+                    billData === null ? handleButtonClick : printFinallBill
                   }
                 />
-                <ButtonDis title={"Delete"} />
+                <ButtonDis
+                  title={"Delete"}
+                  onClick={ResureAlert}
+                  disabled={billData === null ? true : false}
+                />
                 <ButtonDis title={"Refresh"} onClick={() => refreshData()} />
               </div>
             </div>

@@ -7,7 +7,7 @@ import {
   View,
   Image,
 } from "@react-pdf/renderer";
-import logo from "../../Images/ZMCLogo-2.png";
+import logo from "../../Images/ZMCLogo-.png";
 
 const FinallBillPDF = ({
   billData,
@@ -24,6 +24,9 @@ const FinallBillPDF = ({
   const MyPage = ({ children }) => (
     <Page style={styles.page}>
       <Image src={logo} style={styles.Image} />
+      <View style={styles.watermarkContainer}>
+        <Image src={logo} style={styles.watermark} />
+      </View>
       <View style={styles.content}>{children}</View>
       <View style={styles.footer} />
       <View style={styles.pageNumber}>
@@ -112,7 +115,7 @@ const FinallBillPDF = ({
                 Days
               </Text>
               <Text fixed style={[styles.font, styles.wid1]}>
-                DischargeDate: {billData?.admissionData[0]?.dischargeDate}
+                Discharge Date: {billData?.admissionData[0]?.dischargeDate}
               </Text>
             </View>
             <View style={styles.headC2}>
@@ -120,7 +123,23 @@ const FinallBillPDF = ({
                 Ward Name: {billData?.activeWard[0]?.wardName}
               </Text>
               <Text fixed style={[styles.font, styles.wid1]}>
+                Discharge User: {FinalBillD?.dischargeUser}
+              </Text>
+            </View>
+            <View style={styles.headC2}>
+              <Text fixed style={[styles.font, styles.ml4, styles.wid]}>
                 Bed No: {billData?.activeWard[0]?.bedNo}
+              </Text>
+              <Text fixed style={[styles.font, styles.wid1]}>
+                Bill No: {FinalBillD?.billNo}
+              </Text>
+            </View>
+            <View style={styles.headC2}>
+              <Text fixed style={[styles.font, styles.ml4, styles.wid]}>
+                Bed User: {FinalBillD?.billUser}
+              </Text>
+              <Text fixed style={[styles.font, styles.wid1]}>
+                Bill Date: {FinalBillD?.billDate}
               </Text>
             </View>
             <View style={styles.headC2}>
@@ -528,6 +547,25 @@ const styles = StyleSheet.create({
   },
   wid1: {
     width: "40%",
+  },
+  watermarkContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: -1,
+    justifyContent: "center",
+    alignItems: "center",
+    opacity: 0.3,
+  },
+  watermark: {
+    width: 600,
+    height: 150,
+    transform: "rotate(-45deg)", // Rotate the watermark
+  },
+  content: {
+    zIndex: 1,
   },
 });
 
