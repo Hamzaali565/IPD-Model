@@ -104,7 +104,7 @@ const ReAdmission = () => {
       refreshData();
     } catch (error) {
       console.log("error of discharged", error);
-      ErrorAlert({ text: error.message });
+      ErrorAlert({ text: error?.response?.data?.message });
       setOpen(false);
     }
   };
