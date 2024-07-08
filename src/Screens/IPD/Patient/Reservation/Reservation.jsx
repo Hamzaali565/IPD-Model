@@ -27,6 +27,7 @@ const Reservation = () => {
   const [paymentType, setPaymentType] = useState("");
   const [locationData, setLocationData] = useState([]);
   const [paymentData, setPaymentData] = useState([]);
+  const [getDoc, setGetDoc] = useState([]);
   const [open, setOpen] = useState(false);
   const [toggle, setToggle] = useState(false);
 
@@ -50,18 +51,6 @@ const Reservation = () => {
     ]);
   }, [!toggle]);
 
-  const delateCollection = async () => {
-    try {
-      const response = await axios.delete(
-        `${url}/deleteCollectionReservation`,
-        { withCredentials: true }
-      );
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   // function
   const refresh = () => {
     setConsultant(null);
@@ -74,6 +63,7 @@ const Reservation = () => {
     setlocation("");
     setLocationData([]);
     setPaymentData([]);
+    setGetDoc([]);
     setToggle(!toggle);
   };
 
@@ -85,6 +75,7 @@ const Reservation = () => {
       <ReservationPDF
         key={key}
         billData={reservationInfo !== null ? reservationInfo : myData}
+        consultantDetails={getDoc}
       />
     ).toBlob();
 
@@ -150,10 +141,28 @@ const Reservation = () => {
       SuccessAlert({ text: "RESERVATION CREATED SUCCESSFULLY", timer: 1500 });
       refresh();
       setOpen(false);
+      printMRCard(response?.data?.data);
     } catch (error) {
       console.log("Error of Submit Handler", error);
       ErrorAlert({ text: error.response.data.message, timer: 1000 });
       setOpen(false);
+    }
+  };
+  // api
+  const getConsultant = async (e) => {
+    setOpen(true);
+    try {
+      setReservationInfo(e);
+      const response = await axios.get(
+        `${url}/reservationconsultant?consultantId=${e?.consultantId}`,
+        { withCredentials: true }
+      );
+      setOpen(setOpen(false));
+      setGetDoc(response?.data?.data);
+      console.log("Response of getConsultant", response.data.data);
+    } catch (error) {
+      console.log("Error of getConsultant", error);
+      setOpen(setOpen(false));
     }
   };
 
@@ -175,7 +184,7 @@ const Reservation = () => {
           <div className="flex justify-center">
             <AllReservationModal
               title={"Select Reservation No."}
-              onClick={(e) => setReservationInfo(e)}
+              onClick={(e) => getConsultant(e)}
             />
           </div>
           {(mrInfo !== null || reservationInfo !== null) && (
@@ -202,7 +211,9 @@ const Reservation = () => {
                 disabled={true}
                 placeholder={"Cell No"}
                 label={"Cell No"}
-                value={mrInfo !== null ? mrInfo?.cellNo : "oho"}
+                value={
+                  mrInfo !== null ? mrInfo?.cellNo : reservationInfo?.cellNo
+                }
               />
               <LabeledInput
                 disabled={true}
@@ -221,13 +232,25 @@ const Reservation = () => {
             label={"From Date"}
             type={"date"}
             onChange={(e) => handleDate(e.target.value, "fromDate")}
-            value={fromDate ? fromDate : reservationInfo?.fromDate}
+            value={
+              fromDate
+                ? fromDate
+                : reservationInfo !== null
+                ? reservationInfo?.fromDate
+                : ""
+            }
           />
           <LabeledInput
             label={"To Date"}
             type={"date"}
             onChange={(e) => handleDate(e.target.value, "toDate")}
-            value={toDate ? toDate : reservationInfo?.toDate}
+            value={
+              toDate
+                ? toDate
+                : reservationInfo !== null
+                ? reservationInfo?.toDate
+                : ""
+            }
           />
         </div>
       </div>
@@ -250,7 +273,9 @@ const Reservation = () => {
               value={
                 consultant?.name
                   ? consultant?.name
-                  : reservationInfo?.consultantName
+                  : getDoc.length > 0
+                  ? getDoc[0]?.name
+                  : ""
               }
             />
           </div>
@@ -265,7 +290,13 @@ const Reservation = () => {
             label={"AMOUNT"}
             placeholder={2000}
             type={"number"}
-            value={amount ? amount : reservationInfo?.amount}
+            value={
+              amount
+                ? amount
+                : reservationInfo !== null
+                ? reservationInfo?.amount
+                : ""
+            }
             onChange={(e) => setAmount(e.target.value)}
           />
           <SimpleDropDown
@@ -282,7 +313,11 @@ const Reservation = () => {
         <div className="flex justify-center space-x-2 mt-3">
           <ButtonDis title={"SUBMIT"} onClick={check} />
           <ButtonDis title={"Refresh"} onClick={refresh} />
-          <ButtonDis title={"Print"} onClick={printMRCard} />
+          <ButtonDis
+            title={"Print"}
+            onClick={printMRCard}
+            disabled={reservationInfo !== null ? false : true}
+          />
         </div>
       </div>
       <Loader onClick={open} title={"Please Wait"} />

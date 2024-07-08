@@ -6,13 +6,32 @@ import {
   StyleSheet,
   View,
   Image,
+  Font,
 } from "@react-pdf/renderer";
 import logo from "../../Images/ZMCLogo-2.png";
+// Register the Roboto font
+Font.register({
+  family: "Roboto",
+  src: "https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxP.ttf",
+});
 
-const ReservationPDF = ({ billData, userName }) => {
+const ReservationPDF = ({ billData, userName, consultantDetails }) => {
+  console.log("consultantDetails", consultantDetails[0]?.name);
   const MyPage = ({ children }) => (
     <Page style={styles.page}>
-      <Image src={logo} style={styles.Image} />
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Image src={logo} style={styles.Image} />
+        <Text style={{ fontSize: "12", fontFamily: "Roboto" }}>
+          Reservation Form
+        </Text>
+      </View>
       <View style={styles.content}>{children}</View>
       <View style={styles.footer} />
       <View style={styles.pageNumber}>
@@ -55,7 +74,7 @@ const ReservationPDF = ({ billData, userName }) => {
                 Contact: {billData.cellNo}
               </Text>
               <Text fixed style={[styles.font, styles.ml2, styles.wid1]}>
-                Consultant: {billData?.consultantName}
+                Consultant: "Hello"
               </Text>
             </View>
             <View style={styles.headC2}>
@@ -95,6 +114,61 @@ const ReservationPDF = ({ billData, userName }) => {
             </View>
           </View>
         </View>
+
+        <View style={styles.head}>
+          <View style={styles.headC1}>
+            <Text>Reservation Period</Text>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginVertical: "5",
+              fontSize: "10",
+              paddingHorizontal: "2",
+            }}
+          >
+            <Text>From Date: {billData?.fromDate}</Text>
+            <Text>To Date: {billData?.toDate}</Text>
+          </View>
+        </View>
+
+        <View style={styles.head}>
+          <View style={styles.headC1}>
+            <Text>Advice By</Text>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              marginVertical: "5",
+              fontSize: "10",
+              paddingHorizontal: "2",
+            }}
+          >
+            <Text>Consultant Name: {billData?.consultantName}</Text>
+          </View>
+        </View>
+
+        <View style={styles.head}>
+          <View style={styles.headC1}>
+            <Text>Amount Details</Text>
+          </View>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              marginVertical: "5",
+              fontSize: "10",
+              paddingHorizontal: "2",
+            }}
+          >
+            <Text>Amount Paid: {billData?.amount}</Text>
+          </View>
+        </View>
       </MyPage>
     </Document>
   );
@@ -131,7 +205,7 @@ const styles = StyleSheet.create({
   },
   head: {
     border: "1px solid black",
-    marginTop: "2",
+    marginTop: "10",
     padding: "2",
   },
   headC1: {
@@ -140,7 +214,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#454545",
     textAlign: "center",
     padding: "2",
-    marginTop: "4",
+    marginTop: "1",
   },
   headC2: {
     display: "flex",
