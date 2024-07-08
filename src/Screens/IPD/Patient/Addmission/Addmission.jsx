@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import ButtonDis from "../../../../Components/Button/ButtonDis";
 import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import Loader from "../../../../Components/Modal/Loader";
+import AdmissionModal from "../../../../Components/Modal/AdmissionModal";
 
 const Addmission = () => {
   const [admissionType, setAdmissionType] = useState("");
@@ -171,6 +172,10 @@ const Addmission = () => {
         <CenterHeading title={"Admission"} />
 
         <div className="flex flex-col items-center ">
+          <AdmissionModal
+            title={"Select Admission No"}
+            onClick={(e) => console.log(e)}
+          />
           <SimpleDropDown
             DropDownLabel={"Select Admission Type"}
             data={ADType}
