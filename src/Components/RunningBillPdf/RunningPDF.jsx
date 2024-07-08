@@ -6,8 +6,14 @@ import {
   StyleSheet,
   View,
   Image,
+  Font,
 } from "@react-pdf/renderer";
 import logo from "../../Images/ZMCLogo-2.png";
+
+Font.register({
+  family: "Roboto",
+  src: "https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxP.ttf",
+});
 
 const RunningPDF = ({
   billData,
@@ -22,7 +28,19 @@ const RunningPDF = ({
   console.log("BillData", billData);
   const MyPage = ({ children }) => (
     <Page style={styles.page}>
-      <Image src={logo} style={styles.Image} />
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Image src={logo} style={styles.Image} />
+        <Text style={{ fontSize: "12", fontFamily: "Roboto" }}>
+          Running Bill Form
+        </Text>
+      </View>
       <View style={styles.content}>{children}</View>
       <View style={styles.footer} />
       <View style={styles.pageNumber}>

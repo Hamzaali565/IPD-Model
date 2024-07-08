@@ -13,12 +13,16 @@ import ButtonDis from "../../../../Components/Button/ButtonDis";
 import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import Loader from "../../../../Components/Modal/Loader";
 import AdmissionModal from "../../../../Components/Modal/AdmissionModal";
+import { pdf } from "@react-pdf/renderer";
+import { v4 as uuidv4 } from "uuid";
+import AdmissionPDF from "../../../../Components/PDFDetails/AdmissionPDF";
 
 const Addmission = () => {
   const [admissionType, setAdmissionType] = useState("");
   const [ADType, setADType] = useState([]);
   const [ward, setWard] = useState([]);
   const [bed, setBed] = useState([]);
+  const [completeAdmData, setCompleteAdmData] = useState(null);
   const [mrInfo, setMrInfo] = useState(null);
   const [party, setParty] = useState(null);
   const [consultant, setConsultant] = useState(null);
@@ -93,10 +97,28 @@ const Addmission = () => {
     setToggle(!toggle);
     setReferedBy("");
     setRemarks("");
+    setCompleteAdmData(null);
   };
 
   const resetBed = () => {
     setBed([]);
+  };
+
+  const AdmissionPrint = async (data) => {
+    const key = uuidv4();
+    // Create a PDF document as a Blob
+    const blob = await pdf(
+      <AdmissionPDF
+        key={key}
+        billData={completeAdmData}
+        userName={userData[0]?.userId}
+      />
+    ).toBlob();
+
+    // Create a Blob URL and open it in a new tab
+    let url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    url = "";
   };
 
   const checkbedId = (e) => {
@@ -166,6 +188,20 @@ const Addmission = () => {
       setOpen(false);
     }
   };
+
+  const callData = async (data) => {
+    try {
+      setMrInfo(data);
+      const response = await axios.get(
+        `${url}/admissionwisedetails?admissionNo=${data?.admissionNo}&mrNo=${data?.mrNo}`,
+        { withCredentials: true }
+      );
+      console.log("response of admissionwisedetails", response?.data);
+      setCompleteAdmData(response?.data);
+    } catch (error) {
+      console.log("Error of call Data", error);
+    }
+  };
   return (
     <div>
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
@@ -174,7 +210,7 @@ const Addmission = () => {
         <div className="flex flex-col items-center ">
           <AdmissionModal
             title={"Select Admission No"}
-            onClick={(e) => console.log(e)}
+            onClick={(e) => callData(e)}
             whatCall={"yes"}
           />
           <SimpleDropDown
@@ -251,22 +287,40 @@ const Addmission = () => {
             <LabeledInput
               label={"Party"}
               disabled={true}
-              value={party !== null ? party?.name : ""}
+              value={
+                (party && party.name) ||
+                (completeAdmData && completeAdmData.partyData[0].party) ||
+                ""
+              }
             />
             <LabeledInput
               label={"Consultant"}
               disabled={true}
-              value={consultant !== null ? consultant?.name : ""}
+              value={
+                (consultant && consultant.party) ||
+                (completeAdmData && completeAdmData.consultantData[0].name) ||
+                ""
+              }
             />
             <LabeledInput
               label={"Remarks"}
-              value={remarks}
+              value={
+                (remarks && remarks) ||
+                (completeAdmData &&
+                  completeAdmData?.admissionData[0].remarks) ||
+                ""
+              }
               onChange={(e) => setRemarks(e.target.value.toUpperCase())}
               placeholder={"Enter Remarks"}
             />
             <LabeledInput
               label={"Refered By"}
-              value={referedBy}
+              value={
+                (referedBy && referedBy) ||
+                (completeAdmData &&
+                  completeAdmData?.admissionData[0]?.referedBy) ||
+                ""
+              }
               placeholder={"Enter referal name"}
               onChange={(e) => setReferedBy(e.target.value.toUpperCase())}
             />
@@ -278,6 +332,11 @@ const Addmission = () => {
           title={"Save"}
           onClick={validationCheck}
           disabled={buttonDis}
+        />
+        <ButtonDis
+          title={"Print"}
+          disabled={completeAdmData !== null ? false : true}
+          onClick={() => AdmissionPrint()}
         />
         <ButtonDis title={"Refresh"} onClick={resetFlag} />
       </div>
