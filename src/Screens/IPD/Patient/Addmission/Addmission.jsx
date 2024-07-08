@@ -175,6 +175,7 @@ const Addmission = () => {
           <AdmissionModal
             title={"Select Admission No"}
             onClick={(e) => console.log(e)}
+            whatCall={"yes"}
           />
           <SimpleDropDown
             DropDownLabel={"Select Admission Type"}

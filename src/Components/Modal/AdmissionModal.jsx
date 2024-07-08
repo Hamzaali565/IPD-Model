@@ -20,14 +20,19 @@ const style = {
   overflowY: "auto", // Enable vertical scrolling
 };
 
-export default function AdmissionModal({ onClick, title }) {
+export default function AdmissionModal({ onClick, title, whatCall }) {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
   const [toggle, setToggle] = useState(false);
   const inputRef = useRef(null); // Reference for the input element
 
   React.useEffect(() => {
-    getData();
+    if (whatCall) {
+      getData1();
+      return;
+    } else {
+      getData();
+    }
   }, [toggle]);
   const handleClose = () => setOpen(false);
 
@@ -62,6 +67,18 @@ export default function AdmissionModal({ onClick, title }) {
   const getData = async () => {
     try {
       const response = await axios.get(`${url}/admission`, {
+        withCredentials: true,
+      });
+      console.log(response.data.data);
+      setData(response.data.data);
+    } catch (error) {
+      console.log("error of get data", error);
+    }
+  };
+
+  const getData1 = async () => {
+    try {
+      const response = await axios.get(`${url}/admissionall`, {
         withCredentials: true,
       });
       console.log(response.data.data);
