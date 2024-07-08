@@ -16,7 +16,6 @@ Font.register({
 });
 
 const ReservationPDF = ({ billData, userName, consultantDetails }) => {
-  console.log("consultantDetails", consultantDetails[0]?.name);
   const MyPage = ({ children }) => (
     <Page style={styles.page}>
       <View
@@ -74,7 +73,12 @@ const ReservationPDF = ({ billData, userName, consultantDetails }) => {
                 Contact: {billData.cellNo}
               </Text>
               <Text fixed style={[styles.font, styles.ml2, styles.wid1]}>
-                Consultant: "Hello"
+                Consultant:{" "}
+                {consultantDetails[0]?.name
+                  ? consultantDetails[0]?.name
+                  : billData
+                  ? billData?.consultantName
+                  : ""}
               </Text>
             </View>
             <View style={styles.headC2}>
@@ -148,7 +152,14 @@ const ReservationPDF = ({ billData, userName, consultantDetails }) => {
               paddingHorizontal: "2",
             }}
           >
-            <Text>Consultant Name: {billData?.consultantName}</Text>
+            <Text>
+              Consultant Name:{" "}
+              {consultantDetails[0]?.name
+                ? consultantDetails[0]?.name
+                : billData
+                ? billData?.consultantName
+                : ""}
+            </Text>
           </View>
         </View>
 

@@ -74,8 +74,9 @@ const Reservation = () => {
     const blob = await pdf(
       <ReservationPDF
         key={key}
-        billData={reservationInfo !== null ? reservationInfo : myData}
         consultantDetails={getDoc}
+        userName={userData[0].userId}
+        billData={reservationInfo !== null ? reservationInfo : myData}
       />
     ).toBlob();
 
