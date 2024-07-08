@@ -110,7 +110,7 @@ const Addmission = () => {
     const blob = await pdf(
       <AdmissionPDF
         key={key}
-        billData={completeAdmData}
+        billData={(completeAdmData && completeAdmData) || (data && data)}
         userName={userData[0]?.userId}
       />
     ).toBlob();
@@ -176,11 +176,12 @@ const Addmission = () => {
         },
         { withCredentials: true }
       );
-      console.log("response of admission", response.data.data);
+      console.log("response of admission", response);
       resetFlag();
       SuccessAlert({ text: "ADMISSION CREATED SUCCESSFULLY", timer: 3000 });
       setButtonDis(false);
       setOpen(false);
+      AdmissionPrint(response?.data);
     } catch (error) {
       console.log("error of admission", error);
       setButtonDis(false);
@@ -297,7 +298,7 @@ const Addmission = () => {
               label={"Consultant"}
               disabled={true}
               value={
-                (consultant && consultant.party) ||
+                (consultant && consultant?.name) ||
                 (completeAdmData && completeAdmData.consultantData[0].name) ||
                 ""
               }

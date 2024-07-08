@@ -250,10 +250,10 @@ const AdmissionPDF = ({ billData, userName }) => {
               { fontWeight: "bold", textAlign: "justify", padding: "2" },
             ]}
           >
-            5- All patients will be provided with meals . Meal charges will be
-            included in the bill which is non –refundable. Insurance/welfare
+            5- All patients will be provided with meals. Meal charges will be
+            included in the bill which is non–refundable. Insurance/welfare
             patients will be dealt according to benefits offered by their
-            insurance/welfare panels. .
+            insurance/welfare panels.
           </Text>
         </View>
       </MyPage>
