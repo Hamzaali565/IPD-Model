@@ -9,6 +9,11 @@ import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import Loader from "../../../../Components/Modal/Loader";
+import PaymentRecieptModal from "../../../../Components/Modal/PaymentRecieptModal";
+import Swal from "sweetalert2";
+import { pdf } from "@react-pdf/renderer";
+import { v4 as uuidv4 } from "uuid";
+import PaymentRecieptPDF from "../../../../Components/PDFDetails/PaymentRecieptPDF";
 
 const PaymentReciept = () => {
   const [paymentType, setPaymentType] = useState("");
@@ -22,7 +27,7 @@ const PaymentReciept = () => {
   const [locationData, setLocationData] = useState([]);
   const [toggle, setToggle] = useState(false);
   const [open, setOpen] = useState(false);
-
+  const [recieptData, setRecieptData] = useState(null);
   const userData = useSelector((state) => state.response);
   const url = useSelector((state) => state.url);
   let shiftData = useSelector((state) => state.shift);
@@ -80,6 +85,40 @@ const PaymentReciept = () => {
     }
   };
 
+  const printReciept = (e) => {
+    setRecieptData(e);
+    Swal.fire({
+      title: "Are you sure?",
+      text: `You want to print payment no. ${e.paymentNo}`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Print it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        PaymentPrint(e);
+      }
+    });
+  };
+
+  const PaymentPrint = async (data) => {
+    const key = uuidv4();
+    // Create a PDF document as a Blob
+    const blob = await pdf(
+      <PaymentRecieptPDF
+        key={key}
+        billData={data}
+        userName={userData[0]?.userId}
+      />
+    ).toBlob();
+
+    // Create a Blob URL and open it in a new tab
+    let url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    url = "";
+  };
+
   // api
   const submitPayment = async () => {
     setOpen(true);
@@ -114,6 +153,12 @@ const PaymentReciept = () => {
     <div>
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
         <CenterHeading title={"Payment Receipt"} />
+        <div className="flex justify-center ">
+          <PaymentRecieptModal
+            title={"Select Payment No."}
+            onClick={(e) => printReciept(e)}
+          />
+        </div>
         <div className="flex flex-col items-center space-y-2">
           <SimpleDropDown
             DropDownLabel={"Payment Against"}
