@@ -15,7 +15,7 @@ Font.register({
   src: "https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxP.ttf",
 });
 
-const PaymentRecieptPDF = ({ billData, userName }) => {
+const PaymentRefundPDF = ({ billData, userName }) => {
   const MyPage = ({ children }) => (
     <Page style={styles.page}>
       <View
@@ -28,7 +28,7 @@ const PaymentRecieptPDF = ({ billData, userName }) => {
       >
         <Image src={logo} style={styles.Image} />
         <Text style={{ fontSize: "12", fontFamily: "Roboto" }}>
-          Payment Reciept
+          Refund Slip
         </Text>
       </View>
       <View style={styles.content}>{children}</View>
@@ -102,10 +102,10 @@ const PaymentRecieptPDF = ({ billData, userName }) => {
                 fixed
                 style={[styles.font, { fontWeight: "bold" }, styles.wid]}
               >
-                Payment No: {billData?.paymentNo}
+                Refund No: {billData?.paymentNo}
               </Text>
               <Text fixed style={[styles.font, styles.ml1, styles.wid1]}>
-                Payment Agaisnt: {billData?.paymentAgainst}
+                Refund Agaisnt: {billData?.paymentAgainst}
               </Text>
             </View>
             <View style={styles.headC2}>
@@ -116,7 +116,7 @@ const PaymentRecieptPDF = ({ billData, userName }) => {
                 Against No: {billData?.againstNo}
               </Text>
               <Text fixed style={[styles.font, styles.ml1, styles.wid1]}>
-                Amount: {billData?.amount}
+                Refunded Amount: {billData?.amount}
               </Text>
             </View>
             <View style={styles.headC2}>
@@ -135,10 +135,10 @@ const PaymentRecieptPDF = ({ billData, userName }) => {
                 fixed
                 style={[styles.font, { fontWeight: "bold" }, styles.wid]}
               >
-                Payment User: {billData?.createdUser}
+                User: {billData?.createdUser}
               </Text>
               <Text fixed style={[styles.font, styles.ml1, styles.wid1]}>
-                Payment Date: {billData?.createdOn}
+                Refund Date: {billData?.createdOn}
               </Text>
             </View>
             <View style={styles.headC2}>
@@ -265,4 +265,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PaymentRecieptPDF;
+export default PaymentRefundPDF;

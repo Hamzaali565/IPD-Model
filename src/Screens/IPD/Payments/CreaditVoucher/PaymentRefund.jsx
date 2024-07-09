@@ -8,6 +8,11 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import Loader from "../../../../Components/Modal/Loader";
 import BillToRefundModal from "../../../../Components/Modal/BillToRefundModal";
+import RefundModal from "../../../../Components/Modal/RefundModal";
+import Swal from "sweetalert2";
+import PaymentRefundPDF from "../../../../Components/PDFDetails/PaymentRefundPDF";
+import { pdf } from "@react-pdf/renderer";
+import { v4 as uuidv4 } from "uuid";
 
 const PaymentRefund = () => {
   const [paymentType, setPaymentType] = useState("");
@@ -66,6 +71,39 @@ const PaymentRefund = () => {
     setToggle(!toggle);
   };
 
+  const printReciept = (e) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: `You want to print refund no. ${e.paymentNo}`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Print it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        PaymentPrint(e);
+      }
+    });
+  };
+
+  const PaymentPrint = async (data) => {
+    const key = uuidv4();
+    // Create a PDF document as a Blob
+    const blob = await pdf(
+      <PaymentRefundPDF
+        key={key}
+        billData={data}
+        userName={userData[0]?.userId}
+      />
+    ).toBlob();
+
+    // Create a Blob URL and open it in a new tab
+    let url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    url = "";
+  };
+
   const checkValidation = () => {
     try {
       if (!paymentAgainst) throw new Error("PLEASE SELECT REFUND AGAINST !!!");
@@ -116,6 +154,7 @@ const PaymentRefund = () => {
       SuccessAlert({ text: "REFUND CREATED SUCCESSFULLY !!!", timer: 2000 });
       resetData();
       setOpen(false);
+      PaymentPrint(response?.data?.data);
     } catch (error) {
       console.log("Error of submitPayment", error.response);
       ErrorAlert({ text: "SOMETHING WENT WRONG !!!", timer: 2000 });
@@ -127,6 +166,12 @@ const PaymentRefund = () => {
     <div>
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
         <CenterHeading title={"Payment Refund"} />
+        <div className="flex justify-center">
+          <RefundModal
+            title={"SELECT REFUND NO."}
+            onClick={(e) => printReciept(e)}
+          />
+        </div>
         <div className="flex flex-col items-center space-y-2">
           <SimpleDropDown
             DropDownLabel={"Refund Agaisnt"}
