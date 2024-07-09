@@ -142,6 +142,7 @@ const PaymentReciept = () => {
       SuccessAlert({ text: "PAYMENT CREATED SUCCESSFULLY !!!", timer: 2000 });
       resetData();
       setOpen(false);
+      PaymentPrint(response?.data?.data);
     } catch (error) {
       console.log("Error of submitPayment", error.response);
       ErrorAlert({ text: "SOMETHING WENT WRONG !!!", timer: 2000 });
