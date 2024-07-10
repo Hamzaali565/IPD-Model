@@ -78,7 +78,12 @@ export default function BasicModal({ onClick, title }) {
 
   return (
     <div>
-      <Button onClick={OpenData}>{title}</Button>
+      <Button
+        onClick={OpenData}
+        style={{ backgroundColor: "#378FE7", color: "white" }}
+      >
+        {title}
+      </Button>
       <Modal
         open={open}
         onClose={handleClose}

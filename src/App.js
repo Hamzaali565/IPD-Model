@@ -40,8 +40,10 @@ import PatientDischarge from "./Screens/IPD/Discharge/PatientDischarge/PatientDi
 import ReAdmission from "./Screens/IPD/Discharge/ReAdmission/ReAdmission";
 import FinalBill from "./Screens/IPD/Discharge/FinalBill/FinalBill";
 import PaymentRefund from "./Screens/IPD/Payments/CreaditVoucher/PaymentRefund";
-import RadiologyMaster from "./Screens/Radiology/Master/RadiologyMaster";
+import RadiologyMaster from "./Screens/Radiology/Master/RadiologyCharges/RadiologyMaster";
 import RadiologyServiceCharges from "./Screens/Radiology/Master/RadiologyCharges/RadiologyServiceCharges";
+import TransactionMaster from "./Screens/Radiology/Transaction/TransactionMaster";
+import RadiologyBooking from "./Screens/Radiology/Transaction/RadiologyBooking/RadiologyBooking";
 
 function App() {
   const dispatch = useDispatch();
@@ -150,6 +152,7 @@ function App() {
                 <Route path="finalbill" element={<FinalBill />} />
               </Route>
             </Route>
+            {/* Radiology Service Charges */}
             <Route path="mainpage/*" element={<MainPage />}>
               <Route index element={<Port />} />
               <Route path="radiology/*" element={<RadiologyMaster />}>
@@ -157,6 +160,16 @@ function App() {
                   path="radiologycharges"
                   element={<RadiologyServiceCharges />}
                 />
+              </Route>
+            </Route>
+            {/* Radiology test booking */}
+            <Route path="mainpage/*" element={<MainPage />}>
+              <Route index element={<Port />} />
+              <Route
+                path="radiology/transaction/*"
+                element={<TransactionMaster />}
+              >
+                <Route path="radiologybooking" element={<RadiologyBooking />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/mainpage" replace />} />

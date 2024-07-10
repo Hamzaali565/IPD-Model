@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, Outlet } from "react-router-dom";
-import PageTitle from "../../../Components/Page Title/PAgeTitle";
-import DropDown from "../../../Components/DropDown/DropDown";
+import PageTitle from "../../../../Components/Page Title/PAgeTitle";
+import DropDown from "../../../../Components/DropDown/DropDown";
 
 const RadiologyMaster = () => {
   const data = [{ name: "--" }, { name: "Service Charges" }];

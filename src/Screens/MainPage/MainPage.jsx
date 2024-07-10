@@ -115,6 +115,14 @@ const MainPage = () => {
               }}
             />
           </Link>
+          <Link to="/mainpage/radiology/transaction">
+            <SidebarItems
+              title={"Transaction"}
+              onClick={() => {
+                setToggle(!toggle);
+              }}
+            />
+          </Link>
         </Sidebar>
 
         <div
