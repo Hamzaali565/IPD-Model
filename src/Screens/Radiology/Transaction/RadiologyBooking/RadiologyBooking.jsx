@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CenterHeading from "../../../../Components/Center Heading/CenterHeading";
 import MRModel from "../../../../Components/Modal/MRModal";
 import BasicModal from "../../../../Components/Modal/FullScreenModal";
@@ -8,14 +8,42 @@ import ConsultantModal from "../../../../Components/Modal/ConsultantModal";
 import RadiologyServiceModal from "../../../../Components/Modal/RadiologyServiceModal";
 import ButtonDis from "../../../../Components/Button/ButtonDis";
 import { ErrorAlert } from "../../../../Components/Alert/Alert";
+import SimpleDropDown from "../../../../Components/SimpleDropdown/SimpleDropDown";
+import { useSelector } from "react-redux";
 
 const RadiologyBooking = () => {
+  const [paymentType, setPaymentType] = useState("");
+  const [location, setLocation] = useState("");
   const [mrInfo, setmrInfo] = useState(null);
   const [party, setParty] = useState(null);
   const [consultant, setConsultant] = useState(null);
   const [serviceDetails, setServiceDetails] = useState([]);
   const [remarks, setRemarks] = useState("");
   const [amount, setAmount] = useState(0);
+  const [paymentTypeData, setPaymentTypeData] = useState([]);
+  const [locationData, setLocationData] = useState([]);
+  const [toggle, setToggle] = useState(false);
+
+  const userData = useSelector((state) => state.response);
+  const url = useSelector((state) => state.url);
+  let shiftData = useSelector((state) => state.shift);
+
+  useEffect(() => {
+    setPaymentTypeData([
+      { name: "--" },
+      { name: "Cash" },
+      { name: "Credit Card" },
+      { name: "Online" },
+      { name: "Cheque" },
+      { name: "Pay Order" },
+    ]);
+
+    setLocationData([
+      { name: "--" },
+      { name: "Main Reception" },
+      { name: "OPD Recetion" },
+    ]);
+  }, [toggle]);
 
   const SumAmount = (e) => {
     setServiceDetails(e);
@@ -32,10 +60,23 @@ const RadiologyBooking = () => {
     setServiceDetails([]);
     setRemarks("");
     setAmount(0);
+    setPaymentTypeData([]);
+    setLocationData([]);
+    setPaymentType("");
+    setLocation("");
+    setToggle(!toggle);
   };
   const CheckValidation = () => {
     try {
       if (mrInfo === null) throw new Error("PLEASE SELECT MR NO");
+      if (party === null) throw new Error("PLEASE SELECT PARTY");
+      if (consultant === null) throw new Error("PLEASE SELECT CONSULTANT");
+      if (serviceDetails.length === 0) throw new Error("PLEASE SELECT SERVICE");
+      if (amount === 0) throw new Error("PLEASE ENTER AMOUNT");
+      if (paymentType === "" || paymentType === "--")
+        throw new Error("PLEASE SELECT PAYMENT TYPE");
+      if (location === "" || location === "--")
+        throw new Error("PLEASE SELECT LOCATION");
     } catch (error) {
       ErrorAlert({ text: error?.message, timer: 2000 });
     }
@@ -132,6 +173,16 @@ const RadiologyBooking = () => {
             label={"Amount Recieved"}
             placeholder={"Amount Recieved"}
             value={amount}
+          />
+          <SimpleDropDown
+            DropDownLabel={"Payment Type"}
+            data={paymentTypeData}
+            onChange={(e) => setPaymentType(e)}
+          />
+          <SimpleDropDown
+            DropDownLabel={"Collecting Location"}
+            data={locationData}
+            onChange={(e) => setLocation(e)}
           />
         </div>
         {mrInfo !== null && (
