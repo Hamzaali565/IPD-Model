@@ -40,6 +40,8 @@ import PatientDischarge from "./Screens/IPD/Discharge/PatientDischarge/PatientDi
 import ReAdmission from "./Screens/IPD/Discharge/ReAdmission/ReAdmission";
 import FinalBill from "./Screens/IPD/Discharge/FinalBill/FinalBill";
 import PaymentRefund from "./Screens/IPD/Payments/CreaditVoucher/PaymentRefund";
+import RadiologyMaster from "./Screens/Radiology/Master/RadiologyMaster";
+import RadiologyServiceCharges from "./Screens/Radiology/Master/RadiologyCharges/RadiologyServiceCharges";
 
 function App() {
   const dispatch = useDispatch();
@@ -146,6 +148,15 @@ function App() {
                 <Route path="patientdischarge" element={<PatientDischarge />} />
                 <Route path="readmission" element={<ReAdmission />} />
                 <Route path="finalbill" element={<FinalBill />} />
+              </Route>
+            </Route>
+            <Route path="mainpage/*" element={<MainPage />}>
+              <Route index element={<Port />} />
+              <Route path="radiology/*" element={<RadiologyMaster />}>
+                <Route
+                  path="radiologycharges"
+                  element={<RadiologyServiceCharges />}
+                />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/mainpage" replace />} />

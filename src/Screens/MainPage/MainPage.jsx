@@ -106,6 +106,17 @@ const MainPage = () => {
           <SidebarItems title={"Reports"} />
         </Sidebar>
 
+        <Sidebar buttonTitle={"Radiology"}>
+          <Link to="/mainpage/radiology">
+            <SidebarItems
+              title={"Master"}
+              onClick={() => {
+                setToggle(!toggle);
+              }}
+            />
+          </Link>
+        </Sidebar>
+
         <div
           className={` ${toggle === true ? "fixed bottom-3 ml-5" : "hidden"}`}
         >
