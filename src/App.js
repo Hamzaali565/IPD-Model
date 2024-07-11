@@ -44,6 +44,7 @@ import RadiologyMaster from "./Screens/Radiology/Master/RadiologyCharges/Radiolo
 import RadiologyServiceCharges from "./Screens/Radiology/Master/RadiologyCharges/RadiologyServiceCharges";
 import TransactionMaster from "./Screens/Radiology/Transaction/TransactionMaster";
 import RadiologyBooking from "./Screens/Radiology/Transaction/RadiologyBooking/RadiologyBooking";
+import RadiologyResult from "./Screens/Radiology/Transaction/RadiologyResult/RadiologyResult";
 
 function App() {
   const dispatch = useDispatch();
@@ -170,6 +171,7 @@ function App() {
                 element={<TransactionMaster />}
               >
                 <Route path="radiologybooking" element={<RadiologyBooking />} />
+                <Route path="radiologyresult" element={<RadiologyResult />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/mainpage" replace />} />

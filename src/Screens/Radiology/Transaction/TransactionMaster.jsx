@@ -4,7 +4,11 @@ import PageTitle from "../../../Components/Page Title/PAgeTitle";
 import DropDown from "../../../Components/DropDown/DropDown";
 
 const TransactionMaster = () => {
-  const data = [{ name: "--" }, { name: "Radiology Booking" }];
+  const data = [
+    { name: "--" },
+    { name: "Radiology Booking" },
+    { name: "Radiology Result" },
+  ];
 
   let navigate = useNavigate();
 
@@ -13,6 +17,9 @@ const TransactionMaster = () => {
     let path;
     if (name === "Radiology Booking") {
       path = "radiologybooking"; // Relative path
+      navigate(path);
+    } else if (name === "Radiology Result") {
+      path = "radiologyresult"; // Relative path
       navigate(path);
     }
   };
