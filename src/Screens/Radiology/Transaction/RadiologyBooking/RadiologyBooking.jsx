@@ -7,9 +7,11 @@ import PartyModal from "../../../../Components/Modal/PartyModal";
 import ConsultantModal from "../../../../Components/Modal/ConsultantModal";
 import RadiologyServiceModal from "../../../../Components/Modal/RadiologyServiceModal";
 import ButtonDis from "../../../../Components/Button/ButtonDis";
-import { ErrorAlert } from "../../../../Components/Alert/Alert";
+import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import SimpleDropDown from "../../../../Components/SimpleDropdown/SimpleDropDown";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import Loader from "../../../../Components/Modal/Loader";
 
 const RadiologyBooking = () => {
   const [paymentType, setPaymentType] = useState("");
@@ -23,6 +25,7 @@ const RadiologyBooking = () => {
   const [paymentTypeData, setPaymentTypeData] = useState([]);
   const [locationData, setLocationData] = useState([]);
   const [toggle, setToggle] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const userData = useSelector((state) => state.response);
   const url = useSelector((state) => state.url);
@@ -77,8 +80,38 @@ const RadiologyBooking = () => {
         throw new Error("PLEASE SELECT PAYMENT TYPE");
       if (location === "" || location === "--")
         throw new Error("PLEASE SELECT LOCATION");
+      submitData();
     } catch (error) {
       ErrorAlert({ text: error?.message, timer: 2000 });
+    }
+  };
+
+  const submitData = async () => {
+    setOpen(true);
+    try {
+      const response = await axios.post(
+        `${url}/radiologybooking`,
+        {
+          mrNo: mrInfo?.MrNo,
+          consultant: consultant?.name,
+          party: party?.name,
+          amount,
+          paymentType,
+          location,
+          remarks,
+          serviceDetails,
+          createdUser: userData[0]?.userId,
+          shiftNo: shiftData[0].ShiftNo,
+        },
+        { withCredentials: true }
+      );
+      console.log("Response of submit data", response);
+      SuccessAlert({ text: "RADIOLOGY CREATED SUCCESSFULLY", timer: 2000 });
+      refreshData();
+      setOpen(false);
+    } catch (error) {
+      console.log("Error of Submit Data", error);
+      setOpen(false);
     }
   };
 
@@ -221,6 +254,8 @@ const RadiologyBooking = () => {
           <ButtonDis title={"Refresh"} onClick={refreshData} />
         </div>
       </div>
+
+      <Loader onClick={open} title={"Please Wait"} />
     </div>
   );
 };
