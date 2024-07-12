@@ -38,7 +38,7 @@ const RunningPDF = ({
       >
         <Image src={logo} style={styles.Image} />
         <Text style={{ fontSize: "12", fontFamily: "Roboto" }}>
-          Running Bill Form
+          Running Bill
         </Text>
       </View>
       <View style={styles.content}>{children}</View>

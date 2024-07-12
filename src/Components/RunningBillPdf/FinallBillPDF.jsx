@@ -38,9 +38,7 @@ const FinallBillPDF = ({
         }}
       >
         <Image src={logo} style={styles.Image} />
-        <Text style={{ fontSize: "12", fontFamily: "Roboto" }}>
-          Final Bill Form
-        </Text>
+        <Text style={{ fontSize: "12", fontFamily: "Roboto" }}>Final Bill</Text>
       </View>
       <View style={styles.watermarkContainer}>
         <Image src={logo} style={styles.watermark} />
