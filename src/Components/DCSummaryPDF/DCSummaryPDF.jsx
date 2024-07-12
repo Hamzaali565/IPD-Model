@@ -10,12 +10,9 @@ import {
 import logo from "../../Images/ZMCLogo-2.png";
 
 const DCSummary = ({ summaryData, mrData, userName, consultant, ward }) => {
-  console.log("mrData", mrData);
-  console.log("summaryData", summaryData);
-  console.log("consultant", consultant);
   const MyPage = ({ children }) => (
     <Page style={styles.page}>
-      <Image src={logo} style={styles.Image} />
+      <Text>Your Company Logo</Text>
       <View style={styles.content}>{children}</View>
       <View style={styles.footer} />
       <View style={styles.pageNumber}>
