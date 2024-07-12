@@ -8,7 +8,7 @@ import {
   Image,
   Font,
 } from "@react-pdf/renderer";
-import logo from "../../Images/ZMCLogo-.png";
+import logo from "../../Images/ZMCLogo-2.png";
 
 Font.register({
   family: "Roboto",
@@ -37,12 +37,10 @@ const FinallBillPDF = ({
           alignItems: "center",
         }}
       >
-        <Image src={logo} style={styles.Image} />
+        <Text>Your Company Logo</Text>
         <Text style={{ fontSize: "12", fontFamily: "Roboto" }}>Final Bill</Text>
       </View>
-      <View style={styles.watermarkContainer}>
-        <Image src={logo} style={styles.watermark} />
-      </View>
+
       <View style={styles.content}>{children}</View>
       <View style={styles.footer} />
       <View style={styles.pageNumber}>

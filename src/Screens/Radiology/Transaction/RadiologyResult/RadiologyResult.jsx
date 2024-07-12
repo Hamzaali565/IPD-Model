@@ -1,52 +1,75 @@
-import React, { useState, useEffect } from "react";
-import CenterHeading from "../../../../Components/Center Heading/CenterHeading";
+import React, { useState } from "react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const RadiologyResult = () => {
-  const [file, setFile] = useState(null);
-  const [fileUrl, setFileUrl] = useState(null);
-  const [error, setError] = useState(null);
+  const [editorData, setEditorData] = useState("");
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-    setError(null); // Reset error when a new file is selected
+  const editorConfiguration = {
+    toolbar: [
+      "heading",
+      "|",
+      "alignment",
+      "bold",
+      "italic",
+      "link",
+      "bulletedList",
+      "numberedList",
+      "blockQuote",
+      "|",
+      "fontFamily",
+      "fontSize",
+      "fontColor",
+      "fontBackgroundColor",
+      "|",
+      "insertTable",
+      "mediaEmbed",
+      "undo",
+      "redo",
+    ],
+    fontFamily: {
+      options: [
+        "default",
+        "Arial, Helvetica, sans-serif",
+        "Courier New, Courier, monospace",
+        "Georgia, serif",
+        "Lucida Sans Unicode, Lucida Grande, sans-serif",
+        "Tahoma, Geneva, sans-serif",
+        "Times New Roman, Times, serif",
+        "Trebuchet MS, Helvetica, sans-serif",
+        "Verdana, Geneva, sans-serif",
+      ],
+    },
+    fontSize: {
+      options: ["tiny", "small", "default", "big", "huge"],
+    },
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!file) {
-      alert("Please select a file first!");
-      return;
-    }
-    const url = URL.createObjectURL(file);
-    setFileUrl(url);
-  };
-
-  useEffect(() => {
-    return () => {
-      // Cleanup the URL object when the component unmounts
-      if (fileUrl) {
-        URL.revokeObjectURL(fileUrl);
-      }
-    };
-  }, [fileUrl]);
 
   return (
     <div>
-      <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
-        <CenterHeading title={"Radiology Result"} />
+      <h2>Using CKEditor 5 in React</h2>
+      <CKEditor
+        editor={ClassicEditor}
+        config={editorConfiguration}
+        data={editorData}
+        onReady={(editor) => {
+          console.log("Editor is ready to use!", editor);
+        }}
+        onChange={(event, editor) => {
+          const data = editor.getData();
+          setEditorData(data);
+        }}
+        onBlur={(event, editor) => {
+          console.log("Blur.", editor);
+        }}
+        onFocus={(event, editor) => {
+          console.log("Focus.", editor);
+        }}
+      />
+      <div>
+        <h3>Content:</h3>
+        <div dangerouslySetInnerHTML={{ __html: editorData }} />
       </div>
-      <form onSubmit={handleSubmit}>
-        <input type="file" accept=".doc,.docx" onChange={handleFileChange} />
-        <button type="submit">Upload</button>
-      </form>
-      {fileUrl && (
-        <iframe
-          src={fileUrl}
-          style={{ width: "100%", height: "600px" }}
-          title="Document Viewer"
-        ></iframe>
-      )}
-      {error && <div style={{ color: "red" }}>{error}</div>}
     </div>
   );
 };

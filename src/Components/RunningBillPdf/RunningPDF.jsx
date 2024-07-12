@@ -36,7 +36,7 @@ const RunningPDF = ({
           alignItems: "center",
         }}
       >
-        <Image src={logo} style={styles.Image} />
+        <Text>Your Company Logo</Text>
         <Text style={{ fontSize: "12", fontFamily: "Roboto" }}>
           Running Bill
         </Text>
