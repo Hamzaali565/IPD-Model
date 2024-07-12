@@ -4,16 +4,26 @@ import Loader from "../../../../Components/Modal/Loader";
 import RadioTestModal from "../../../../Components/Modal/RadioTestModal";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { SuccessAlert } from "../../../../Components/Alert/Alert";
+import LabeledInput from "../../../../Components/LabelledInput/LabeledInput";
+import ButtonDis from "../../../../Components/Button/ButtonDis";
 
 const TestCancellation = () => {
   const [serviceDetails, setServiceDetails] = useState([]);
+  const [mrInfo, setmrinfo] = useState(null);
   const [loader, setLoader] = useState(false);
 
   const url = useSelector((items) => items?.url);
   const userData = useSelector((items) => items?.response);
 
+  const resetData = () => {
+    setmrinfo(null);
+    setServiceDetails([]);
+  };
+
   const getDetails = async (data) => {
     setLoader(true);
+    setmrinfo(data);
     try {
       const response = await axios.get(
         `${url}/radiologybooking?radiologyNo=${data?.radiologyNo}`,
@@ -26,6 +36,26 @@ const TestCancellation = () => {
       setLoader(false);
     }
   };
+
+  const deleteTest = async (uniqueId) => {
+    setLoader(true);
+    try {
+      const response = await axios.put(
+        `${url}/radiologybooking`,
+        {
+          uniqueId,
+          deletedUser: userData[0]?.userId,
+        },
+        { withCredentials: true }
+      );
+      SuccessAlert({ text: "TEST DELETED SUCCESSFULLY", timer: 1000 });
+      setLoader(false);
+      getDetails(mrInfo);
+    } catch (error) {
+      console.log("Error of delete Test", error);
+      setLoader(false);
+    }
+  };
   return (
     <div>
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
@@ -33,6 +63,38 @@ const TestCancellation = () => {
         <div className="flex justify-center mt-2">
           <RadioTestModal title={"Select Radiology No."} onClick={getDetails} />
         </div>
+        {mrInfo && (
+          <div className=" flex flex-col items-center space-y-2 md:grid md:grid-cols-2 md:gap-y-2 md:justify-items-center">
+            <LabeledInput
+              disabled={true}
+              label={"Patient Name"}
+              placeholder={"Patient Name"}
+              value={
+                mrInfo !== null
+                  ? `${mrInfo.patientType} ${mrInfo.patientName}  ${mrInfo.relativeType} ${mrInfo.relativeName}`
+                  : ""
+              }
+            />
+            <LabeledInput
+              disabled={true}
+              label={"Radiology No"}
+              placeholder={"Radiology No"}
+              value={mrInfo !== null ? mrInfo?.radiologyNo : ""}
+            />
+            <LabeledInput
+              disabled={true}
+              label={"Mr No"}
+              placeholder={"Mr No"}
+              value={mrInfo !== null ? mrInfo?.mrNo : ""}
+            />
+            <LabeledInput
+              disabled={true}
+              label={"Cell No"}
+              placeholder={"Cell No"}
+              value={mrInfo !== null ? mrInfo?.cellNo : ""}
+            />
+          </div>
+        )}
       </div>
 
       {/* service details */}
@@ -53,12 +115,18 @@ const TestCancellation = () => {
                 <p>{items?.serviceName} </p>
                 <p>{items?.amount}</p>
                 <p>{items?.amount}</p>
-                <p className="font-bold underline cursor-pointer hover:text-red-600">
+                <p
+                  className="font-bold underline cursor-pointer hover:text-red-600"
+                  onClick={() => deleteTest(items?.uniqueId)}
+                >
                   Delete
                 </p>
               </div>
             </div>
           ))}
+        <div className=" flex justify-center mt-3" onClick={resetData}>
+          <ButtonDis title={"Refresh"} />
+        </div>
       </div>
       <Loader title={"Please Wait"} onClick={loader} />
     </div>
