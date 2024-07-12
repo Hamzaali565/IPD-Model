@@ -19,7 +19,7 @@ const MRRegPDF = ({ mrData }) => {
           flexDirection: "row",
         }}
       >
-        <Image src={logo} style={styles.Image} />
+        <Text>Your Company Logo</Text>
       </View>
       <View style={styles.content}>{children}</View>
     </Page>
