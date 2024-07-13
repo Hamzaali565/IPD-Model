@@ -13,6 +13,7 @@ import Swal from "sweetalert2";
 import PaymentRefundPDF from "../../../../Components/PDFDetails/PaymentRefundPDF";
 import { pdf } from "@react-pdf/renderer";
 import { v4 as uuidv4 } from "uuid";
+import RadioTestModal from "../../../../Components/Modal/RadioTestModal";
 
 const PaymentRefund = () => {
   const [paymentType, setPaymentType] = useState("");
@@ -46,6 +47,7 @@ const PaymentRefund = () => {
       { name: "--" },
       { name: "Agaisnt IPD Bill" },
       { name: "Agaisnt ER Bill" },
+      { name: "Agaisnt Radiology" },
     ]);
 
     setLocationData([
@@ -188,11 +190,18 @@ const PaymentRefund = () => {
             data={locationData}
             onChange={(e) => setLocation(e)}
           />
-          {paymentAgainst === "Agaisnt IPD Bill" && (
+
+          {(paymentAgainst === "Agaisnt IPD Bill" ||
+            paymentAgainst === "Agaisnt Radiology") && (
             <div className="flex items-center flex-col space-y-2">
               {paymentAgainst === "Agaisnt IPD Bill" ? (
                 <BillToRefundModal
                   title={"Select Bill No"}
+                  onClick={(e) => getBill(e)}
+                />
+              ) : paymentAgainst === "Agaisnt Radiology" ? (
+                <RadioTestModal
+                  title={"Select Radiology No"}
                   onClick={(e) => getBill(e)}
                 />
               ) : (
@@ -211,9 +220,21 @@ const PaymentRefund = () => {
               />
               <LabeledInput
                 disabled={true}
-                placeholder={"Admission No"}
-                label={"Admission No"}
-                value={mrInfo !== null ? mrInfo?.admissionNo : ""}
+                placeholder={
+                  (paymentAgainst === "Agaisnt IPD Bill" && "Bill No") ||
+                  (paymentAgainst === "Agaisnt Radiology" && "Radiology No") ||
+                  ""
+                }
+                label={
+                  (paymentAgainst === "Agaisnt IPD Bill" && "Admission No") ||
+                  (paymentAgainst === "Agaisnt Radiology" && "Radiology No") ||
+                  ""
+                }
+                value={
+                  (mrInfo?.admissionNo && mrInfo?.admissionNo) ||
+                  (mrInfo?.radiologyNo && mrInfo?.radiologyNo) ||
+                  ""
+                }
               />
               <LabeledInput
                 disabled={true}
