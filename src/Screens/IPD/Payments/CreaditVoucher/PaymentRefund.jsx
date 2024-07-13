@@ -134,6 +134,33 @@ const PaymentRefund = () => {
   };
 
   // api
+  const getRadiology = async (data) => {
+    setOpen(true);
+    try {
+      setMrInfo(data);
+      const response = await axios.get(
+        `${url}/radiologyreverse?radiologyNo=${data?.radiologyNo}`,
+        { withCredentials: true }
+      );
+      let sumAmount = 0;
+
+      let sum = response?.data?.data?.map((item) => {
+        sumAmount += +item?.amount;
+      });
+      setAmount(sumAmount);
+      if (sumAmount === 0)
+        throw new Error("NO TEST REVERSE BY RESPECTIVE DEPARTMENT");
+      setOpen(false);
+      console.log(response.data, sumAmount);
+    } catch (error) {
+      console.log("Error of getRadiology", error);
+      resetData();
+      ErrorAlert({ text: error.message });
+      setOpen(false);
+    }
+  };
+
+  // api
   const submitRefund = async () => {
     setOpen(true);
     try {
@@ -202,7 +229,7 @@ const PaymentRefund = () => {
               ) : paymentAgainst === "Agaisnt Radiology" ? (
                 <RadioTestModal
                   title={"Select Radiology No"}
-                  onClick={(e) => getBill(e)}
+                  onClick={(e) => getRadiology(e)}
                 />
               ) : (
                 ""
@@ -248,7 +275,13 @@ const PaymentRefund = () => {
             type={"Number"}
             placeholder={"Refund Amount"}
             label={"Refund Amount"}
-            value={refundData !== null ? refundData?.totalRefund : 0}
+            value={
+              refundData !== null
+                ? refundData?.totalRefund
+                : amount
+                ? amount
+                : 0
+            }
             disabled={true}
             onChange={(e) => setAmount(+e.target.value)}
           />
