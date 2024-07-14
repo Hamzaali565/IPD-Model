@@ -149,7 +149,7 @@ const PaymentRefund = () => {
       });
       setAmount(sumAmount);
       if (sumAmount === 0)
-        throw new Error("NO TEST REVERSE BY RESPECTIVE DEPARTMENT");
+        throw new Error("NO TEST REVERSE BY RESPECTIVE DEPARTMENT!!!");
       setOpen(false);
       console.log(response.data, sumAmount);
     } catch (error) {
