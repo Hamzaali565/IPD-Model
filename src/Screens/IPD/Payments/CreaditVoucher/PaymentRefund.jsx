@@ -108,10 +108,10 @@ const PaymentRefund = () => {
 
   const checkValidation = () => {
     try {
-      if (!paymentAgainst) throw new Error("PLEASE SELECT REFUND AGAINST !!!");
-      if (!paymentType) throw new Error("PLEASE SELECT REFUND TYPE !!!");
-      if (!location) throw new Error("PLEASE SELECT LOCATION !!!");
-      if (mrInfo === null) throw new Error("PLEASE SELECT BILL NO.");
+      if (!paymentAgainst) throw new Error("PLEASE SELECT REFUND AGAINST !!");
+      if (!paymentType) throw new Error("PLEASE SELECT REFUND TYPE !!");
+      if (!location) throw new Error("PLEASE SELECT LOCATION !!");
+      if (mrInfo === null) throw new Error("PLEASE SELECT BILL NO. !!");
       submitRefund();
     } catch (error) {
       ErrorAlert({ text: error.message, timer: 2000 });
@@ -149,7 +149,7 @@ const PaymentRefund = () => {
       });
       setAmount(sumAmount);
       if (sumAmount === 0)
-        throw new Error("NO TEST REVERSE BY RESPECTIVE DEPARTMENT!!!");
+        throw new Error("NO TEST REVERSE BY RESPECTIVE DEPARTMENT !!");
       setOpen(false);
       console.log(response.data, sumAmount);
     } catch (error) {
