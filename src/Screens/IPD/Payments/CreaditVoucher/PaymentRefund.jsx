@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 import PaymentRefundPDF from "../../../../Components/PDFDetails/PaymentRefundPDF";
 import { pdf } from "@react-pdf/renderer";
 import { v4 as uuidv4 } from "uuid";
-import RadioTestModal from "../../../../Components/Modal/RadioTestModal";
+import RadioRefundModal from "../../../../Components/Modal/RadioRefundModal";
 
 const PaymentRefund = () => {
   const [paymentType, setPaymentType] = useState("");
@@ -227,7 +227,7 @@ const PaymentRefund = () => {
                   onClick={(e) => getBill(e)}
                 />
               ) : paymentAgainst === "Agaisnt Radiology" ? (
-                <RadioTestModal
+                <RadioRefundModal
                   title={"Select Radiology No"}
                   onClick={(e) => getRadiology(e)}
                 />

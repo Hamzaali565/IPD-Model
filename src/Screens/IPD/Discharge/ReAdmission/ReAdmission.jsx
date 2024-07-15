@@ -208,7 +208,7 @@ const ReAdmission = () => {
           />
           <LabeledInput
             placeholder={"Reason"}
-            onChange={(e) => setReason(e.target.value)}
+            onChange={(e) => setReason(e.target.value.toUpperCase())}
             label={"Reason"}
             value={reason}
           />
