@@ -28,6 +28,7 @@ const PaymentRefund = () => {
   const [toggle, setToggle] = useState(false);
   const [open, setOpen] = useState(false);
   const [refundData, setRefundData] = useState(null);
+  const [uniqueId, setUniqueId] = useState([]);
 
   const userData = useSelector((state) => state.response);
   const url = useSelector((state) => state.url);
@@ -151,7 +152,9 @@ const PaymentRefund = () => {
       if (sumAmount === 0)
         throw new Error("NO TEST REVERSE BY RESPECTIVE DEPARTMENT !!");
       setOpen(false);
-      console.log(response.data, sumAmount);
+      const id = response.data.data.map((items) => items.uniqueId);
+      setUniqueId(id);
+      console.log("uniqueId", uniqueId);
     } catch (error) {
       console.log("Error of getRadiology", error);
       resetData();
