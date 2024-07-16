@@ -23,6 +23,7 @@ const RunningBill = () => {
   const [visitCharges, setVisitCharges] = useState(0);
   const [deposit, setDeposit] = useState(0);
   const [total, setTotal] = useState(0);
+  const [radiologyCharges, setRadiologyCharges] = useState(0);
   const [toggle, setToggle] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -30,7 +31,13 @@ const RunningBill = () => {
   const userData = useSelector((item) => item?.response);
 
   useEffect(() => {
-    setTotal(wardCharges + visitCharges + procedureCharges + serviceCharges);
+    setTotal(
+      wardCharges +
+        visitCharges +
+        procedureCharges +
+        serviceCharges +
+        radiologyCharges
+    );
   }, [toggle]);
 
   const getData = async (e) => {
@@ -79,6 +86,13 @@ const RunningBill = () => {
         );
         setDeposit(totalCharges);
       }
+      if (response?.data?.data?.radiologyCharges?.length > 0) {
+        const totalCharges = response?.data?.data?.radiologyCharges.reduce(
+          (accumulator, item) => accumulator + item?.amount,
+          0
+        );
+        setRadiologyCharges(totalCharges);
+      }
       setToggle(!toggle);
       setOpen(false);
     } catch (error) {
@@ -94,6 +108,7 @@ const RunningBill = () => {
   const refreshData = () => {
     setRunningData([]);
     setServiceCharges(0);
+    setRadiologyCharges(0);
     setWardCharges(0);
     setProcedureCharges(0);
     setVisitCharges(0);
@@ -117,6 +132,7 @@ const RunningBill = () => {
         totalCharges={total}
         depositAmount={deposit}
         userName={userData[0]?.userId}
+        radiology={radiologyCharges}
       />
     ).toBlob();
 
@@ -363,6 +379,7 @@ const RunningBill = () => {
                 <LabeledInput
                   placeholder={"Radiology Charges"}
                   label={"Radiology Charges"}
+                  value={radiologyCharges}
                   disabled={true}
                 />
               </div>

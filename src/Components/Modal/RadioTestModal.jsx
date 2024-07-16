@@ -20,7 +20,12 @@ const style = {
   overflowY: "auto", // Enable vertical scrolling
 };
 
-export default function RadioTestModal({ onClick, title, whatCall }) {
+export default function RadioTestModal({
+  onClick,
+  title,
+  whatCall,
+  patientType,
+}) {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
   const [toggle, setToggle] = useState(false);
@@ -67,7 +72,7 @@ export default function RadioTestModal({ onClick, title, whatCall }) {
   const getData = async () => {
     try {
       const response = await axios.get(
-        `${url}/radiologydetails?patientType=Cash`,
+        `${url}/radiologydetails?patientType=${patientType}`,
         {
           withCredentials: true,
         }

@@ -8,7 +8,7 @@ import { SuccessAlert } from "../../../../Components/Alert/Alert";
 import LabeledInput from "../../../../Components/LabelledInput/LabeledInput";
 import ButtonDis from "../../../../Components/Button/ButtonDis";
 
-const TestCancellation = () => {
+const RadioIPDCancellation = () => {
   const [serviceDetails, setServiceDetails] = useState([]);
   const [mrInfo, setmrinfo] = useState(null);
   const [loader, setLoader] = useState(false);
@@ -59,12 +59,12 @@ const TestCancellation = () => {
   return (
     <div>
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
-        <CenterHeading title={"Radiology Tests Cancellation"} />
+        <CenterHeading title={"Radiology IPD Cancellation"} />
         <div className="flex justify-center mt-2">
           <RadioTestModal
             title={"Select Radiology No."}
             onClick={getDetails}
-            patientType={"Cash"}
+            patientType={"IPD"}
           />
         </div>
         {mrInfo && (
@@ -137,4 +137,4 @@ const TestCancellation = () => {
   );
 };
 
-export default TestCancellation;
+export default RadioIPDCancellation;

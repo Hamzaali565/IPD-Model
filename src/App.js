@@ -46,6 +46,7 @@ import TransactionMaster from "./Screens/Radiology/Transaction/TransactionMaster
 import RadiologyBooking from "./Screens/Radiology/Transaction/RadiologyBooking/RadiologyBooking";
 import RadiologyResult from "./Screens/Radiology/Transaction/RadiologyResult/RadiologyResult";
 import TestCancellation from "./Screens/Radiology/Transaction/TestCancellation/TestCancellation";
+import RadioIPDCancellation from "./Screens/Radiology/Transaction/TestCancellation/RadioIPDCancellation";
 
 function App() {
   const dispatch = useDispatch();
@@ -176,6 +177,10 @@ function App() {
                 <Route
                   path="radiologycancellation"
                   element={<TestCancellation />}
+                />
+                <Route
+                  path="radiologyipdcancellation"
+                  element={<RadioIPDCancellation />}
                 />
               </Route>
             </Route>

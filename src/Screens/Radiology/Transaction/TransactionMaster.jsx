@@ -8,7 +8,8 @@ const TransactionMaster = () => {
     { name: "--" },
     { name: "Radiology Booking" },
     { name: "Radiology Result" },
-    { name: "Radiology Cancellation" },
+    { name: "Radiology Cash Cancellation" },
+    { name: "Radiology IPD Cancellation" },
   ];
 
   let navigate = useNavigate();
@@ -22,8 +23,11 @@ const TransactionMaster = () => {
     } else if (name === "Radiology Result") {
       path = "radiologyresult"; // Relative path
       navigate(path);
-    } else if (name === "Radiology Cancellation") {
+    } else if (name === "Radiology Cash Cancellation") {
       path = "radiologycancellation"; // Relative path
+      navigate(path);
+    } else if (name === "Radiology IPD Cancellation") {
+      path = "radiologyipdcancellation"; // Relative path
       navigate(path);
     }
   };
