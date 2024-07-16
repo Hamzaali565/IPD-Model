@@ -14,6 +14,7 @@ import WardChargesPDF from "../../../../Components/RunningBillPdf/WardChargesPDF
 import ProcedurePDF from "../../../../Components/RunningBillPdf/ProcedurePDF";
 import VisitPDF from "../../../../Components/RunningBillPdf/VisitPDF";
 import DepositPDF from "../../../../Components/RunningBillPdf/DepositPDF";
+import RadioPDF from "../../../../Components/RunningBillPdf/RadioPDF";
 
 const RunningBill = () => {
   const [runningData, setRunningData] = useState([]);
@@ -242,6 +243,26 @@ const RunningBill = () => {
     window.open(url, "_blank");
     url = "";
   };
+  const printRadio = async () => {
+    // Generate a unique key to force re-render
+
+    const key = uuidv4();
+
+    // Create a PDF document as a Blob
+    const blob = await pdf(
+      <RadioPDF
+        key={key}
+        billData={runningData}
+        radiology={radiologyCharges}
+        userName={userData[0]?.userId}
+      />
+    ).toBlob();
+
+    // Create a Blob URL and open it in a new tab
+    let url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    url = "";
+  };
 
   const PrintDeposit = async () => {
     // Generate a unique key to force re-render
@@ -380,7 +401,11 @@ const RunningBill = () => {
                   placeholder={"Radiology Charges"}
                   label={"Radiology Charges"}
                   value={radiologyCharges}
+                  className={
+                    "hover:text-blue-600 hover:underline cursor-pointer"
+                  }
                   disabled={true}
+                  onClick={printRadio}
                 />
               </div>
             </div>

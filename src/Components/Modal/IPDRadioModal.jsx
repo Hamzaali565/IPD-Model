@@ -72,6 +72,10 @@ export default function IPDRadioModal({
   };
 
   const SendData = (item) => {
+    if (consultant === null) {
+      console.log("please select Consultant !!!");
+      return;
+    }
     for (const existingItem of serviceDetails) {
       if (existingItem?.serviceId === item?.serviceId) {
         console.log("Item already exists");
@@ -81,6 +85,7 @@ export default function IPDRadioModal({
     item.amount = item.charges;
     item.quantity = 1;
     item.createdUser = userData[0]?.userId;
+    item.consultant = consultant?.name;
     setServiceDetails((prevServiceDetails) => [...prevServiceDetails, item]);
     console.log("serviceDetails", serviceDetails);
     // handleClose();
@@ -176,7 +181,7 @@ export default function IPDRadioModal({
               onChange={(e) => filterNames(e.target.value)}
             />
             <ConsultantModal
-              title={"Select Consultant"}
+              title={"Performed By"}
               onClick={(e) => {
                 setConsultant(e);
               }}
@@ -239,6 +244,7 @@ export default function IPDRadioModal({
                             placeholder="Qty"
                             value={items?.quantity}
                             name=""
+                            disabled={true}
                             id=""
                             onChange={(e) => updateSD(e.target.value, items)}
                           />
