@@ -91,7 +91,7 @@ const PaymentRefundPDF = ({ billData, userName }) => {
         </View>
 
         <View style={styles.headC1}>
-          <Text>Payment Detail</Text>
+          <Text>Refund Detail</Text>
         </View>
 
         <View style={styles.head}>
