@@ -70,6 +70,7 @@ const PaymentRefund = () => {
     setRemarks("");
     setMrInfo(null);
     setRefundData(null);
+    setUniqueId([]);
 
     setToggle(!toggle);
   };
@@ -194,6 +195,38 @@ const PaymentRefund = () => {
     }
   };
 
+  // submit radiology refund
+
+  const RadiologyRefund = async () => {
+    setOpen(true);
+    try {
+      const response = await axios.put(
+        `${url}/paymentrefundradiology`,
+        {
+          uniqueId,
+          refundUser: userData[0]?.userId,
+          refundAgainst: paymentAgainst,
+          refundType: paymentType,
+          location,
+          refundAmount: amount,
+          shiftNo: shiftData[0].ShiftNo,
+          againstNo: mrInfo?.radiologyNo,
+          mrNo: mrInfo?.mrNo,
+          remarks,
+        },
+        { withCredentials: true }
+      );
+      console.log("response of radiology refund", response);
+      SuccessAlert({ text: "REFUND CREATED SUCCESSFULLY", timer: 2000 });
+      resetData();
+      setOpen(false);
+      PaymentPrint(response?.data?.data);
+    } catch (error) {
+      console.log("Error of radiology refund", error);
+      ErrorAlert({ text: error.message });
+      setOpen(false);
+    }
+  };
   return (
     <div>
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
@@ -295,7 +328,10 @@ const PaymentRefund = () => {
             onChange={(e) => setRemarks(e.target.value.toUpperCase())}
           />
           <div className="flex items-center space-x-2">
-            <ButtonDis title={"Save"} onClick={checkValidation} />
+            <ButtonDis
+              title={"Save"}
+              onClick={uniqueId.length > 0 ? RadiologyRefund : submitRefund}
+            />
             <ButtonDis title={"Refresh"} onClick={resetData} />
           </div>
         </div>
