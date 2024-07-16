@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import CenterHeading from "../Center Heading/CenterHeading";
 import ButtonDis from "../Button/ButtonDis";
 import { ErrorAlert, SuccessAlert } from "../Alert/Alert";
+import ConsultantModal from "./ConsultantModal";
 
 const style = {
   position: "absolute",
@@ -33,6 +34,7 @@ export default function IPDRadioModal({
   const [data, setData] = useState([]);
   const [toggle, setToggle] = useState(false);
   const [serviceDetails, setServiceDetails] = useState([]);
+  const [consultant, setConsultant] = useState(null);
   const inputRef = useRef(null); // Reference for the input element
 
   React.useEffect(() => {
@@ -42,6 +44,7 @@ export default function IPDRadioModal({
     setOpen(false);
     setData([]);
     setServiceDetails([]);
+    setConsultant(null);
   };
 
   const url = useSelector((state) => state.url);
@@ -115,11 +118,13 @@ export default function IPDRadioModal({
     try {
       if (serviceDetails.length <= 0)
         throw new Error("PLEASE SELECT SERVICE !!!");
+      if (consultant === null) throw new Error("Please Select Consultant!!!");
       const response = await axios.post(
-        `${url}/internalservice`,
+        `${url}/ipdradiology`,
         {
           admissionNo: modalAdmissionNo,
           serviceDetails: serviceDetails,
+          consultant: consultant?.name,
         },
         { withCredentials: true }
       );
@@ -164,12 +169,21 @@ export default function IPDRadioModal({
               <span className="font-bold ">Party:</span> Cash
             </p>
           </div>
-          <div className="flex justify-center">
+          <div className="flex justify-center space-x-3">
             <SimpleInput
               ref={inputRef}
               placeholder={"Search Services . . ."}
               onChange={(e) => filterNames(e.target.value)}
             />
+            <ConsultantModal
+              title={"Select Consultant"}
+              onClick={(e) => {
+                setConsultant(e);
+              }}
+            />
+          </div>
+          <div className="flex justify-center mt-2">
+            <p>{(consultant && consultant?.name) || ""}</p>
           </div>
           {/* main */}
           <div className="grid grid-cols-2 gap-x-2">

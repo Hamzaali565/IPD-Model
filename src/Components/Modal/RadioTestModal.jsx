@@ -66,9 +66,12 @@ export default function RadioTestModal({ onClick, title, whatCall }) {
   // api
   const getData = async () => {
     try {
-      const response = await axios.get(`${url}/radiologydetails`, {
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `${url}/radiologydetails?patientType=Cash`,
+        {
+          withCredentials: true,
+        }
+      );
       console.log(response.data.data);
       setData(response.data.data);
     } catch (error) {
