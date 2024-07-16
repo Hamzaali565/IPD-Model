@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ServiceModal from "../Modal/ServiceModal";
+import IPDRadioModal from "../Modal/IPDRadioModal";
 
 export default function Drawer({
   onClick,
@@ -50,7 +51,14 @@ export default function Drawer({
             onClick={onClickModalItem}
           />
         </MenuItem>
-        <MenuItem onClick={() => handleClose("lab")}>Laboratory</MenuItem>
+        <MenuItem onClick={() => handleClose("lab")}>
+          <IPDRadioModal
+            title={"Radiology"}
+            modalAdmissionNo={modalAdmissionNo}
+            patientName={patientName}
+            onClick={onClickModalItem}
+          />
+        </MenuItem>
         <MenuItem onClick={() => handleClose("med")}>Medicines</MenuItem>
         <MenuItem onClick={() => handleClose("radio")}>Radiology</MenuItem>
         <MenuItem onClick={() => handleClose("view")}>View History</MenuItem>
