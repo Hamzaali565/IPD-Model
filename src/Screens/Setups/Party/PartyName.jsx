@@ -2,15 +2,17 @@ import React from "react";
 import CenterHeading from "../../../Components/Center Heading/CenterHeading";
 import LabeledInput from "../../../Components/LabelledInput/LabeledInput";
 import ButtonDis from "../../../Components/Button/ButtonDis";
+import SimpleDropDown from "../../../Components/SimpleDropdown/SimpleDropDown";
 
-const ParentParty = () => {
+const PartyName = () => {
   return (
     <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
-      <CenterHeading title={"Parent Party Name"} />
-      <div className="flex flex-col items-center space-y-2 mt-2">
+      <CenterHeading title={"Party Name"} />
+      <div className="flex flex-col items-center space-y-2">
+        <SimpleDropDown DropDownLabel={"Select Parent"} />
         <LabeledInput
-          label={"Parent Party Name"}
-          placeholder={"Enter Parent Party Name"}
+          label={"Party Name"}
+          placeholder={"Enter Party Service Name"}
         />
         <div className="flex justify-center space-x-2">
           <ButtonDis title={"Save"} />
@@ -21,4 +23,4 @@ const ParentParty = () => {
   );
 };
 
-export default ParentParty;
+export default PartyName;
