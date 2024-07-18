@@ -47,6 +47,8 @@ import RadiologyBooking from "./Screens/Radiology/Transaction/RadiologyBooking/R
 import RadiologyResult from "./Screens/Radiology/Transaction/RadiologyResult/RadiologyResult";
 import TestCancellation from "./Screens/Radiology/Transaction/TestCancellation/TestCancellation";
 import RadioIPDCancellation from "./Screens/Radiology/Transaction/TestCancellation/RadioIPDCancellation";
+import PartyMaster from "./Screens/Setups/Party/PartyMaster";
+import ParentParty from "./Screens/Setups/Party/ParentParty";
 
 function App() {
   const dispatch = useDispatch();
@@ -182,6 +184,13 @@ function App() {
                   path="radiologyipdcancellation"
                   element={<RadioIPDCancellation />}
                 />
+              </Route>
+            </Route>
+            {/* setup */}
+            <Route path="mainpage/*" element={<MainPage />}>
+              <Route index element={<Port />} />
+              <Route path="setups/party/*" element={<PartyMaster />}>
+                <Route path="parentparty" element={<ParentParty />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/mainpage" replace />} />

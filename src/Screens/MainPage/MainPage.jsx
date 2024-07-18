@@ -52,6 +52,25 @@ const MainPage = () => {
           toggle ? "w-32 overflow-y-auto" : "w-0 overflow-hidden"
         }`}
       >
+        <Sidebar buttonTitle={"Setups"}>
+          <Link to="/mainpage/setups/services">
+            <SidebarItems
+              title={"Services"}
+              onClick={() => {
+                setToggle(!toggle);
+              }}
+            />
+          </Link>
+          <Link to="/mainpage/setups/party">
+            <SidebarItems
+              title={"Party"}
+              onClick={() => {
+                setToggle(!toggle);
+              }}
+            />
+          </Link>
+        </Sidebar>
+
         <Sidebar buttonTitle={"IPD"}>
           <Link to="/mainpage/ipdmaster">
             <SidebarItems
