@@ -12,6 +12,10 @@ import SimpleDropDown from "../../../../Components/SimpleDropdown/SimpleDropDown
 import { useSelector } from "react-redux";
 import axios from "axios";
 import Loader from "../../../../Components/Modal/Loader";
+import { UserData } from "../../../../Components/Constants/constant";
+import { pdf } from "@react-pdf/renderer";
+import { v4 as uuidv4 } from "uuid";
+import RadiologyBookingPDF from "../../../../Components/PDFDetails/RadiologyBookingPDF";
 
 const RadiologyBooking = () => {
   const [paymentType, setPaymentType] = useState("");
@@ -24,6 +28,7 @@ const RadiologyBooking = () => {
   const [amount, setAmount] = useState(0);
   const [paymentTypeData, setPaymentTypeData] = useState([]);
   const [locationData, setLocationData] = useState([]);
+  const [bookingResponse, setBookingResponse] = useState(null);
   const [toggle, setToggle] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -106,6 +111,8 @@ const RadiologyBooking = () => {
         { withCredentials: true }
       );
       console.log("Response of submit data", response);
+
+      setBookingResponse(response.data);
       SuccessAlert({ text: "RADIOLOGY CREATED SUCCESSFULLY", timer: 2000 });
       refreshData();
       setOpen(false);
@@ -113,6 +120,24 @@ const RadiologyBooking = () => {
       console.log("Error of Submit Data", error);
       setOpen(false);
     }
+  };
+
+  const PrintRadiology = async () => {
+    // if (mrInfo === null) {
+    //   ErrorAlert({ text: "NO DATA TO BE PRINT !!!", timer: 2000 });
+    //   return;
+    // }
+    const key = uuidv4();
+
+    // Create a PDF document as a Blob
+    const blob = await pdf(
+      <RadiologyBookingPDF key={key} userName={userData[0]?.userId} />
+    ).toBlob();
+
+    // Create a Blob URL and open it in a new tab
+    let url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    url = "";
   };
 
   return (
@@ -199,7 +224,7 @@ const RadiologyBooking = () => {
             label={"Remarks"}
             placeholder={"Remarks"}
             value={remarks}
-            onChange={(e) => setRemarks(e.target.value)}
+            onChange={(e) => setRemarks(e.target.value.toUpperCase())}
           />
           <LabeledInput
             disabled={true}
@@ -250,7 +275,7 @@ const RadiologyBooking = () => {
           ))}
         <div className="flex flex-col items-center space-y-2 mt-2 md:flex-row md:space-y-0 md:space-x-2 md:justify-center">
           <ButtonDis title={"Save"} onClick={CheckValidation} />
-          <ButtonDis title={"Print"} />
+          <ButtonDis title={"Print"} onClick={PrintRadiology} />
           <ButtonDis title={"Refresh"} onClick={refreshData} />
         </div>
       </div>
