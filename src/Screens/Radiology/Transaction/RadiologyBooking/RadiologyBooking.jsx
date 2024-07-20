@@ -115,12 +115,12 @@ const RadiologyBooking = () => {
         },
         { withCredentials: true }
       );
-      console.log("Response of submit data", response);
-
+      console.log("Response of submit data", response.data);
       setBookingResponse(response.data);
       SuccessAlert({ text: "RADIOLOGY CREATED SUCCESSFULLY", timer: 2000 });
       refreshData();
       setOpen(false);
+      PrintRadiology(response.data);
     } catch (error) {
       console.log("Error of Submit Data", error);
       setOpen(false);
