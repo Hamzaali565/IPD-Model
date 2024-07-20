@@ -27,6 +27,7 @@ const ServiceName = () => {
     setName("");
     setParentData([]);
     getParents();
+    setServiceData([]);
   };
 
   const getParents = async () => {
@@ -58,7 +59,6 @@ const ServiceName = () => {
       );
       SuccessAlert({ text: "SERVICE CREATED SUCCESSFULLY !!!", timer: 2000 });
       setOpen(false);
-      getServices(parent);
       resetData();
       console.log(response);
     } catch (error) {
