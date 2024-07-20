@@ -25,6 +25,7 @@ const FinallBillPDF = ({
   depositAmount,
   userName,
   FinalBillD,
+  radiology,
 }) => {
   console.log("FinalBillD", FinalBillD);
   const MyPage = ({ children }) => (
@@ -259,7 +260,7 @@ const FinallBillPDF = ({
             }}
           >
             <Text style={{ fontSize: "10" }}>Radiology Charges</Text>
-            <Text style={{ fontSize: "10" }}>0 </Text>
+            <Text style={{ fontSize: "10" }}>{radiology}</Text>
           </View>
           <View
             style={{

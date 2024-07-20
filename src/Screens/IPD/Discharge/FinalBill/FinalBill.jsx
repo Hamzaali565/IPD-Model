@@ -19,6 +19,7 @@ import FinallBillPDF from "../../../../Components/RunningBillPdf/FinallBillPDF";
 import AdmissionBillModal from "../../../../Components/Modal/AdmissionBillModal";
 import { SuccessAlert, ErrorAlert } from "../../../../Components/Alert/Alert";
 import Swal from "sweetalert2";
+import RadioPDF from "../../../../Components/RunningBillPdf/RadioPDF";
 
 const FinalBill = () => {
   const [runningData, setRunningData] = useState([]);
@@ -30,6 +31,7 @@ const FinalBill = () => {
   const [visitCharges, setVisitCharges] = useState(0);
   const [deposit, setDeposit] = useState(0);
   const [total, setTotal] = useState(0);
+  const [radiologyCharges, setRadiologyCharges] = useState(0);
   const [toggle, setToggle] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -37,7 +39,13 @@ const FinalBill = () => {
   const userData = useSelector((item) => item?.response);
 
   useEffect(() => {
-    setTotal(wardCharges + visitCharges + procedureCharges + serviceCharges);
+    setTotal(
+      wardCharges +
+        visitCharges +
+        procedureCharges +
+        serviceCharges +
+        radiologyCharges
+    );
   }, [toggle]);
   //api
   const getData = async (e) => {
@@ -86,6 +94,13 @@ const FinalBill = () => {
           0
         );
         setDeposit(totalCharges);
+      }
+      if (response?.data?.data?.radiologyCharges?.length > 0) {
+        const totalCharges = response?.data?.data?.radiologyCharges.reduce(
+          (accumulator, item) => accumulator + item?.amount,
+          0
+        );
+        setRadiologyCharges(totalCharges);
       }
       setToggle(!toggle);
       setOpen(false);
@@ -174,7 +189,7 @@ const FinalBill = () => {
           totalServices: serviceCharges,
           totalMedicine: 0,
           totalLab: 0,
-          totalRadiology: 0,
+          totalRadiology: radiologyCharges,
           billUser: userData[0]?.userId,
         },
         { withCredentials: true }
@@ -249,6 +264,7 @@ const FinalBill = () => {
         ward={wardCharges}
         procedure={procedureCharges}
         visit={visitCharges}
+        radiology={radiologyCharges}
         totalCharges={total}
         depositAmount={deposit}
         userName={userData[0]?.userId}
@@ -361,6 +377,26 @@ const FinalBill = () => {
     window.open(url, "_blank");
     url = "";
   };
+  const printRadio = async () => {
+    // Generate a unique key to force re-render
+
+    const key = uuidv4();
+
+    // Create a PDF document as a Blob
+    const blob = await pdf(
+      <RadioPDF
+        key={key}
+        billData={runningData}
+        radiology={radiologyCharges}
+        userName={userData[0]?.userId}
+      />
+    ).toBlob();
+
+    // Create a Blob URL and open it in a new tab
+    let url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    url = "";
+  };
 
   const PrintDeposit = async () => {
     // Generate a unique key to force re-render
@@ -404,6 +440,7 @@ const FinalBill = () => {
         procedure={procedureCharges}
         visit={visitCharges}
         totalCharges={total}
+        radiology={radiologyCharges}
         depositAmount={deposit}
         userName={userData[0]?.userId}
       />
@@ -526,7 +563,12 @@ const FinalBill = () => {
                 <LabeledInput
                   placeholder={"Radiology Charges"}
                   label={"Radiology Charges"}
+                  value={radiologyCharges}
+                  className={
+                    "hover:text-blue-600 hover:underline cursor-pointer"
+                  }
                   disabled={true}
+                  onClick={printRadio}
                 />
               </div>
             </div>
