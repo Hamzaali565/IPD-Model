@@ -50,6 +50,9 @@ import RadioIPDCancellation from "./Screens/Radiology/Transaction/TestCancellati
 import PartyMaster from "./Screens/Setups/Party/PartyMaster";
 import ParentParty from "./Screens/Setups/Party/ParentParty";
 import PartyName from "./Screens/Setups/Party/PartyName";
+import ServiceMaster from "./Screens/Setups/Services/ServiceMaster";
+import ParentService from "./Screens/Setups/Services/ParentService";
+import ServiceName from "./Screens/Setups/Services/ServiceName";
 
 function App() {
   const dispatch = useDispatch();
@@ -193,6 +196,10 @@ function App() {
               <Route path="setups/party/*" element={<PartyMaster />}>
                 <Route path="parentparty" element={<ParentParty />} />
                 <Route path="partyname" element={<PartyName />} />
+              </Route>
+              <Route path="setups/services/*" element={<ServiceMaster />}>
+                <Route path="parentservicename" element={<ParentService />} />
+                <Route path="servicename" element={<ServiceName />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/mainpage" replace />} />
