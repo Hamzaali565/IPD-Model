@@ -13,6 +13,7 @@ const PartyName = () => {
   const [open, setOpen] = useState(false);
   const [parent, setParent] = useState("");
   const [name, setName] = useState("");
+  const [partyData, setPartyData] = useState([]);
 
   const url = useSelector((item) => item.url);
   const userData = useSelector((item) => item?.response);
@@ -26,6 +27,7 @@ const PartyName = () => {
     setName("");
     setParentData([]);
     getParents();
+    setPartyData([]);
   };
 
   const getParents = async () => {
@@ -60,26 +62,63 @@ const PartyName = () => {
     }
   };
 
+  const getParty = async (name) => {
+    setOpen(true);
+    try {
+      setParent(name);
+      const response = await axios.get(`${url}/party?parent=${name}`, {
+        withCredentials: true,
+      });
+      setPartyData(response.data.data);
+      setOpen(false);
+    } catch (error) {
+      console.log("Error of getservices", error);
+      setOpen(false);
+    }
+  };
+
   return (
-    <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
-      <CenterHeading title={"Party Name"} />
-      <div className="flex flex-col items-center space-y-2">
-        <SimpleDropDown
-          DropDownLabel={"Select Parent"}
-          data={(parentData && parentData) || []}
-          onChange={(e) => setParent(e)}
-        />
-        <LabeledInput
-          label={"Party Name"}
-          placeholder={"Enter Party Service Name"}
-          value={name}
-          onChange={(e) => setName(e.target.value.toUpperCase())}
-        />
-        <div className="flex justify-center space-x-2">
-          <ButtonDis title={"Save"} onClick={submitHandler} />
-          <ButtonDis title={"Refresh"} onClick={resetData} />
+    <div>
+      <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
+        <CenterHeading title={"Party Name"} />
+        <div className="flex flex-col items-center space-y-2">
+          <SimpleDropDown
+            DropDownLabel={"Select Parent"}
+            data={(parentData && parentData) || []}
+            onChange={(e) => getParty(e)}
+          />
+          <LabeledInput
+            label={"Party Name"}
+            placeholder={"Enter Party Service Name"}
+            value={name}
+            onChange={(e) => setName(e.target.value.toUpperCase())}
+          />
+          <div className="flex justify-center space-x-2">
+            <ButtonDis title={"Save"} onClick={submitHandler} />
+            <ButtonDis title={"Refresh"} onClick={resetData} />
+          </div>
         </div>
       </div>
+      <div className="container mx-auto mt-3">
+        <div className="mt-3 grid grid-cols-4 text-xs justify-items-center items-center h-16 border border-gray-300">
+          <p>Party Name</p>
+          <p>Parent Name</p>
+          <p>Created User</p>
+          <p>Created Date</p>
+        </div>
+      </div>
+      {partyData.length > 0 &&
+        partyData?.map((items, index) => (
+          <div className="container mx-auto mt-3" key={index}>
+            <div className="mt-3 grid grid-cols-4 text-xs justify-items-center items-center h-10 border border-gray-300">
+              <p>{items?.name}</p>
+              <p>{items?.parent}</p>
+              <p>{items?.createdUser}</p>
+              <p>{items?.createdOn}</p>
+            </div>
+          </div>
+        ))}
+
       <Loader onClick={open} title={"Please Wait..."} />
     </div>
   );
