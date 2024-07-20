@@ -1,7 +1,8 @@
 import React from "react";
 import { Text, Page, Document, StyleSheet, View } from "@react-pdf/renderer";
 
-const RadiologyBookingPDF = ({ mrData }) => {
+const RadiologyBookingPDF = ({ radioDetails }) => {
+  console.log("booking response", radioDetails);
   const MyPage = ({ children }) => (
     <Page size={[288, "auto"]} style={styles.page}>
       <View style={styles.logoContainer}>
@@ -20,21 +21,52 @@ const RadiologyBookingPDF = ({ mrData }) => {
 
         <View style={styles.head}>
           <Text style={styles.text}>
-            Patient Name: Muhammad hamza s/o farooq
+            Patient Name: {radioDetails?.data2[0]?.patientType}{" "}
+            {radioDetails?.data2[0]?.patientName}{" "}
+            {radioDetails?.data2[0]?.relativeType}{" "}
+            {radioDetails?.data2[0]?.relativeName}
           </Text>
-          <Text style={styles.text}>Gender: Male</Text>
-          <Text style={styles.text}>Age: 10 Years</Text>
-          <Text style={styles.text}>Cell No: 03111011484</Text>
-          <Text style={styles.text}>MR No: 10</Text>
-          <Text style={styles.text}>Radiology No: 12</Text>
-          <Text style={styles.text}>Performed By: Dr. Hamza Ali</Text>
-          <Text style={styles.text}>Payment Type: Cash</Text>
-          <Text style={styles.text}>Payment Location: Main Reception</Text>
           <Text style={styles.text}>
-            Remarks: outsourse patient of dr khalid and dr fiasal and me
+            Gender: {radioDetails?.data2[0]?.gender}
           </Text>
-          <Text style={styles.text}>Created User: hamza.farooq</Text>
-          <Text style={styles.text}>CreatedOn: 20/07/2024 15:13:50</Text>
+          <Text style={styles.text}>
+            Age:{" "}
+            {radioDetails?.data2[0]?.ageYear
+              ? radioDetails?.data2[0]?.ageYear
+              : "0"}{" "}
+            Years{" "}
+            {radioDetails?.data2[0]?.ageMonth
+              ? radioDetails?.data2[0]?.ageMonth
+              : "0"}{" "}
+            Months{" "}
+            {radioDetails?.data2[0]?.ageDay
+              ? radioDetails?.data2[0]?.ageDay
+              : "0"}{" "}
+            Days
+          </Text>
+          <Text style={styles.text}>
+            Cell No: {radioDetails?.data2[0]?.cellNo}
+          </Text>
+          <Text style={styles.text}>MR No: {radioDetails?.data2[0]?.MrNo}</Text>
+          <Text style={styles.text}>
+            Radiology No: {radioDetails?.data1[0]?.againstNo}
+          </Text>
+          <Text style={styles.text}>Performed By: {radioDetails?.doctor}</Text>
+          <Text style={styles.text}>
+            Payment Type: {radioDetails?.data1[0]?.paymentType}
+          </Text>
+          <Text style={styles.text}>
+            Payment Location: {radioDetails?.data1[0]?.location}
+          </Text>
+          <Text style={styles.text}>
+            Remarks: {radioDetails?.data1[0]?.remarks}
+          </Text>
+          <Text style={styles.text}>
+            Created User: {radioDetails?.data1[0]?.createdUser}
+          </Text>
+          <Text style={styles.text}>
+            CreatedOn: {radioDetails?.data1[0]?.createdOn}
+          </Text>
         </View>
 
         <View style={styles.headC1}>
@@ -47,25 +79,34 @@ const RadiologyBookingPDF = ({ mrData }) => {
           <Text style={{ fontSize: "9", width: "30%" }}>Charges</Text>
           <Text style={{ fontSize: "9", width: "30%" }}>Amount</Text>
         </View>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginTop: "4",
-            border: "1px solid black",
-            padding: "2",
-            borderBottom: "1 px solid black",
-          }}
-        >
-          <Text style={{ fontSize: "9", width: "40%" }}>Chest x-ray</Text>
-          <Text style={{ fontSize: "9", width: "30%", textAlign: "center" }}>
-            2000 x 1
-          </Text>
-          <Text style={{ fontSize: "9", width: "30%", textAlign: "center" }}>
-            2000
-          </Text>
-        </View>
+        {radioDetails &&
+          radioDetails.data?.map((items) => (
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginTop: "4",
+                border: "1px solid black",
+                padding: "2",
+                borderBottom: "1 px solid black",
+              }}
+            >
+              <Text style={{ fontSize: "9", width: "40%" }}>
+                {items?.serviceName}
+              </Text>
+              <Text
+                style={{ fontSize: "9", width: "30%", textAlign: "center" }}
+              >
+                {items?.amount} X {items?.amount / items?.amount}
+              </Text>
+              <Text
+                style={{ fontSize: "9", width: "30%", textAlign: "center" }}
+              >
+                {items?.amount}
+              </Text>
+            </View>
+          ))}
         <View style={styles.headC1}>
           <Text>Payment Detail</Text>
         </View>
@@ -86,13 +127,13 @@ const RadiologyBookingPDF = ({ mrData }) => {
           }}
         >
           <Text style={{ fontSize: "9", width: "40%", textAlign: "center" }}>
-            00310
+            {radioDetails?.data1[0]?.paymentNo}
           </Text>
           <Text style={{ fontSize: "9", width: "30%", textAlign: "center" }}>
-            2000
+            {radioDetails?.data1[0]?.amount}
           </Text>
           <Text style={{ fontSize: "9", width: "30%", textAlign: "center" }}>
-            2000
+            {radioDetails?.data1[0]?.amount}
           </Text>
         </View>
 

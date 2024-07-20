@@ -7,7 +7,11 @@ import PartyModal from "../../../../Components/Modal/PartyModal";
 import ConsultantModal from "../../../../Components/Modal/ConsultantModal";
 import RadiologyServiceModal from "../../../../Components/Modal/RadiologyServiceModal";
 import ButtonDis from "../../../../Components/Button/ButtonDis";
-import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
+import {
+  AskingAlert,
+  ErrorAlert,
+  SuccessAlert,
+} from "../../../../Components/Alert/Alert";
 import SimpleDropDown from "../../../../Components/SimpleDropdown/SimpleDropDown";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -16,6 +20,7 @@ import { UserData } from "../../../../Components/Constants/constant";
 import { pdf } from "@react-pdf/renderer";
 import { v4 as uuidv4 } from "uuid";
 import RadiologyBookingPDF from "../../../../Components/PDFDetails/RadiologyBookingPDF";
+import RadioTestModal from "../../../../Components/Modal/RadioTestModal";
 
 const RadiologyBooking = () => {
   const [paymentType, setPaymentType] = useState("");
@@ -122,7 +127,7 @@ const RadiologyBooking = () => {
     }
   };
 
-  const PrintRadiology = async () => {
+  const PrintRadiology = async (data) => {
     // if (mrInfo === null) {
     //   ErrorAlert({ text: "NO DATA TO BE PRINT !!!", timer: 2000 });
     //   return;
@@ -131,13 +136,41 @@ const RadiologyBooking = () => {
 
     // Create a PDF document as a Blob
     const blob = await pdf(
-      <RadiologyBookingPDF key={key} userName={userData[0]?.userId} />
+      <RadiologyBookingPDF
+        key={key}
+        userName={userData[0]?.userId}
+        radioDetails={data}
+      />
     ).toBlob();
 
     // Create a Blob URL and open it in a new tab
     let url = URL.createObjectURL(blob);
     window.open(url, "_blank");
     url = "";
+  };
+
+  const getDetails = async (name) => {
+    setOpen(true);
+    try {
+      const response = await axios.get(
+        `${url}/radiologypdf?radiologyNo=${name?.radiologyNo}&mrNo=${name?.mrNo}`,
+        { withCredentials: true }
+      );
+      setOpen(false);
+      const ask = await AskingAlert({
+        text: `YOU WANT TO PRINT RADIOLOGY NO ${name?.radiologyNo}`,
+      });
+      if (ask) {
+        console.log("ok");
+        PrintRadiology(response.data);
+      } else {
+        console.log("User canceled");
+        return;
+      }
+    } catch (error) {
+      console.log("Error of get Details", error);
+      setOpen(false);
+    }
   };
 
   return (
@@ -156,6 +189,11 @@ const RadiologyBooking = () => {
             title={"Select Tests"}
             modalAdmissionNo={party !== null ? party?.name : ""}
             onClick={(e) => SumAmount(e)}
+          />
+          <RadioTestModal
+            title={"Select Radiology No."}
+            onClick={getDetails}
+            patientType={"Cash"}
           />
         </div>
       </div>

@@ -17,3 +17,17 @@ export const ErrorAlert = ({ text, timer }) => {
     allowOutsideClick: false,
   });
 };
+
+export const AskingAlert = ({ text }) => {
+  return Swal.fire({
+    title: "Are you sure?",
+    text: text,
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, Print it!",
+  }).then((result) => {
+    return result.isConfirmed;
+  });
+};
