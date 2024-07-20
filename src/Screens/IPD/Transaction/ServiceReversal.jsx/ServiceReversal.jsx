@@ -90,7 +90,9 @@ const ServiceReversal = () => {
             <div className="container mx-auto mt-3" key={index}>
               <div className="mt-3 grid grid-cols-4 text-xs justify-items-center items-center h-10 border border-gray-300">
                 <p>{items?.serviceName}</p>
-                <p>{items?.charges}</p>
+                <p>
+                  {items?.charges} X {items?.amount / items?.charges}
+                </p>
                 <p>{items?.amount}</p>
                 <p
                   className="font-bold underline cursor-pointer hover:text-red-600"
