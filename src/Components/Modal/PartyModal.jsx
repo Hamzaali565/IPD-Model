@@ -3,6 +3,8 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import SimpleInput from "../SimpleInput/SimpleInput";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const style = {
   position: "absolute",
@@ -34,6 +36,8 @@ export default function PartyModal({ onClick, title }) {
     setOpen(!open);
   };
 
+  const url = useSelector((state) => state.url);
+
   const filterNames = (input) => {
     const searchTerm = input.toLowerCase();
     if (input === "") {
@@ -49,9 +53,15 @@ export default function PartyModal({ onClick, title }) {
     );
     setData(filteredData);
   };
-  const getData = () => {
-    const newData = [{ name: "Cash", status: true }];
-    setData(newData);
+  const getData = async () => {
+    try {
+      const response = await axios.get(`${url}/partyall`, {
+        withCredentials: true,
+      });
+      setData(response?.data?.data);
+    } catch (error) {
+      console.log("error of getData", error);
+    }
   };
   const SendData = (item) => {
     onClick(item);
