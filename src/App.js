@@ -53,6 +53,9 @@ import PartyName from "./Screens/Setups/Party/PartyName";
 import ServiceMaster from "./Screens/Setups/Services/ServiceMaster";
 import ParentService from "./Screens/Setups/Services/ParentService";
 import ServiceName from "./Screens/Setups/Services/ServiceName";
+import WardMaster from "./Screens/Setups/Ward/WardMaster";
+import WardName from "./Screens/Setups/Ward/WardName";
+import BedName from "./Screens/Setups/Ward/BedName";
 
 function App() {
   const dispatch = useDispatch();
@@ -200,6 +203,10 @@ function App() {
               <Route path="setups/services/*" element={<ServiceMaster />}>
                 <Route path="parentservicename" element={<ParentService />} />
                 <Route path="servicename" element={<ServiceName />} />
+              </Route>
+              <Route path="setups/ward/*" element={<WardMaster />}>
+                <Route path="wardname" element={<WardName />} />
+                <Route path="bedname" element={<BedName />} />
               </Route>
             </Route>
             <Route path="*" element={<Navigate to="/mainpage" replace />} />

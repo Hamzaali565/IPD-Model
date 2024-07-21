@@ -69,6 +69,14 @@ const MainPage = () => {
               }}
             />
           </Link>
+          <Link to="/mainpage/setups/ward">
+            <SidebarItems
+              title={"Ward / Bed"}
+              onClick={() => {
+                setToggle(!toggle);
+              }}
+            />
+          </Link>
         </Sidebar>
 
         <Sidebar buttonTitle={"IPD"}>
