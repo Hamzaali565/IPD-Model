@@ -6,6 +6,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import Loader from "../../../../Components/Modal/Loader";
+import PartyModal from "../../../../Components/Modal/PartyModal";
 
 const ServiceCharges = () => {
   // state variables
@@ -162,12 +163,10 @@ const ServiceCharges = () => {
     <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
       <CenterHeading title={"Party Wise Service Charges"} />
 
-      <div className="md:grid md:grid-cols-3">
-        <SimpleDropDown
-          DropDownLabel={"Party"}
-          data={partyDetails}
-          onChange={handleDropDownParty}
-          onClick={reset}
+      <div className="md:grid md:grid-cols-3 md:justify-items-center md:items-center">
+        <PartyModal
+          title={"Select Party Name"}
+          onClick={(e) => setParty(e?.name)}
         />
         <SimpleDropDown
           DropDownLabel={"Ward Name"}
@@ -186,6 +185,11 @@ const ServiceCharges = () => {
           }}
         />
       </div>
+      {party && (
+        <div className="text-sm flex justify-center mt-4 font-bold text-red-600">
+          SELECTED PARTY IS {party}
+        </div>
+      )}
       {serviceChargesData && (
         <div>
           <div className="container mx-auto mt-3">
