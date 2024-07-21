@@ -84,6 +84,9 @@ const ConsultantCharges = () => {
   const handleDropDownChange = (name) => {
     console.log("Selected Name:", name);
     setParty(name);
+    setWard([]);
+    setConsultantDetails([]);
+    setToggle(!toggle);
     // setSelectedName(name);
   };
 
@@ -113,6 +116,7 @@ const ConsultantCharges = () => {
     setConsultantDetails([]);
     setWardName("");
     setWard([]);
+    setParty("");
     setToggle(!toggle);
   };
   const Empty2 = () => {
@@ -125,7 +129,7 @@ const ConsultantCharges = () => {
       <div className="md:grid md:grid-cols-2 md:justify-items-center md:items-center">
         <PartyModal
           title={"Select Party Name"}
-          onClick={(e) => setParty(e?.name)}
+          onClick={(e) => handleDropDownChange(e?.name)}
         />
         <SimpleDropDown
           DropDownLabel={"Ward"}

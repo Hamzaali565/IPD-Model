@@ -23,7 +23,6 @@ const WardCharges = () => {
 
   const url = useSelector((item) => item.url);
   const UserData = useSelector((item) => item.response);
-  const partyDetails = [{ name: "--" }, { name: "Cash" }];
 
   const wardNames = async () => {
     try {
@@ -39,6 +38,9 @@ const WardCharges = () => {
   const handleDropDownChange = (name) => {
     console.log("Selected Name:", name);
     setParty(name);
+    setWard([]);
+    setWardCharges([]);
+    setToggle(!toggle);
     // setSelectedName(name);
   };
   const partyCheck = () => {
@@ -119,7 +121,7 @@ const WardCharges = () => {
       <div className="md:grid md:grid-cols-2 md:justify-items-center md:items-center">
         <PartyModal
           title={"Select Party Name"}
-          onClick={(e) => setParty(e?.name)}
+          onClick={(e) => handleDropDownChange(e?.name)}
         />
         <SimpleDropDown
           DropDownLabel={"Ward Name"}
