@@ -32,7 +32,7 @@ const BedName = () => {
 
   const getParents = async () => {
     try {
-      const response = await axios.get(`${url}/parentservicename`, {
+      const response = await axios.get(`${url}/getward`, {
         withCredentials: true,
       });
       setParentData(response.data.data);
@@ -46,14 +46,13 @@ const BedName = () => {
     setOpen(true);
     try {
       if (!parent || parent === "--")
-        throw new Error("PLEASE SELECT PARENT NAME!!!");
+        throw new Error("PLEASE SELECT Ward NAME!!!");
       const response = await axios.post(
-        `${url}/service`,
+        `${url}/ipdbeds`,
         {
-          serviceName: name,
-          parentName: parent,
+          bedNumber: name,
+          wardName: parent,
           createdUser: userData[0].userId,
-          _id: "",
         },
         { withCredentials: true }
       );
@@ -72,7 +71,7 @@ const BedName = () => {
     setOpen(true);
     try {
       setParent(name);
-      const response = await axios.get(`${url}/service?parentName=${name}`, {
+      const response = await axios.get(`${url}/ipdbeds?wardName=${name}`, {
         withCredentials: true,
       });
       setServiceData(response.data.data);
@@ -86,16 +85,16 @@ const BedName = () => {
   return (
     <div>
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
-        <CenterHeading title={"Party Name"} />
+        <CenterHeading title={"Bed Name"} />
         <div className="flex flex-col items-center space-y-2">
           <SimpleDropDown
-            DropDownLabel={"Select Parent"}
+            DropDownLabel={"Select Ward Name"}
             data={(parentData && parentData) || []}
             onChange={(e) => getServices(e)}
           />
           <LabeledInput
-            label={"Service Name"}
-            placeholder={"Enter Service Name"}
+            label={"Bed Name"}
+            placeholder={"Enter Bed Name"}
             value={name}
             onChange={(e) => setName(e.target.value.toUpperCase())}
           />
@@ -107,8 +106,8 @@ const BedName = () => {
       </div>
       <div className="container mx-auto mt-3">
         <div className="mt-3 grid grid-cols-4 text-xs justify-items-center items-center h-16 border border-gray-300">
-          <p>Service Name</p>
-          <p>Parent Name</p>
+          <p>Ward Name</p>
+          <p>Bed Name</p>
           <p>Created User</p>
           <p>Created Date</p>
         </div>
@@ -117,10 +116,10 @@ const BedName = () => {
         serviceData?.map((items, index) => (
           <div className="container mx-auto mt-3" key={index}>
             <div className="mt-3 grid grid-cols-4 text-xs justify-items-center items-center h-10 border border-gray-300">
-              <p>{items?.serviceName}</p>
-              <p>{items?.parentName}</p>
+              <p>{items?.wardName}</p>
+              <p>{items?.bedNumber}</p>
               <p>{items?.createdUser}</p>
-              <p>{items?.updatedOn}</p>
+              <p>{items?.createdOn}</p>
             </div>
           </div>
         ))}
