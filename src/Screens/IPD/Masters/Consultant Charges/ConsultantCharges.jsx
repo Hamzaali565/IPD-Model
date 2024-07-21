@@ -134,6 +134,12 @@ const ConsultantCharges = () => {
           onChange={handleCall}
         />
       </div>
+
+      {party && (
+        <div className="text-sm flex justify-center mt-4 font-bold text-red-600">
+          SELECTED PARTY IS <span className="text-blue-700 ml-1">{party}</span>
+        </div>
+      )}
       {/* data */}
       <div>
         {/* header */}

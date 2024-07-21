@@ -75,6 +75,8 @@ const DSCharges = () => {
   //   functions
   const handleDropDownChange = (name) => {
     setParty(name);
+    Empty();
+    setToggle(!toggle);
   };
 
   const partyCheck = () => {
@@ -112,7 +114,7 @@ const DSCharges = () => {
       <div className="md:grid md:grid-cols-2 md:justify-items-center md:items-center">
         <PartyModal
           title={"Select Party Name"}
-          onClick={(e) => setParty(e?.name)}
+          onClick={(e) => handleDropDownChange(e?.name)}
         />
         <SimpleDropDown
           DropDownLabel={"Service Name"}
@@ -121,7 +123,11 @@ const DSCharges = () => {
           onClick={partyCheck}
         />
       </div>
-
+      {party && (
+        <div className="text-sm flex justify-center mt-4 font-bold text-red-600">
+          SELECTED PARTY IS <span className="text-blue-700 ml-1">{party}</span>
+        </div>
+      )}
       {/* table header */}
       <div className="container mx-auto mt-3">
         <div className="grid grid-cols-4 text-xs justify-items-center items-center h-16 border border-gray-300">

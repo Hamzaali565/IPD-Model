@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import SimpleButton from "../../../../Components/Button/SimpleButton";
 import Loader from "../../../../Components/Modal/Loader";
+import PartyModal from "../../../../Components/Modal/PartyModal";
 
 const WardCharges = () => {
   const [ward, setWard] = useState([]);
@@ -115,11 +116,10 @@ const WardCharges = () => {
   return (
     <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
       <CenterHeading title={"Party Wise Ward Charges"} />
-      <div className="md:grid md:grid-cols-2">
-        <SimpleDropDown
-          DropDownLabel={"Party"}
-          data={partyDetails}
-          onChange={handleDropDownChange}
+      <div className="md:grid md:grid-cols-2 md:justify-items-center md:items-center">
+        <PartyModal
+          title={"Select Party Name"}
+          onClick={(e) => setParty(e?.name)}
         />
         <SimpleDropDown
           DropDownLabel={"Ward Name"}
@@ -128,6 +128,13 @@ const WardCharges = () => {
           onClick={partyCheck}
         />
       </div>
+
+      {party && (
+        <div className="text-sm flex justify-center mt-4 font-bold text-red-600">
+          SELECTED PARTY IS <span className="text-blue-700 ml-1">{party}</span>
+        </div>
+      )}
+
       {/* Charges table */}
       <div className="container mx-auto mt-3">
         <div className="mt-3 grid grid-cols-3 text-xs justify-items-center items-center h-16 border border-gray-300">
