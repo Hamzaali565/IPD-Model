@@ -98,6 +98,7 @@ const ServiceCharges = () => {
       set_id("");
       setResponse(!response);
       setParty("");
+      setWardName("");
       setWard([]);
       SuccessAlert({ text: "DATA SAVED SUCCESSFULLY 🎉🎉" });
       setOpen(false);
@@ -113,6 +114,7 @@ const ServiceCharges = () => {
     setParentServiceName([]);
     setServiceChargesData([]);
     set_id("");
+    setWardName("");
     setResponse(!response);
   };
   const reset2 = () => {
