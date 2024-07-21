@@ -6,6 +6,7 @@ import axios from "axios";
 import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import SimpleButton from "../../../../Components/Button/SimpleButton";
 import Loader from "../../../../Components/Modal/Loader";
+import PartyModal from "../../../../Components/Modal/PartyModal";
 
 const RadiologyServiceCharges = () => {
   const [parentservice, setParentService] = useState([]);
@@ -74,6 +75,9 @@ const RadiologyServiceCharges = () => {
   //   functions
   const handleDropDownChange = (name) => {
     setParty(name);
+    setServiceDetails([]);
+    setParentService([]);
+    setToggle(!toggle);
   };
 
   const partyCheck = () => {
@@ -103,16 +107,16 @@ const RadiologyServiceCharges = () => {
     setParentName("");
     setServiceDetails([]);
     setParentService([]);
+    setParty("");
   };
   return (
     <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
       <CenterHeading title={"Radiology Service Charges"} />
 
-      <div className="md:grid md:grid-cols-2">
-        <SimpleDropDown
-          DropDownLabel={"Party"}
-          data={partyDetails}
-          onChange={handleDropDownChange}
+      <div className="md:grid md:grid-cols-2 md:justify-items-center md:items-center">
+        <PartyModal
+          title={"Select Party Name"}
+          onClick={(e) => handleDropDownChange(e?.name)}
         />
         <SimpleDropDown
           DropDownLabel={"Service Name"}
@@ -121,6 +125,11 @@ const RadiologyServiceCharges = () => {
           onClick={partyCheck}
         />
       </div>
+      {party && (
+        <div className="text-sm flex justify-center mt-4 font-bold text-red-600">
+          SELECTED PARTY IS <span className="text-blue-700 ml-1">{party}</span>
+        </div>
+      )}
 
       {/* table header */}
       <div className="container mx-auto mt-3">
