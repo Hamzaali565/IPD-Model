@@ -208,7 +208,7 @@ const Addmission = () => {
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
         <CenterHeading title={"Admission"} />
 
-        <div className="flex flex-col items-center ">
+        <div className="flex flex-col items-center mt-2 space-y-2 ">
           <AdmissionModal
             title={"Select Admission No"}
             onClick={(e) => callData(e)}
@@ -222,7 +222,7 @@ const Addmission = () => {
           />
 
           {admissionType === "Direct" ? (
-            <div>
+            <div className="flex flex-col space-y-2 mt-2 md:flex-row md:space-y-0 md:justify-center md: space-x-2">
               <BasicModal title={"Select MR No."} onClick={pickMr} />
               <MRModel title={"Create MR No."} onClick={pickMr} />
             </div>
@@ -238,7 +238,7 @@ const Addmission = () => {
         {/* ward Detaild */}
         <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
           <CenterHeading title={"Admitted In"} />
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center space-y-3 mt-4">
             <PartyModal title={"Select Party"} onClick={pickParty} />
             <SimpleDropDown
               DropDownLabel={"Select Ward"}
@@ -260,7 +260,7 @@ const Addmission = () => {
         {/* Patient Details */}
         <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
           <CenterHeading title={"Patient Info"} />
-          <div className="flex flex-col items-center space-y-2">
+          <div className="flex flex-col items-center space-y-2 ">
             <LabeledInput
               label={"Patient Name"}
               disabled={true}

@@ -71,6 +71,7 @@ const BedAllocation = () => {
                 }`}
                 bedNo={items?.bedNo}
                 admissionNo={items?.admissionNo}
+                Party={items?.party}
                 onClick={(data) => console.log(data)}
                 onClickModalItem={checkData}
               />

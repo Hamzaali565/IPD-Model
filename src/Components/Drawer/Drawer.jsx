@@ -10,6 +10,7 @@ export default function Drawer({
   modalAdmissionNo,
   patientName,
   onClickModalItem,
+  Party,
 }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -49,6 +50,7 @@ export default function Drawer({
             modalAdmissionNo={modalAdmissionNo}
             patientName={patientName}
             onClick={onClickModalItem}
+            Party={Party}
           />
         </MenuItem>
         <MenuItem onClick={() => handleClose("lab")}>

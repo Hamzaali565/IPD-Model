@@ -6,7 +6,7 @@ const BED = ({
   admissionNo,
   patienName,
   onClick,
-
+  Party,
   onClickModalItem,
 }) => {
   return (
@@ -18,6 +18,7 @@ const BED = ({
           modalAdmissionNo={admissionNo}
           patientName={patienName}
           onClickModalItem={onClickModalItem}
+          Party={Party}
         />
       </div>
       <p className="text-center text-xs">BED NO. {bedNo}</p>
@@ -27,6 +28,11 @@ const BED = ({
       <p className="text-center text-xs mt-1 text-red-600 font-bold">
         {patienName}
       </p>
+      {Party && (
+        <p className="text-center text-xs mt-1 text-red-600 font-bold">
+          Party: {Party}
+        </p>
+      )}
     </div>
   );
 };

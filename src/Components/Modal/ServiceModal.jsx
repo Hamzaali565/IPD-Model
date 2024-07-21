@@ -28,6 +28,7 @@ export default function ServiceModal({
   title,
   modalAdmissionNo,
   patientName,
+  Party,
 }) {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
@@ -164,7 +165,7 @@ export default function ServiceModal({
               {modalAdmissionNo}
             </p>
             <p>
-              <span className="font-bold ">Party:</span> Cash
+              <span className="font-bold ">Party:</span> {Party}
             </p>
           </div>
           <div className="flex justify-center">
