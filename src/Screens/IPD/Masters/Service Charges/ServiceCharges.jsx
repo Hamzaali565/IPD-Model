@@ -97,6 +97,8 @@ const ServiceCharges = () => {
       setParentServiceName([]);
       set_id("");
       setResponse(!response);
+      setParty("");
+      setWard([]);
       SuccessAlert({ text: "DATA SAVED SUCCESSFULLY 🎉🎉" });
       setOpen(false);
     } catch (error) {
@@ -123,6 +125,7 @@ const ServiceCharges = () => {
   const handleDropDownParty = (name) => {
     console.log("Selected Name:", name);
     setParty(name);
+    reset();
     // setSelectedName(name);
   };
   const handleDropDownWard = (name) => {
@@ -166,7 +169,7 @@ const ServiceCharges = () => {
       <div className="md:grid md:grid-cols-3 md:justify-items-center md:items-center">
         <PartyModal
           title={"Select Party Name"}
-          onClick={(e) => setParty(e?.name)}
+          onClick={(e) => handleDropDownParty(e?.name)}
         />
         <SimpleDropDown
           DropDownLabel={"Ward Name"}
