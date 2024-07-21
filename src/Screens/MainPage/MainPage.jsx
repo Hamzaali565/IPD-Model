@@ -77,6 +77,14 @@ const MainPage = () => {
               }}
             />
           </Link>
+          <Link to="/mainpage/setups/consultant">
+            <SidebarItems
+              title={"Consultant"}
+              onClick={() => {
+                setToggle(!toggle);
+              }}
+            />
+          </Link>
         </Sidebar>
 
         <Sidebar buttonTitle={"IPD"}>
