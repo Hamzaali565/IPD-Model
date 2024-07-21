@@ -69,7 +69,7 @@ const WardCharges = () => {
 
   const handlerEffect = (value, _id, key, bedId) => {
     try {
-      console.log(bedId, _id);
+      console.log("/n bed id", bedId, "/n id", _id);
       const newData = wardCharges.map((item, index) => {
         if (item.bedId === bedId) {
           if (key === "charges") {
@@ -82,8 +82,6 @@ const WardCharges = () => {
         return item;
       });
       setWardCharges(newData);
-
-      // console.log(newData);
     } catch (error) {}
   };
 
