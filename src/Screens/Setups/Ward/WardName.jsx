@@ -17,11 +17,11 @@ const WardName = () => {
     setOpen(true);
     try {
       const response = await axios.post(
-        `${url}/parentservice`,
-        { name, createdUser: userData[0].userId },
+        `${url}/ipdward`,
+        { wardName: name, createdUser: userData[0].userId },
         { withCredentials: true }
       );
-      SuccessAlert({ text: "PARENT CREATED SUCCESSFULLY!!!", timer: 2000 });
+      SuccessAlert({ text: "WARD CREATED SUCCESSFULLY!!!", timer: 2000 });
       setName("");
       setOpen(false);
     } catch (error) {
@@ -33,11 +33,11 @@ const WardName = () => {
 
   return (
     <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
-      <CenterHeading title={"Parent Service Name"} />
+      <CenterHeading title={"Ward Name"} />
       <div className="flex flex-col items-center space-y-2 mt-2">
         <LabeledInput
-          label={"Parent Service Name"}
-          placeholder={"Enter Parent Service Name"}
+          label={"Ward Name"}
+          placeholder={"Enter Ward Name"}
           onChange={(e) => setName(e.target.value.toUpperCase())}
           value={name}
         />
