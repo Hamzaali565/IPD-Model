@@ -7,6 +7,7 @@ import axios from "axios";
 import { ErrorAlert, SuccessAlert } from "../../../../Components/Alert/Alert";
 import SimpleButton from "../../../../Components/Button/SimpleButton";
 import Loader from "../../../../Components/Modal/Loader";
+import PartyModal from "../../../../Components/Modal/PartyModal";
 
 const ConsultantCharges = () => {
   const [ward, setWard] = useState([]);
@@ -121,12 +122,10 @@ const ConsultantCharges = () => {
     <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
       <CenterHeading title={"Consultant Charges"} />
       {/* dropDowns */}
-      <div className="md:grid md:grid-cols-2">
-        <SimpleDropDown
-          DropDownLabel={"Party"}
-          data={data}
-          onChange={handleDropDownChange}
-          onClick={Empty}
+      <div className="md:grid md:grid-cols-2 md:justify-items-center md:items-center">
+        <PartyModal
+          title={"Select Party Name"}
+          onClick={(e) => setParty(e?.name)}
         />
         <SimpleDropDown
           DropDownLabel={"Ward"}

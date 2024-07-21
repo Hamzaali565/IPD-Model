@@ -151,7 +151,7 @@ const FinallBillPDF = ({
             </View>
             <View style={styles.headC2}>
               <Text fixed style={[styles.font, styles.ml4, styles.wid]}>
-                Bed User: {FinalBillD?.billUser}
+                Bill User: {FinalBillD?.billUser}
               </Text>
               <Text fixed style={[styles.font, styles.wid1]}>
                 Bill Date: {FinalBillD?.billDate}
