@@ -128,7 +128,7 @@ const AdmissionPDF = ({ billData, userName }) => {
                 Days
               </Text>
               <Text fixed style={[styles.font, styles.wid1]}>
-                DischargeDate: {billData?.admissionData[0]?.dischargeDate}
+                Discharge Date: {billData?.admissionData[0]?.dischargeDate}
               </Text>
             </View>
 

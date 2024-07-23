@@ -116,11 +116,21 @@ const Reservation = () => {
       ErrorAlert({ text: "Please Enter Amount.", timer: 1500 });
       return;
     }
+    if (!location || location === "--") {
+      ErrorAlert({ text: "Please Select Location.", timer: 1500 });
+      return;
+    }
+    if (!paymentType || paymentType === "--") {
+      ErrorAlert({ text: "Please Select Payment Type.", timer: 1500 });
+      return;
+    }
+
     handleSubmit();
   };
   // api
   const handleSubmit = async () => {
     setOpen(true);
+
     try {
       const response = await axios.post(
         `${url}/reservation`,
@@ -173,7 +183,7 @@ const Reservation = () => {
         <CenterHeading title={"Reservation"} />
 
         <div className="mt-2">
-          <div className="flex justify-center">
+          <div className="flex justify-center space-x-2">
             <FullScreenModal
               title={"Select MR No."}
               onClick={(e) => {
@@ -182,7 +192,7 @@ const Reservation = () => {
             />
             <MRModel title={"Create MR No."} onClick={(e) => setMrInfo(e)} />
           </div>
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-2">
             <AllReservationModal
               title={"Select Reservation No."}
               onClick={(e) => getConsultant(e)}
@@ -258,7 +268,7 @@ const Reservation = () => {
 
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
         <CenterHeading title={"Advised By"} />
-        <div className="flex justify-center">
+        <div className="flex justify-center my-2">
           <ConsultantModal
             title={"Select Consultant"}
             onClick={(e) => {

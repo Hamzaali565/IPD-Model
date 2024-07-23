@@ -196,7 +196,7 @@ const WardTransfer = () => {
             </div>
           </div>
         )}
-        <div className="flex justify-center space-x-2">
+        <div className="flex justify-center space-x-2 mt-4">
           <ButtonDis
             title={"Save"}
             onClick={changeBed}
