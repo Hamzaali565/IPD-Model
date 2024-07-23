@@ -74,9 +74,12 @@ const PaymentReciept = () => {
 
   const checkValidation = () => {
     try {
-      if (!paymentAgainst) throw new Error("PLEASE SELECT PAYMENT AGAINST !!!");
-      if (!paymentType) throw new Error("PLEASE SELECT PAYMENT TYPE !!!");
-      if (!location) throw new Error("PLEASE SELECT LOCATION !!!");
+      if (!paymentAgainst || paymentAgainst === "--")
+        throw new Error("PLEASE SELECT PAYMENT AGAINST !!!");
+      if (!paymentType || paymentType === "--")
+        throw new Error("PLEASE SELECT PAYMENT TYPE !!!");
+      if (!location || location === "--")
+        throw new Error("PLEASE SELECT LOCATION !!!");
       if (mrInfo === null) throw new Error("PLEASE SELECT ADMISSION NO.");
       if (!amount) throw new Error("PLEASE ENTER AMOUNT !!!");
       submitPayment();
