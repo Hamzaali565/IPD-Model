@@ -73,11 +73,11 @@ const WardTransfer = () => {
 
   const changeBed = async () => {
     try {
-      if (wardName === "") {
+      if (wardName === "" || wardName === "--") {
         ErrorAlert({ text: "PLEASE SELECT NEW WARD", timer: 2000 });
         return;
       }
-      if (bedNo === "") {
+      if (bedNo === "" || bedNo === "--") {
         ErrorAlert({ text: "PLEASE SELECT NEW BED", timer: 2000 });
         return;
       }

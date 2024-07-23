@@ -53,7 +53,7 @@ const ServiceReversal = () => {
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
         <CenterHeading title={"Service Reversal"} />
 
-        <div className="flex justify-center">
+        <div className="flex justify-center my-2">
           <AdmissionModal
             title={"Select Admission No."}
             onClick={(e) => PickDetail(e)}
