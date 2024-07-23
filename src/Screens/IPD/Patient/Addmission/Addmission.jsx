@@ -74,11 +74,11 @@ const Addmission = () => {
       ErrorAlert({ text: "PLEASE SELECT PARTY", timer: 2000 });
       return;
     }
-    if (wardName === "") {
+    if (wardName === "" || wardName === "--") {
       ErrorAlert({ text: "PLEASE SELECT WARD", timer: 2000 });
       return;
     }
-    if (bedNo === "") {
+    if (bedNo === "" || bedNo === "--") {
       ErrorAlert({ text: "PLEASE SELECT BED NO", timer: 2000 });
       return;
     }
