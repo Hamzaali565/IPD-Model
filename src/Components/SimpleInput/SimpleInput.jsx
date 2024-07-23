@@ -1,6 +1,14 @@
 import React from "react";
 
-const SimpleInput = ({ max, placeholder, type, onChange, value, disabled }) => {
+const SimpleInput = ({
+  max,
+  placeholder,
+  type,
+  onChange,
+  value,
+  disabled,
+  checked,
+}) => {
   return (
     <div>
       <input
@@ -14,6 +22,7 @@ const SimpleInput = ({ max, placeholder, type, onChange, value, disabled }) => {
         maxLength={max}
         disabled={disabled}
         id=""
+        checked={checked}
       />
     </div>
   );

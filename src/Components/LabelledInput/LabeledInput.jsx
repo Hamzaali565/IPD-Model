@@ -11,6 +11,7 @@ const LabeledInput = ({
   disabled,
   className,
   onClick,
+  checked,
 }) => {
   return (
     <div className="md:w-80 grid grid-cols-[5rem,auto] md:grid-cols-[10rem,auto] gap-x-2 items-center">
@@ -24,6 +25,7 @@ const LabeledInput = ({
         onChange={onChange}
         disabled={disabled}
         value={value}
+        checked={checked}
       />
     </div>
   );
