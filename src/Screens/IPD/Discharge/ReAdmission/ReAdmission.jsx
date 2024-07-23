@@ -78,6 +78,22 @@ const ReAdmission = () => {
       setOpen(false);
     }
   };
+
+  const validationCheck = () => {
+    try {
+      if (mrInfo === null) throw new Error("PLEASE SELECT ADMISSION NO.");
+      if (wardName === "--" || !wardName)
+        throw new Error("PLEASE SELECT WARD NAME !!!");
+      if (bedNo === "--" || !bedNo)
+        throw new Error("PLEASE SELECT BED NO. !!!");
+      if (reAdmissionType === "--" || !reAdmissionType)
+        throw new Error("PLEASE SELECT RE_ADMISSION TYPE !!!");
+      ReAdmit();
+    } catch (error) {
+      ErrorAlert({ text: error.message });
+    }
+  };
+
   //api
   const ReAdmit = async () => {
     try {
@@ -215,7 +231,7 @@ const ReAdmission = () => {
           <div className="flex justify-center space-x-2">
             <ButtonDis
               title={"Re-Admit"}
-              onClick={ReAdmit}
+              onClick={validationCheck}
               disabled={mrInfo === null ? true : false}
             />
             <ButtonDis title={"Refresh"} onClick={refreshData} />
