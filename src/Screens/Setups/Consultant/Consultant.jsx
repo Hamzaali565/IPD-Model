@@ -6,6 +6,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import Loader from "../../../Components/Modal/Loader";
 import { ErrorAlert, SuccessAlert } from "../../../Components/Alert/Alert";
+import ConsultantModal from "../../../Components/Modal/ConsultantModal";
 
 const Consultant = () => {
   const [name, setName] = useState("");
@@ -17,6 +18,7 @@ const Consultant = () => {
   const [phone, setPhone] = useState("");
   const [status, setStatus] = useState(false);
   const [open, setOpen] = useState(false);
+  const [details, setDetails] = useState(null);
 
   const url = useSelector((item) => item.url);
   const userData = useSelector((item) => item?.response);
@@ -30,6 +32,19 @@ const Consultant = () => {
     setCnic("");
     setPhone("");
     setStatus(false);
+    setDetails(null);
+  };
+
+  const updateDetails = (data) => {
+    setDetails(data);
+    setName(data?.name);
+    setSpeciality(data?.speciality);
+    setPmdc(data?.pmdc);
+    setAddress(data?.address);
+    setEmail(data?.email);
+    setCnic(data?.cnic);
+    setPhone(data?.phone);
+    setStatus(data?.status);
   };
 
   const submitData = async () => {
@@ -47,12 +62,17 @@ const Consultant = () => {
           phone,
           status,
           createdUser: userData[0].userId,
-          _id: "",
+          _id: (details && details?._id) || "",
         },
         { withCredentials: true }
       );
       setOpen(false);
-      SuccessAlert({ text: "DOCTOR CREATED SUCCESSFULLY !!!", timer: 2000 });
+      if (response?.data?.message === "created") {
+        SuccessAlert({ text: "DOCTOR CREATED SUCCESSFULLY !!!", timer: 2000 });
+      }
+      if (response?.data?.message === "update") {
+        SuccessAlert({ text: "DOCTOR UPDATED SUCCESSFULLY !!!", timer: 2000 });
+      }
       resetFunction();
     } catch (error) {
       console.log("Error of submit data", error);
@@ -64,6 +84,13 @@ const Consultant = () => {
   return (
     <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
       <CenterHeading title={"Consultant"} />
+      <div className="flex justify-center my-4">
+        <ConsultantModal
+          title={"Select Consultant"}
+          onClick={(e) => updateDetails(e)}
+          All="Ok"
+        />
+      </div>
       <div className="flex flex-col items-center space-y-2 mt-3 md:grid md:grid-cols-2 md:justify-items-center md:gap-y-2">
         <LabeledInput
           label={"Name"}

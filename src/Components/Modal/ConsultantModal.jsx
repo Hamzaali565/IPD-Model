@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import SimpleInput from "../SimpleInput/SimpleInput";
-import axios from "axios";
+import axios, { all } from "axios";
 import { useSelector } from "react-redux";
 
 const style = {
@@ -20,7 +20,7 @@ const style = {
   overflowY: "auto", // Enable vertical scrolling
 };
 
-export default function ConsultantModal({ onClick, title }) {
+export default function ConsultantModal({ onClick, title, All = "" }) {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
   const [toggle, setToggle] = useState(false);
@@ -61,7 +61,7 @@ export default function ConsultantModal({ onClick, title }) {
   // api
   const getData = async () => {
     try {
-      const response = await axios.get(`${url}/getconsultant`, {
+      const response = await axios.get(`${url}/getconsultant?All=${All}`, {
         withCredentials: true,
       });
       console.log(response.data.data);
@@ -119,7 +119,9 @@ export default function ConsultantModal({ onClick, title }) {
                     <p className="">{index + 1}</p>
                     <p className="">{item?.name}</p>
                     <p className="">{item.speciality}</p>
-                    <p className="">Active</p>
+                    <p className="">
+                      {item?.status === true ? "Active" : "De-Active"}
+                    </p>
                   </div>
                 </div>
               ))
