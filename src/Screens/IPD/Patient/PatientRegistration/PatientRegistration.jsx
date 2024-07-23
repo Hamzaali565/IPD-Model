@@ -42,6 +42,7 @@ const PatientRegistration = () => {
   const [MrNo, setMrNo] = useState("");
   const [mrData, setMrData] = useState([]);
   const [toggle, setToggle] = useState(false);
+  const [toggle2, setToggle2] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -72,8 +73,47 @@ const PatientRegistration = () => {
     setGender([{ name: "--" }, { name: "Male" }, { name: "Female" }]);
   }, [toggle]);
 
+  useEffect(() => {
+    setFatherType([
+      { name: "--" },
+      { name: "S/o" },
+      { name: "D/o" },
+      { name: "W/o" },
+      { name: "C/o" },
+    ]);
+    setMaritalStatus([
+      { name: "--" },
+      { name: "Single" },
+      { name: "Married" },
+      { name: "Widow" },
+    ]);
+    setGender([{ name: "--" }, { name: "Male" }, { name: "Female" }]);
+  }, [toggle2]);
+
   const url = useSelector((item) => item.url);
   const userData = useSelector((item) => item.response);
+
+  const validationCheck = () => {
+    try {
+      console.log("heelo");
+      if (!patientStatus || patientStatus === "--")
+        throw new Error("PLEASE SELECT PATIENT TYPE !!!");
+      if (!patientName || patientName === "")
+        throw new Error("PLEASE ENTER PATIENT NAME !!!");
+      if (!relativeStatus || relativeStatus === "--")
+        throw new Error("PLEASE SELECT RELATIVE TYPE");
+      if (!relativeName || relativeName === "")
+        throw new Error("PLEASE ENTER RELATIVE NAME !!!");
+      if (!gendarData || gendarData === "--")
+        throw new Error("PLEASE SELECT GENDER !!!");
+      if (!maritalData || maritalData === "--")
+        throw new Error("PLEASE SELECT MARITAL STATUS !!!");
+      if (!cellNo) throw new Error("PLEASE SELECT CELL NO !!!");
+      submitHandler();
+    } catch (error) {
+      ErrorAlert({ text: error.message, timer: 2000 });
+    }
+  };
 
   const printMRCard = async (data) => {
     const key = uuidv4();
@@ -189,8 +229,7 @@ const PatientRegistration = () => {
           relativeType,
           gender,
           occupation,
-          maritalStatus:
-            maritalData === "" ? mrData[0].maritalStatus : maritalData,
+          maritalStatus,
           email,
           cellNo,
           cnicNo,
@@ -267,12 +306,7 @@ const PatientRegistration = () => {
 
   const DropDownChange = (name) => {
     setParientStatus(name);
-    if (
-      name === "Mr." ||
-      name === "Dr." ||
-      name === "Prof" ||
-      name === "Master"
-    ) {
+    if (name === "Mr." || name === "Master") {
       setRelativeStatus("S/o");
       setGenderData("Male");
       setMaritalData("Single");
@@ -287,11 +321,30 @@ const PatientRegistration = () => {
       setGenderData("Female");
       setMaritalData("Single");
       return;
+    } else {
+      setRelativeStatus("--");
+      setGenderData("--");
+      setMaritalData("--");
+      setFatherType([]);
+      setMaritalStatus([]);
+      setGender([]);
+      setToggle2(!toggle2);
     }
   };
 
   const inputChange = async (value, key) => {
     let updatedData;
+    if (key === "patientType") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, patientType: value };
+        });
+      } else {
+        DropDownChange(value);
+        return;
+      }
+      setMrData(updatedData);
+    }
     if (key === "patientName") {
       if (mrData.length > 0) {
         updatedData = mrData.map((item) => {
@@ -310,6 +363,17 @@ const PatientRegistration = () => {
         });
       } else {
         setRelativeName(value.toUpperCase());
+        return;
+      }
+      setMrData(updatedData);
+    }
+    if (key === "relativeType") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, relativeType: value };
+        });
+      } else {
+        setRelativeStatus(value);
         return;
       }
       setMrData(updatedData);
@@ -343,6 +407,28 @@ const PatientRegistration = () => {
         });
       } else {
         setDay(value);
+        return;
+      }
+      setMrData(updatedData);
+    }
+    if (key === "gender") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, gender: value };
+        });
+      } else {
+        setGenderData(value);
+        return;
+      }
+      setMrData(updatedData);
+    }
+    if (key === "maritalstatus") {
+      if (mrData.length > 0) {
+        updatedData = mrData.map((item) => {
+          return { ...item, maritalStatus: value };
+        });
+      } else {
+        setMaritalData(value);
         return;
       }
       setMrData(updatedData);
@@ -489,7 +575,7 @@ const PatientRegistration = () => {
               label={"Patient Name"}
               data={patientType}
               placeholder={"Patient Name"}
-              onChangeDrop={DropDownChange}
+              onChangeDrop={(e) => inputChange(e, "patientType")}
               value={mrData.length > 0 ? mrData[0]?.patientName : patientName}
               onChange={(e) => {
                 inputChange(e.target.value, "patientName");
@@ -513,10 +599,7 @@ const PatientRegistration = () => {
               label={"Relative Name"}
               data={
                 patientStatus.length !== ""
-                  ? patientStatus === "Mr." ||
-                    patientStatus === "Dr." ||
-                    patientStatus === "Prof" ||
-                    patientStatus === "Master"
+                  ? patientStatus === "Mr." || patientStatus === "Master"
                     ? [{ name: "S/o" }]
                     : patientStatus === "Miss"
                     ? [{ name: "D/o" }]
@@ -525,7 +608,7 @@ const PatientRegistration = () => {
                     : fatherType
                   : fatherType
               }
-              onChangeDrop={(name) => setRelativeStatus(name)}
+              onChangeDrop={(name) => inputChange(name, "relativeType")}
               value={mrData.length > 0 ? mrData[0]?.relativeName : relativeName}
               placeholder={"Relative Name"}
               onChange={(e) => {
@@ -536,17 +619,14 @@ const PatientRegistration = () => {
               label={"Gender"}
               data={
                 patientStatus !== ""
-                  ? patientStatus === "Mr." ||
-                    patientStatus === "Dr." ||
-                    patientStatus === "Prof" ||
-                    patientStatus === "Master"
+                  ? patientStatus === "Mr." || patientStatus === "Master"
                     ? [{ name: "Male" }]
                     : patientStatus === "Miss" || patientStatus === "Mrs."
                     ? [{ name: "Female" }]
                     : gender
                   : gender
               }
-              onChange={(name) => setGenderData(name)}
+              onChange={(name) => inputChange(name, "gender")}
             />
             <LabeledInput
               label={"Occupation"}
@@ -559,8 +639,6 @@ const PatientRegistration = () => {
               data={
                 patientStatus !== ""
                   ? patientStatus === "Mr." ||
-                    patientStatus === "Dr." ||
-                    patientStatus === "Prof" ||
                     patientStatus === "Miss" ||
                     patientStatus === "Master" ||
                     patientStatus === "Baby of"
@@ -570,7 +648,7 @@ const PatientRegistration = () => {
                     : maritalStatus
                   : maritalStatus
               }
-              onChange={(name) => setMaritalData(name)}
+              onChange={(name) => inputChange(name, "maritalstatus")}
             />
             <LabeledInput
               label={"Email"}
@@ -660,7 +738,7 @@ const PatientRegistration = () => {
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl flex items-center flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 md:justify-center">
         <ButtonDis
           title={"Save"}
-          onClick={mrData.length > 0 ? updateHandler : submitHandler}
+          onClick={mrData.length > 0 ? updateHandler : validationCheck}
         />
         <ButtonDis
           title={"Print"}
