@@ -110,10 +110,23 @@ const PaymentRefund = () => {
 
   const checkValidation = () => {
     try {
-      if (!paymentAgainst) throw new Error("PLEASE SELECT REFUND AGAINST !!");
-      if (!paymentType) throw new Error("PLEASE SELECT REFUND TYPE !!");
-      if (!location) throw new Error("PLEASE SELECT LOCATION !!");
-      if (mrInfo === null) throw new Error("PLEASE SELECT BILL NO. !!");
+      if (!paymentAgainst || paymentAgainst === "--")
+        throw new Error("PLEASE SELECT REFUND AGAINST !!");
+      if (!paymentType || paymentType === "--")
+        throw new Error("PLEASE SELECT REFUND TYPE !!");
+      if (!location || location === "--")
+        throw new Error("PLEASE SELECT LOCATION !!");
+      if (mrInfo === null)
+        throw new Error(
+          `PLEASE SELECT ${
+            paymentAgainst === "Agaisnt Radiology" ? "Radiology No" : "Bill No"
+          } !!`
+        );
+      submitRefund();
+      if (uniqueId.length > 0) {
+        RadiologyRefund();
+        return;
+      }
       submitRefund();
     } catch (error) {
       ErrorAlert({ text: error.message, timer: 2000 });
@@ -328,10 +341,7 @@ const PaymentRefund = () => {
             onChange={(e) => setRemarks(e.target.value.toUpperCase())}
           />
           <div className="flex items-center space-x-2">
-            <ButtonDis
-              title={"Save"}
-              onClick={uniqueId.length > 0 ? RadiologyRefund : submitRefund}
-            />
+            <ButtonDis title={"Save"} onClick={checkValidation} />
             <ButtonDis title={"Refresh"} onClick={resetData} />
           </div>
         </div>
