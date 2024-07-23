@@ -77,14 +77,6 @@ const DischargeSummary = () => {
   };
 
   const PrintDCSummary = async () => {
-    // Generate a unique key to force re-render
-    // data, PCData, e, wardData
-    // key={key}
-    // mrData={e}
-    // summaryData={data}
-    // consultant={PCData}
-    // ward={wardData}
-    // userName={userData[0]?.userId}
     if (mrInfo === null) {
       ErrorAlert({ text: "NO DATA TO BE PRINT !!!", timer: 2000 });
       return;
@@ -121,12 +113,6 @@ const DischargeSummary = () => {
 
       setConsultant(response?.data?.data);
       if (response?.data?.data2) {
-        // PrintDCSummary(
-        //   response?.data?.data2,
-        //   response?.data?.data,
-        //   e,
-        //   response?.data?.data3
-        // );
         setPrevSummary(response?.data?.data2);
         setWardDetails(response?.data?.data3);
         setDischargeSummary(response?.data?.data2[0]?.dischargeSummaryData);
@@ -142,9 +128,9 @@ const DischargeSummary = () => {
   const submitHandler = async () => {
     try {
       if (mrInfo === null) throw new Error("PLEASE SELECT PATIENT !!!");
-      if (dcConsultant === "")
+      if (dcConsultant === null)
         throw new Error("PLLEASE SELECT DISCHARGE DOCTOR!!!");
-      if (dischargeCondition === "")
+      if (dischargeCondition === "--" || !dischargeCondition)
         throw new Error("PLEASE SELECT DISCHARGE TYPE!!!");
       setOpen(true);
       const response = await axios.post(
