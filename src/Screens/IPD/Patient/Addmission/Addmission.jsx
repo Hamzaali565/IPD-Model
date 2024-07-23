@@ -192,6 +192,7 @@ const Addmission = () => {
 
   const callData = async (data) => {
     try {
+      setOpen(true);
       setMrInfo(data);
       const response = await axios.get(
         `${url}/admissionwisedetails?admissionNo=${data?.admissionNo}&mrNo=${data?.mrNo}`,
@@ -199,8 +200,10 @@ const Addmission = () => {
       );
       console.log("response of admissionwisedetails", response?.data);
       setCompleteAdmData(response?.data);
+      setOpen(false);
     } catch (error) {
       console.log("Error of call Data", error);
+      setOpen(false);
     }
   };
   return (
