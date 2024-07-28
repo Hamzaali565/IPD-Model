@@ -258,6 +258,7 @@ const FinalBill = () => {
     setVisitCharges(0);
     setTotal(0);
     setDeposit(0);
+    setRadiologyCharges(0);
   };
   const handleButtonClick = async (finalbillData) => {
     // Generate a unique key to force re-render
