@@ -89,7 +89,25 @@ const PartyName = () => {
     }
   };
 
-  const partyNameUpdate = () => {};
+  const partyNameUpdate = async () => {
+    setOpen(true);
+    try {
+      const response = await axios.put(
+        `${url}/partyname`,
+        { name: updateName?.name, partyId: updateName?._id },
+        { withCredentials: true }
+      );
+      console.log(response.data.data);
+      setOpen(false);
+      SuccessAlert({ text: "PARTY NAME UPDATED SUCCESSFULLY" });
+      setUpdateName(null);
+      getParty(parent);
+    } catch (error) {
+      console.log("Error of partyNameUpdate", error);
+      setOpen(false);
+      ErrorAlert({ text: error?.message });
+    }
+  };
 
   return (
     <div>
