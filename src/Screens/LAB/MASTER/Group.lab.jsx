@@ -54,6 +54,7 @@ const LabGroup = () => {
     ]);
   }, [togglePage]);
   const pushDataToSelectedArray = (data) => {
+    // here
     setSelectedTest(data);
     groupDataCreation(data);
     setMessage("");
@@ -97,12 +98,12 @@ const LabGroup = () => {
         newFormat[0].category = data?.category;
         return newFormat;
       });
+      return;
     }
   };
 
-  const resetGroupParams = () => {
-    console.log("groupFormat", groupParams);
-
+  const resetGroupFormat = () => {
+    console.log("groupParams", groupParams);
     setSelectedTest(null);
     setFontSizeData([]);
     setGroupFormat([
@@ -117,13 +118,7 @@ const LabGroup = () => {
         fontSize: "8px",
       },
     ]);
-    // setFontSizeData([
-    //   { name: "8px" },
-    //   { name: "10px" },
-    //   { name: "12px" },
-    //   { name: "14px" },
-    //   { name: "16px" },
-    // ]);
+
     setTogglePage(!togglePage);
   };
 
@@ -132,20 +127,26 @@ const LabGroup = () => {
       setMessage("Please Select Test First !!!");
       return;
     }
-    const prevReview = groupParams.map((items) => {
-      return items?.testCode === groupFormat[0].testCode;
-    });
-    console.log("preview ", prevReview);
 
-    if (prevReview[0] === true) {
-      setMessage("Test Already Exist");
-      return;
-    }
+    // const prevDetails = groupParams.map(
+    //   (items) => items?.testCode == groupFormat[0].testCode
+    // );
+    // // const prevReview = groupParams.map((items) => {
+    // //   return items?.testCode === groupFormat[0].testCode;
+    // // });
+    // console.log("preview ", prevDetails);
+
+    // if (prevReview[0] === true) {
+    //   setMessage("Test Already Exist");
+    //   return;
+    // }
     if (groupParams.length <= 0) {
       setGroupParams(groupFormat);
+      resetGroupFormat();
       return;
     }
     setGroupParams((prevGroupParams) => [...prevGroupParams, ...groupFormat]);
+    resetGroupFormat();
   };
 
   return (
@@ -230,7 +231,7 @@ const LabGroup = () => {
           <ButtonDis
             title={"Reset"}
             onClick={() => {
-              resetGroupParams();
+              resetGroupFormat();
               console.log(groupFormat);
             }}
           />
@@ -255,7 +256,7 @@ const LabGroup = () => {
             </div>
           </div>
           {groupParams.map((items, index) => (
-            <div className="container mx-auto mt-1">
+            <div className="container mx-auto mt-1" key={index}>
               <div className="mt-1 grid grid-cols-9 text-xs justify-items-center items-center h-10 border border-gray-300">
                 <p>{items?.serialNo}</p>
                 <p>{items?.testCode}</p>
