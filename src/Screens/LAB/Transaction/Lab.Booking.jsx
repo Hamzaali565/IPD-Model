@@ -95,7 +95,7 @@ const LabBooking = () => {
       ErrorAlert({ text: error?.message, timer: 2000 });
     }
   };
-// Submit Lab
+  // Submit Lab
   const submitData = async () => {
     setOpen(true);
     try {
@@ -111,9 +111,10 @@ const LabBooking = () => {
           paymentType,
           location,
           remarks,
-          serviceDetails,
+          labDetails: serviceDetails,
           shiftNo: shiftData[0].ShiftNo,
-          labFrom: "OPD"
+          labFrom: "OPD",
+          _id: "",
         },
         { withCredentials: true }
       );
@@ -129,7 +130,7 @@ const LabBooking = () => {
     }
   };
 
-// print lab
+  // print lab
   const PrintRadiology = async (data) => {
     // if (mrInfo === null) {
     //   ErrorAlert({ text: "NO DATA TO BE PRINT !!!", timer: 2000 });
@@ -152,7 +153,7 @@ const LabBooking = () => {
     url = "";
   };
 
-// get details to print previous lab
+  // get details to print previous lab
   const getDetails = async (name) => {
     setOpen(true);
     try {
@@ -177,17 +178,16 @@ const LabBooking = () => {
     }
   };
 
-
-const selectParty = (e)=>{
-  setServiceDetails([])
-  setParty(e)
-}
+  const selectParty = (e) => {
+    setServiceDetails([]);
+    setParty(e);
+  };
   return (
     <div>
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
         <CenterHeading title={"Radiology Booking"} />
         <div className="flex items-center flex-col space-y-2 md:flex-row md:space-y-0 md:space-x-2 md:justify-center mt-2">
-          <MRModel title={"Create Mr No"} onClick={(e) => setmrInfo(e)}/>
+          <MRModel title={"Create Mr No"} onClick={(e) => setmrInfo(e)} />
           <BasicModal title={"Select Mr No"} onClick={(e) => setmrInfo(e)} />
           <PartyModal title={"Select Party"} onClick={(e) => selectParty(e)} />
           <ConsultantModal
@@ -200,7 +200,7 @@ const selectParty = (e)=>{
             onClick={(e) => SumAmount(e)}
           />
           <RadioTestModal
-            title={"Select Radiology No."}
+            title={"Select Lab No."}
             onClick={getDetails}
             patientType={"Cash"}
           />
