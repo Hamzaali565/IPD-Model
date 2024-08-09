@@ -21,6 +21,8 @@ import { v4 as uuidv4 } from "uuid";
 import RadiologyBookingPDF from "../../../Components/PDFDetails/RadiologyBookingPDF";
 import RadioTestModal from "../../../Components/Modal/RadioTestModal";
 import LabTestAndGroup from "../../../Components/Modal/LabTestAndGroups";
+import PrevLabModal from "../../../Components/Modal/PrevLabModal";
+import LAbOpdSlip from "../../../Components/PDFDetails/LabOpdSlip";
 
 const LabBooking = () => {
   const [paymentType, setPaymentType] = useState("");
@@ -123,7 +125,7 @@ const LabBooking = () => {
       SuccessAlert({ text: "LAB CREATED SUCCESSFULLY", timer: 2000 });
       refreshData();
       setOpen(false);
-      // PrintRadiology(response.data);
+      PrintRadiology(response.data?.data);
     } catch (error) {
       console.log("Error of Submit Data", error);
       setOpen(false);
@@ -132,15 +134,12 @@ const LabBooking = () => {
 
   // print lab
   const PrintRadiology = async (data) => {
-    // if (mrInfo === null) {
-    //   ErrorAlert({ text: "NO DATA TO BE PRINT !!!", timer: 2000 });
-    //   return;
-    // }
+   
     const key = uuidv4();
 
     // Create a PDF document as a Blob
     const blob = await pdf(
-      <RadiologyBookingPDF
+      <LAbOpdSlip
         key={key}
         userName={userData[0]?.userId}
         radioDetails={data}
@@ -158,16 +157,15 @@ const LabBooking = () => {
     setOpen(true);
     try {
       const response = await axios.get(
-        `${url}/radiologypdf?radiologyNo=${name?.radiologyNo}&mrNo=${name?.mrNo}`,
+        `${url}/lab/labBookingForPdf?labNo=${name?.labNo}&mrNo=${name?.mrNo}`,
         { withCredentials: true }
       );
       setOpen(false);
       const ask = await AskingAlert({
-        text: `YOU WANT TO PRINT RADIOLOGY NO ${name?.radiologyNo}`,
+        text: `YOU WANT TO PRINT LAB NO ${name?.labNo}`,
       });
       if (ask) {
-        console.log("ok");
-        PrintRadiology(response.data);
+        PrintRadiology(response.data.data);
       } else {
         console.log("User canceled");
         return;
@@ -199,10 +197,10 @@ const LabBooking = () => {
             modalAdmissionNo={party !== null ? party?._id : ""}
             onClick={(e) => SumAmount(e)}
           />
-          <RadioTestModal
+          <PrevLabModal
             title={"Select Lab No."}
             onClick={getDetails}
-            patientType={"Cash"}
+            labFrom={"OPD"}
           />
         </div>
       </div>

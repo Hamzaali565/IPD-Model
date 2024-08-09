@@ -78,8 +78,8 @@ export default function LabTestAndGroup({
     }
     item.amount = item.charges;
     item.quantity = 1;
-    // item.createdUser = userData[0]?.userId;
-    item.department = item.department;
+    item.createdUser = userData[0]?.userId;
+    
     setServiceDetails((prevServiceDetails) => [...prevServiceDetails, item]);
 
     // handleClose();

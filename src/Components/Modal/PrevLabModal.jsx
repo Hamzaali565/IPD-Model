@@ -20,7 +20,7 @@ const style = {
   overflowY: "auto", // Enable vertical scrolling
 };
 
-export default function RefundModal({ onClick, title, whatCall }) {
+export default function PrevLabModal({ onClick, title, whatCall, labFrom }) {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
   const [toggle, setToggle] = useState(false);
@@ -61,16 +61,32 @@ export default function RefundModal({ onClick, title, whatCall }) {
   // api
   const getData = async () => {
     try {
-      const response = await axios.get(`${url}/paymentrefund`, {
-        withCredentials: true,
-      });
-      console.log(response.data.data);
-      setData(response.data.data.reverse());
+      const response = await axios.get(
+        `${url}/lab/labBooking?labFrom=${labFrom}&where=${
+          whatCall ? whatCall : ""
+        }`,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response.data.data.data.reverse());
+      setData(response.data.data.data);
     } catch (error) {
       console.log("error of get data", error);
     }
   };
 
+  const getData1 = async () => {
+    try {
+      const response = await axios.get(`${url}/admissionall`, {
+        withCredentials: true,
+      });
+      console.log(response.data.data);
+      setData(response.data.data);
+    } catch (error) {
+      console.log("error of get data", error);
+    }
+  };
   useEffect(() => {
     if (open && inputRef.current) {
       inputRef.current.focus();
@@ -101,10 +117,10 @@ export default function RefundModal({ onClick, title, whatCall }) {
           </div>
           <div className="container mx-auto mt-3">
             <div className="grid grid-cols-4 text-xs justify-items-center items-center h-16 border border-gray-300">
-              <p className="">Refund No.</p>
-              <p className="">Refund Against</p>
-              <p className="">Patient Name.</p>
-              <p className="">Refunded Amount</p>
+              <p className="">Lab No.</p>
+              <p className="">Patient Name</p>
+              <p className="">Mr No.</p>
+              <p className="">Cell No.</p>
             </div>
           </div>
 
@@ -112,18 +128,18 @@ export default function RefundModal({ onClick, title, whatCall }) {
             {data.length > 0 ? (
               data.map((item, index) => (
                 <div
-                  className="container mx-auto mt-3 cursor-pointer hover:text-blue-600 hover:font-bold"
+                  className="container mx-auto mt-3 cursor-pointer"
                   key={index}
                   onClick={() => SendData(item)}
                 >
                   <div className="grid grid-cols-4 text-xs justify-items-center items-center h-10 border border-gray-300">
-                    <p className="">{item?.paymentNo}</p>
-                    <p className="">{item?.paymentAgainst}</p>
+                    <p className="">{item?.labNo}</p>
                     <p className="">
                       {item?.patientType} {item?.patientName}{" "}
                       {item?.relativeType} {item?.relativeName}
                     </p>
-                    <p className="">{item?.amount}</p>
+                    <p className="">{item?.mrNo}</p>
+                    <p className="">{item?.cellNo}</p>
                   </div>
                 </div>
               ))
