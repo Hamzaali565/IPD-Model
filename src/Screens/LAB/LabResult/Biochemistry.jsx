@@ -3,9 +3,10 @@ import CenterHeading from "../../../Components/Center Heading/CenterHeading";
 import LabeledInput from "../../../Components/LabelledInput/LabeledInput";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { ErrorAlert } from "../../../Components/Alert/Alert";
+import { ErrorAlert, SuccessAlert } from "../../../Components/Alert/Alert";
 import Loader from "../../../Components/Modal/Loader";
 import moment from "moment/moment";
+import ButtonDis from "../../../Components/Button/ButtonDis";
 
 const Biochemistry = () => {
   const [labNo, setLabNo] = useState("");
@@ -18,10 +19,11 @@ const Biochemistry = () => {
   const url = useSelector((items) => items?.url);
 
   const resetDetails = () => {
-    setLabData([]);
-    setPatientData([]);
     setLabNo("");
+    setPatientData([]);
     setLabResultData([]);
+    setLabData([]);
+    setTestMatchedRange([]);
   };
 
   // set ranges according to age and view data to enter result
@@ -100,19 +102,57 @@ const Biochemistry = () => {
 
     setTestMatchedRange([
       {
-        testRanges: matchingRange,
+        testRanges: matchingRange ? matchingRange : {},
         testCode: data.testCode,
         testName: data?.testName,
+        testId: data._id,
       },
     ]);
     console.log("Matching Range:", testMatchedRange);
     console.log("data:", data);
   };
 
+  const handlerEffect = (value, type) => {
+    console.log(testMatchedRange);
+    if (type === "result") {
+      testMatchedRange[0].testRanges.result = value;
+      return;
+    } else {
+      testMatchedRange[0].testRanges.remarks = value;
+    }
+  };
+
+  //getDetail
+  const getDetail1 = async (labNumber) => {
+    try {
+      setOpen(true);
+      console.log(" i am here");
+      const response = await axios.get(
+        `${url}/lab/biochemistry?labNo=${labNumber}`,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log("response of getDetails", response?.data?.data);
+
+      setPatientData(response?.data?.data.patientData);
+      setLabData(response?.data?.data.labCDetails);
+      setLabResultData(response?.data?.data.labData);
+      setLabNo("");
+      setOpen(false);
+    } catch (error) {
+      console.log("error of get details", error);
+      setOpen(false);
+      resetDetails();
+    }
+  };
   // get Details api
   const getDetails = async (e) => {
     try {
       e.preventDefault();
+      if (!labNo) {
+        throw new Error("PLEASE ENTER LAB NO.");
+      }
       setOpen(true);
       console.log(" i am here");
       const response = await axios.get(
@@ -130,9 +170,59 @@ const Biochemistry = () => {
       setOpen(false);
     } catch (error) {
       console.log("error of get details", error);
-      ErrorAlert({ text: error.message, timer: 2000 });
+      let mylab = labNo;
       setOpen(false);
       resetDetails();
+      if (error.response) {
+        if (error.response.status === 402) {
+          ErrorAlert({
+            text: "NO DATA FOUND AGAINST THIS LAB NO.",
+            timer: 2000,
+          });
+          return;
+        } else if (error.response.status === 403) {
+          ErrorAlert({ text: "ALL TESTS ARE DELETED !!!", timer: 2000 });
+          return;
+        } else if (error.response.status === 400) {
+          ErrorAlert({
+            text: `ALL RESULT ENTERED ALREADY AGAINST LAB NO ${mylab}!!!`,
+            timer: 2000,
+          });
+          return;
+        }
+        return;
+      }
+
+      ErrorAlert({
+        text: error.message,
+        timer: 2000,
+      });
+    }
+  };
+
+  // const Submit Result
+  const submitResult = async (e) => {
+    try {
+      setOpen(true);
+      const response = await axios.post(
+        `${url}/lab/labResultEntry`,
+        {
+          mrNo: labData[0]?.mrNo,
+          labNo: labData[0]?.labNo,
+          resultDepart: labResultData[0]?.department,
+          resultData: [testMatchedRange[0].testRanges],
+          testId: testMatchedRange[0]?.testId,
+        },
+        { withCredentials: true }
+      );
+      console.log("response of submit result ", response);
+      setOpen(false);
+      await getDetail1(labData[0]?.labNo);
+      setTestMatchedRange([]);
+      SuccessAlert({ text: "RESULT ENTERED SUCCESSFULLY !!!", timer: 2000 });
+    } catch (error) {
+      console.log("Error of submit result ", error);
+      setOpen(false);
     }
   };
 
@@ -253,35 +343,32 @@ const Biochemistry = () => {
                 <p>{items?.testRanges?.normalRanges}</p>
                 <p>
                   <input
-                    type="number"
                     className="w-24 rounded-xl p-1"
                     placeholder="result"
-                    min={0}
                     name=""
                     // value={items?.charges}
-                    // onChange={(e) =>
-                    //   handlerEffect(e.target.value, items?.testId, "charges")
-                    // }
+                    onChange={(e) => handlerEffect(e.target.value, "result")}
                     id=""
                   />
                 </p>
                 <p>
                   <input
-                    type="number"
                     className="w-24 rounded-xl p-1"
                     placeholder="Charges"
                     min={0}
                     name=""
                     //   value={items?.charges}
-                    //   onChange={(e) =>
-                    //     handlerEffect(e.target.value, items?.testId, "charges")
-                    //   }
+                    onChange={(e) => handlerEffect(e.target.value, "remarks")}
                     //   id=""
                   />
                 </p>
               </div>
             </div>
           ))}
+        <div className="flex justify-center space-x-2 mt-5">
+          <ButtonDis title={"Save"} onClick={submitResult} />
+          <ButtonDis title={"Refresh"} onClick={resetDetails} />
+        </div>
       </div>
       <Loader onClick={open} title={"Please Wait ..."} />
     </div>
