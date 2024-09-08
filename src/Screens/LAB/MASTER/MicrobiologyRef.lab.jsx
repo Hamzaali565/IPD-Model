@@ -36,6 +36,7 @@ const MicrobiologyRef = () => {
       setChildsData(response?.data?.data?.data[0]?.childData);
     } catch (error) {
       setOpen(false);
+      setChildsData([]);
       console.log("Error of get Details ", error);
     }
   };
