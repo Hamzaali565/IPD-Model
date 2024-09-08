@@ -4,11 +4,12 @@ import LabeledInput from "../../../Components/LabelledInput/LabeledInput";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { ErrorAlert, SuccessAlert } from "../../../Components/Alert/Alert";
+import { Typewriter } from "react-simple-typewriter";
 import Loader from "../../../Components/Modal/Loader";
 import moment from "moment/moment";
 import ButtonDis from "../../../Components/Button/ButtonDis";
 
-const Biochemistry = () => {
+const EditBio = () => {
   const [labNo, setLabNo] = useState("");
   const [patientData, setPatientData] = useState([]);
   const [labResultData, setLabResultData] = useState([]);
@@ -16,7 +17,7 @@ const Biochemistry = () => {
   const [open, setOpen] = useState(false);
   const [testMatchedRange, setTestMatchedRange] = useState([]);
   const [GroupTestId, setGroupTestId] = useState("");
-  const [testName, setTestName] = useState("");
+  const [resultId, setResultId] = useState("");
 
   const url = useSelector((items) => items?.url);
 
@@ -27,7 +28,6 @@ const Biochemistry = () => {
     setLabData([]);
     setTestMatchedRange([]);
     setGroupTestId("");
-    setTestName("");
   };
 
   // get groupData
@@ -51,7 +51,6 @@ const Biochemistry = () => {
   // set ranges according to age and view data to enter result
   const viewDataToEnterResult = (data) => {
     setGroupTestId(data?._id);
-    setTestName(data?.testName);
     const age =
       patientData.length > 0
         ? `${patientData[0]?.ageYear ? patientData[0]?.ageYear : "0"} Years ${
@@ -132,8 +131,8 @@ const Biochemistry = () => {
 
     setTestMatchedRange([
       {
-        testRanges: matchingRange ? matchingRange : "",
-        testCode: data?.testCode,
+        testRanges: matchingRange ? matchingRange : {},
+        testCode: data.testCode,
         testName: data?.testName,
         testId: data._id,
       },
@@ -141,15 +140,12 @@ const Biochemistry = () => {
     // console.log("Matching Range:", testMatchedRange);
   };
 
-  const handlerEffect = (value, type, code, name) => {
+  const handlerEffect = (value, type, code) => {
     let updateArray;
     console.log(testMatchedRange);
     if (type === "result") {
       if (testMatchedRange[0].testRanges?.equipment) {
-        testMatchedRange[0].testRanges.result = value; // Add or modify the result property
-        testMatchedRange[0].testRanges.testCode = code; // Add the testCode property
-        testMatchedRange[0].testRanges.testName = name; // Add the testCode property
-        return testMatchedRange[0].testRanges;
+        return (testMatchedRange[0].testRanges.result = value);
       } else {
         updateArray = testMatchedRange.map((items) => {
           if (items?.testCode === code) {
@@ -175,13 +171,35 @@ const Biochemistry = () => {
     }
   };
 
+  const ResultToEdit = async (data, id, testId) => {
+    try {
+      console.log("Data  ", data, id, testId);
+      // setTestMatchedRange(data);
+      setResultId(id);
+      setOpen(true);
+
+      const response = await axios.post(
+        `${url}/lab/editRanges`,
+        { patientData, testData: data, testId },
+        { withCredentials: true }
+      );
+
+      console.log("response of resultToEdit  ", response.data.data);
+      setOpen(false);
+      setTestMatchedRange(response?.data?.data?.data);
+    } catch (error) {
+      console.log("Error of result to edit ", error);
+      setOpen(false);
+    }
+  };
+
   //getDetail
   const getDetail1 = async (labNumber) => {
     try {
       setOpen(true);
       console.log(" i am here");
       const response = await axios.get(
-        `${url}/lab/biochemistry?labNo=${labNumber}&department=Biochemistry`,
+        `${url}/lab/biochemistry?labNo=${labNumber}`,
         {
           withCredentials: true,
         }
@@ -208,20 +226,17 @@ const Biochemistry = () => {
       }
       setOpen(true);
       console.log(" i am here");
-      const response = await axios.get(
-        `${url}/lab/biochemistry?labNo=${labNo}&department=Biochemistry`,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${url}/lab/resultEdit?labNo=${labNo}`, {
+        withCredentials: true,
+      });
       console.log("response of getDetails", response?.data?.data);
 
       setPatientData(response?.data?.data.patientData);
       setLabData(response?.data?.data.labCDetails);
-      setLabResultData(response?.data?.data.labData);
+      setLabResultData(response?.data?.data.data);
       setLabNo("");
       setOpen(false);
-      setTestMatchedRange([]);
+      //   setTestMatchedRange([])
       setGroupTestId("");
     } catch (error) {
       console.log("error of get details", error);
@@ -266,20 +281,11 @@ const Biochemistry = () => {
     try {
       setOpen(true);
       const response = await axios.post(
-        `${url}/lab/labResultEntry`,
+        `${url}/lab/resultUpdate`,
         {
-          mrNo: labData[0]?.mrNo,
           labNo: labData[0]?.labNo,
-          resultDepart: labResultData[0]?.department,
-          resultData:
-            (testMatchedRange[0].testRanges?.equipment && [
-              testMatchedRange[0].testRanges,
-            ]) ||
-            testMatchedRange,
-          testId:
-            (testMatchedRange[0]?.testId && testMatchedRange[0]?.testId) ||
-            GroupTestId,
-          testName: testName,
+          resultData: testMatchedRange,
+          _id: resultId,
         },
         { withCredentials: true }
       );
@@ -288,7 +294,6 @@ const Biochemistry = () => {
       await getDetail1(labData[0]?.labNo);
       setTestMatchedRange([]);
       setGroupTestId("");
-      setTestName("");
       SuccessAlert({ text: "RESULT ENTERED SUCCESSFULLY !!!", timer: 2000 });
     } catch (error) {
       console.log("Error of submit result ", error);
@@ -298,7 +303,33 @@ const Biochemistry = () => {
 
   return (
     <div>
-      <CenterHeading title={"DEPARTMENT OF BIOCHEMISTRY"} />
+      <h1
+        style={{
+          paddingTop: "1.1rem",
+          textAlign: "center",
+          fontWeight: "normal",
+        }}
+      >
+        Here You Can Edit Result Of{" "}
+        <span style={{ color: "red", fontWeight: "bold" }}>
+          {/* Style will be inherited from the parent element */}
+          <Typewriter
+            words={[
+              "Biochemistry",
+              "Hematology",
+              "Serology",
+              "Parasitology",
+              "Chemical Pathology",
+            ]}
+            loop={0}
+            cursor
+            cursorStyle="_"
+            typeSpeed={70}
+            deleteSpeed={50}
+            delaySpeed={1000}
+          />
+        </span>
+      </h1>
       <div className="md:grid md:grid-cols-2 md:grid-rows-2">
         {/* Patient Detail */}
         <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
@@ -381,11 +412,13 @@ const Biochemistry = () => {
               <div
                 key={index}
                 className="cursor-pointer hover:text-blue-600 hover:font-bold"
-                onClick={() => viewDataToEnterResult(items)}
+                onClick={() =>
+                  ResultToEdit(items?.resultData, items?._id, items?.testId)
+                }
               >
                 <LabeledInput
                   label={"Test Name"}
-                  value={`${items?.testName} ${items?.thisIs}`}
+                  value={`${items?.testName}`}
                   disabled
                 />
               </div>
@@ -438,9 +471,8 @@ const Biochemistry = () => {
                       ""}
                   </p>
                   <p>
-                    {(items?.testRanges?.equipment &&
-                      items?.testRanges?.normalRanges) ||
-                      (items?.testRanges && items?.testRanges) ||
+                    {(items?.equipment && items?.normalRanges) ||
+                      (items?.normalRanges && items?.normalRanges) ||
                       ""}
                   </p>
                   <p>
@@ -450,12 +482,7 @@ const Biochemistry = () => {
                       name=""
                       value={items?.category === "Heading" ? "" : items?.result}
                       onChange={(e) =>
-                        handlerEffect(
-                          e.target.value,
-                          "result",
-                          items?.testCode,
-                          items?.testName
-                        )
+                        handlerEffect(e.target.value, "result", items?.testCode)
                       }
                       id=""
                       disabled={
@@ -502,4 +529,4 @@ const Biochemistry = () => {
   );
 };
 
-export default Biochemistry;
+export default EditBio;

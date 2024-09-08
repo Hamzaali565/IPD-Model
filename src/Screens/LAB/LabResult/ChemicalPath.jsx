@@ -8,7 +8,7 @@ import Loader from "../../../Components/Modal/Loader";
 import moment from "moment/moment";
 import ButtonDis from "../../../Components/Button/ButtonDis";
 
-const Biochemistry = () => {
+const ChemicalPath = () => {
   const [labNo, setLabNo] = useState("");
   const [patientData, setPatientData] = useState([]);
   const [labResultData, setLabResultData] = useState([]);
@@ -181,7 +181,7 @@ const Biochemistry = () => {
       setOpen(true);
       console.log(" i am here");
       const response = await axios.get(
-        `${url}/lab/biochemistry?labNo=${labNumber}&department=Biochemistry`,
+        `${url}/lab/biochemistry?labNo=${labNumber}&department=Chemical Pathology`,
         {
           withCredentials: true,
         }
@@ -209,7 +209,7 @@ const Biochemistry = () => {
       setOpen(true);
       console.log(" i am here");
       const response = await axios.get(
-        `${url}/lab/biochemistry?labNo=${labNo}&department=Biochemistry`,
+        `${url}/lab/biochemistry?labNo=${labNo}&department=Chemical Pathology`,
         {
           withCredentials: true,
         }
@@ -246,7 +246,7 @@ const Biochemistry = () => {
           return;
         } else if (error.response.status === 400) {
           ErrorAlert({
-            text: `NO TEST FOR BIOCHEMISTRY AGAINST LAB NO ${mylab}!!!`,
+            text: `NO TEST FOR CHEMICAL PATHOLOGY AGAINST LAB NO ${mylab}!!!`,
             timer: 2000,
           });
           return;
@@ -298,7 +298,7 @@ const Biochemistry = () => {
 
   return (
     <div>
-      <CenterHeading title={"DEPARTMENT OF BIOCHEMISTRY"} />
+      <CenterHeading title={"DEPARTMENT OF CHEMICAL PATHOLOGY"} />
       <div className="md:grid md:grid-cols-2 md:grid-rows-2">
         {/* Patient Detail */}
         <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
@@ -502,4 +502,4 @@ const Biochemistry = () => {
   );
 };
 
-export default Biochemistry;
+export default ChemicalPath;

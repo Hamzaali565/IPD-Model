@@ -72,7 +72,15 @@ import LabBooking from "./Screens/LAB/Transaction/Lab.Booking";
 import LabCancCash from "./Screens/LAB/Transaction/LabCanc.Cash";
 import LabResultMaster from "./Screens/LAB/LabResult/LabResultMaster";
 import Biochemistry from "./Screens/LAB/LabResult/Biochemistry";
-
+import ResultEditMaster from "./Screens/LAB/ResultEdit/ResultEditMaster";
+import EditBio from "./Screens/LAB/ResultEdit/EditBio";
+import Hematology from "./Screens/LAB/LabResult/Hematology";
+import Serology from "./Screens/LAB/LabResult/Serology";
+import Parasitology from "./Screens/LAB/LabResult/Parasitology";
+import ChemicalPath from "./Screens/LAB/LabResult/ChemicalPath";
+import ResultPrint from "./Screens/LAB/ResultPrint/ResultPrint";
+import Microbiology from "./Screens/LAB/LabResult/Microbiology";
+import MicrobiologyRef from "./Screens/LAB/MASTER/MicrobiologyRef.lab";
 
 function App() {
   const dispatch = useDispatch();
@@ -230,14 +238,20 @@ function App() {
                 element={<Consultant />}
               ></Route>
             </Route>
-          {/* OPD */}
+            {/* OPD */}
             <Route path="mainpage/*" element={<MainPage />}>
               <Route index element={<Port />} />
               <Route path="opd/master*" element={<MasterFileOpd />}>
-                <Route path="consultantfees" element={<ConsutantFee/>} />
-                <Route path="consultantschedule" element={<ConsultantSchedule/>} />
+                <Route path="consultantfees" element={<ConsutantFee />} />
+                <Route
+                  path="consultantschedule"
+                  element={<ConsultantSchedule />}
+                />
               </Route>
-              <Route path="opd/transaction/*" element={<TransactionMasterOPD />}>
+              <Route
+                path="opd/transaction/*"
+                element={<TransactionMasterOPD />}
+              >
                 <Route path="opdregistration" element={<OPDRegistraion />} />
                 <Route path="opdcancellation" element={<OPDRefund />} />
               </Route>
@@ -251,26 +265,35 @@ function App() {
             <Route path="mainpage/*" element={<MainPage />}>
               <Route index element={<Port />} />
               <Route path="lab/master*" element={<MasterFileLab />}>
-                <Route path="test" element={<LabTest/>} />
-                <Route path="group" element={<LabGroup/>} />
-                <Route path="labcharges" element={<LabCharges/>} />
+                <Route path="test" element={<LabTest />} />
+                <Route path="group" element={<LabGroup />} />
+                <Route path="labcharges" element={<LabCharges />} />
+                <Route path="microbologyReferences" element={<MicrobiologyRef />} />
               </Route>
-              <Route path="lab/transaction/*" element={<TransactionMasterLab />}>
+              <Route
+                path="lab/transaction/*"
+                element={<TransactionMasterLab />}
+              >
                 <Route path="labregistration" element={<LabBooking />} />
                 <Route path="labcancellationcash" element={<LabCancCash />} />
                 <Route path="labcancellationipd" element={<LabCancCash />} />
               </Route>
               <Route path="lab/result/*" element={<LabResultMaster />}>
                 <Route path="biochemistry" element={<Biochemistry />} />
-                <Route path="labcancellationcash" element={<LabCancCash />} />
-                <Route path="labcancellationipd" element={<LabCancCash />} />
+                <Route path="hematology" element={<Hematology />} />
+                <Route path="serology" element={<Serology />} />
+                <Route path="parasitology" element={<Parasitology />} />
+                <Route path="chemicalPath" element={<ChemicalPath />} />
+                <Route path="microbiology" element={<Microbiology />} />
               </Route>
-              <Route
-                path="setups/consultant/*"
-                element={<Consultant />}
-              ></Route>
+              <Route path="lab/resultEdit/*" element={<ResultEditMaster />}>
+                <Route path="biochemistryEdit" element={<EditBio />} />
+              </Route>
+              <Route path="lab/resultPrint/*" element={<ResultPrint />}>
+                {/* <Route path="biochemistryEdit" element={<EditBio />} /> */}
+              </Route>
+              
             </Route>
-
 
             <Route path="*" element={<Navigate to="/mainpage" replace />} />
           </Routes>

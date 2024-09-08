@@ -131,6 +131,22 @@ const MainPage = () => {
               }}
             />
           </Link>
+          <Link to="/mainpage/lab/resultEdit">
+            <SidebarItems
+              title={"Lab Result Edit"}
+              onClick={() => {
+                setToggle(!toggle);
+              }}
+            />
+          </Link>
+          <Link to="/mainpage/lab/resultPrint">
+            <SidebarItems
+              title={"Result Print"}
+              onClick={() => {
+                setToggle(!toggle);
+              }}
+            />
+          </Link>
         </Sidebar>
 
         <Sidebar buttonTitle={"IPD"}>

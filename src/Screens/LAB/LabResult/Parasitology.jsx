@@ -8,7 +8,7 @@ import Loader from "../../../Components/Modal/Loader";
 import moment from "moment/moment";
 import ButtonDis from "../../../Components/Button/ButtonDis";
 
-const Biochemistry = () => {
+const Parasitology = () => {
   const [labNo, setLabNo] = useState("");
   const [patientData, setPatientData] = useState([]);
   const [labResultData, setLabResultData] = useState([]);
@@ -181,7 +181,7 @@ const Biochemistry = () => {
       setOpen(true);
       console.log(" i am here");
       const response = await axios.get(
-        `${url}/lab/biochemistry?labNo=${labNumber}&department=Biochemistry`,
+        `${url}/lab/biochemistry?labNo=${labNumber}&department=Parasitology`,
         {
           withCredentials: true,
         }
@@ -209,7 +209,7 @@ const Biochemistry = () => {
       setOpen(true);
       console.log(" i am here");
       const response = await axios.get(
-        `${url}/lab/biochemistry?labNo=${labNo}&department=Biochemistry`,
+        `${url}/lab/biochemistry?labNo=${labNo}&department=Parasitology`,
         {
           withCredentials: true,
         }
@@ -298,7 +298,7 @@ const Biochemistry = () => {
 
   return (
     <div>
-      <CenterHeading title={"DEPARTMENT OF BIOCHEMISTRY"} />
+      <CenterHeading title={"DEPARTMENT OF PARASITOLOGY"} />
       <div className="md:grid md:grid-cols-2 md:grid-rows-2">
         {/* Patient Detail */}
         <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
@@ -502,4 +502,4 @@ const Biochemistry = () => {
   );
 };
 
-export default Biochemistry;
+export default Parasitology;
