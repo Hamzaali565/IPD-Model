@@ -676,7 +676,6 @@ const Microbiology = () => {
         </div>
 
         {/* Header */}
-
         <div className="flex justify-center space-x-2 mt-5">
           <ButtonDis title={"Save"} onClick={submitResult} />
           <ButtonDis title={"Refresh"} onClick={resetDetails} />
