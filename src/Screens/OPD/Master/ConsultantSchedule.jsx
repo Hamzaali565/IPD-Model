@@ -108,20 +108,6 @@ const ConsultantSchedule = () => {
   return (
     <div>
       <div className=" mx-4 p-3">
-        {/* <div className="flex items-center flex-col space-y-2 mt-3">
-          <SpecialityModal
-            title={"Search With Speciality"}
-            onClick={getDataFromSpeciality}
-          />
-          {consData.length > 0 && (
-            <LabeledInput
-              label={"Selected Speciality"}
-              disabled={true}
-              value={specialityData?.speciality}
-              placeholder={"Selected Speciality"}
-            />
-          )}
-        </div> */}
         {consData.length > 0 && (
           <div className="container mx-auto mt-3">
             <div className="mt-3 grid grid-cols-7 text-xs font-bold justify-items-center items-center h-16 border border-gray-300">

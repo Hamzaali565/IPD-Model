@@ -18,9 +18,8 @@ const Microbiology = () => {
   const [labResultData, setLabResultData] = useState([]);
   const [labData, setLabData] = useState([]);
   const [open, setOpen] = useState(false);
-  const [testMatchedRange, setTestMatchedRange] = useState([]);
-  const [GroupTestId, setGroupTestId] = useState("");
   const [testName, setTestName] = useState("");
+  const [activeTest, setActiveTest] = useState(null);
   const [specimen, setSpecimen] = useState(null);
   const [znStain, setZnStain] = useState(null);
   const [microscopy, setMicroscopy] = useState([{}]);
@@ -43,9 +42,22 @@ const Microbiology = () => {
     setPatientData([]);
     setLabResultData([]);
     setLabData([]);
-    setTestMatchedRange([]);
-    setGroupTestId("");
     setTestName("");
+    setActiveTest(null);
+    setSpecimen(null);
+    setZnStain(null);
+    setMicroscopy([{}]);
+    setCulture([{}]);
+    setGramStain([{}]);
+    setMicroscopyData([]);
+    setOrganism([
+      { organism: "" },
+      { organism: "" },
+      { organism: "" },
+      { organism: "" },
+      { organism: "" },
+      { organism: "" },
+    ]);
   };
 
   //getDetail
@@ -95,8 +107,6 @@ const Microbiology = () => {
       setLabResultData(response?.data?.data.labData);
       setLabNo("");
       setOpen(false);
-      setTestMatchedRange([]);
-      setGroupTestId("");
     } catch (error) {
       console.log("error of get details", error);
       let mylab = labNo;
@@ -120,7 +130,7 @@ const Microbiology = () => {
           return;
         } else if (error.response.status === 400) {
           ErrorAlert({
-            text: `NO TEST FOR BIOCHEMISTRY AGAINST LAB NO ${mylab}!!!`,
+            text: `NO TEST FOR MICROBIOLOGY AGAINST LAB NO ${mylab}!!!`,
             timer: 2000,
           });
           return;
@@ -145,23 +155,14 @@ const Microbiology = () => {
           mrNo: labData[0]?.mrNo,
           labNo: labData[0]?.labNo,
           resultDepart: labResultData[0]?.department,
-          resultData:
-            (testMatchedRange[0].testRanges?.equipment && [
-              testMatchedRange[0].testRanges,
-            ]) ||
-            testMatchedRange,
-          testId:
-            (testMatchedRange[0]?.testId && testMatchedRange[0]?.testId) ||
-            GroupTestId,
-          testName: testName,
+          testName: (activeTest?.testName && activeTest?.testName) || "",
+          testId: (activeTest?.testId && activeTest?.testId) || "",
         },
         { withCredentials: true }
       );
       console.log("response of submit result ", response);
       setOpen(false);
       await getDetail1(labData[0]?.labNo);
-      setTestMatchedRange([]);
-      setGroupTestId("");
       setTestName("");
       SuccessAlert({ text: "RESULT ENTERED SUCCESSFULLY !!!", timer: 2000 });
     } catch (error) {
@@ -456,7 +457,7 @@ const Microbiology = () => {
         <CenterHeading title={"Test Detail"} />
         <div className="flex flex-col items-center space-y-2 mt-3">
           {labResultData.map((items, index) => (
-            <div key={index}>
+            <div key={index} onClick={() => setActiveTest(items)}>
               <LabeledInput
                 label={"Test Name"}
                 value={`${items?.testName} ${items?.thisIs}`}
@@ -467,6 +468,12 @@ const Microbiology = () => {
         </div>
       </div>
 
+      {/* test entry */}
+      {activeTest !== null && (
+        <div className="md:col-span-2 bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
+          <CenterHeading title={`Test Entry For ${activeTest?.testName}`} />
+        </div>
+      )}
       {/* test entry */}
       <div className="md:col-span-2 bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
         <CenterHeading title={"Test Entry"} />
