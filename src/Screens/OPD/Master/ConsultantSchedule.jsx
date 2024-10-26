@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import ButtonDis from "../../../Components/Button/ButtonDis";
 import ConSchedulePDF from "../../../Components/PDFDetails/ConsSchedulePdf";
 import ConsDisp from "../../../Components/ConsultantDisp/ConsDisp";
-import PracticePageBreakintotwo from "../../../Components/PDFDetails/PracticePageBreakintotwo";
+import PageBreak2PDF from "../../../Components/PDFDetails/PageBreak2PDF";
 
 const ConsultantSchedule = () => {
   const [consData, setConsData] = useState([]);
@@ -17,6 +17,16 @@ const ConsultantSchedule = () => {
   const [searchValue, setSearchValue] = useState("");
 
   const url = useSelector((state) => state?.url);
+
+  const updateCons = (data, value) => {
+    setConsData([]);
+    if (value === "Cons") {
+      setConsData([data]);
+      setSelectedType("Cons");
+      console.log(consData);
+      return;
+    }
+  };
 
   const resetData = () => {
     setConsData([]);
@@ -50,7 +60,7 @@ const ConsultantSchedule = () => {
     const key = uuidv4();
 
     // Create a PDF document as a Blob
-    const blob = await pdf(<PracticePageBreakintotwo data={data} />).toBlob();
+    const blob = await pdf(<PageBreak2PDF data={data} />).toBlob();
 
     // Create a Blob URL and open it in a new tab
     let url = URL.createObjectURL(blob);
@@ -108,6 +118,20 @@ const ConsultantSchedule = () => {
   return (
     <div>
       <div className=" mx-4 p-3">
+        {/* <div className="flex items-center flex-col space-y-2 mt-3">
+          <SpecialityModal
+            title={"Search With Speciality"}
+            onClick={getDataFromSpeciality}
+          />
+          {consData.length > 0 && (
+            <LabeledInput
+              label={"Selected Speciality"}
+              disabled={true}
+              value={specialityData?.speciality}
+              placeholder={"Selected Speciality"}
+            />
+          )}
+        </div> */}
         {consData.length > 0 && (
           <div className="container mx-auto mt-3">
             <div className="mt-3 grid grid-cols-7 text-xs font-bold justify-items-center items-center h-16 border border-gray-300">

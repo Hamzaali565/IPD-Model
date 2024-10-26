@@ -92,13 +92,13 @@ const Login = () => {
         <form action="" onSubmit={loginUser}>
           <div className="grid gap-4 gap-x-3">
             <LoginInput
-              placeholder={"User ID "}
+              placeholder={"User ID: guest "}
               icon={"bi bi-person-circle"}
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
             />
             <LoginInput
-              placeholder={"Password "}
+              placeholder={"Password: user123 "}
               icon={"bi bi-eye-slash"}
               type={"password"}
               value={password}
