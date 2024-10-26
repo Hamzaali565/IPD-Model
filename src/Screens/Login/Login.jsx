@@ -7,6 +7,7 @@ import SimpleButton from "../../Components/Button/SimpleButton";
 import { setLoginToggle, setResponse, setShift } from "../../Store/action";
 import { ErrorAlert } from "../../Components/Alert/Alert";
 import Loader from "../../Components/Modal/Loader";
+import ButtonDis from "../../Components/Button/ButtonDis";
 const Login = () => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
@@ -17,7 +18,8 @@ const Login = () => {
 
   const Dispatch = useDispatch();
 
-  const loginUser = async () => {
+  const loginUser = async (e) => {
+    e.preventDefault();
     setOpen(true);
     try {
       const response = await axios.post(
@@ -87,26 +89,29 @@ const Login = () => {
         <h1 className="text-2xl underline justify-self-center text-gray-500 font-bold">
           Welcome Back!
         </h1>
-        <div className="grid gap-4 gap-x-3">
-          <LoginInput
-            placeholder={"User ID "}
-            icon={"bi bi-person-circle"}
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
-          />
-          <LoginInput
-            placeholder={"Password "}
-            icon={"bi bi-eye-slash"}
-            type={"password"}
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
-        </div>
-        <div className="justify-self-center">
-          <SimpleButton title={"Login"} onClick={loginUser} />
-        </div>
+        <form action="" onSubmit={loginUser}>
+          <div className="grid gap-4 gap-x-3">
+            <LoginInput
+              placeholder={"User ID "}
+              icon={"bi bi-person-circle"}
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
+            />
+            <LoginInput
+              placeholder={"Password "}
+              icon={"bi bi-eye-slash"}
+              type={"password"}
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+          </div>
+          <div className="justify-self-center mt-4">
+            <ButtonDis title={"Login"} onClick={loginUser} />
+          </div>
+        </form>
+
         <div className="justify-self-center grid text-wrap">
           <p className="mt-20">
             Dont have Account?{" "}

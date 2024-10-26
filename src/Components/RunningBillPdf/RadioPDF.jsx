@@ -13,7 +13,19 @@ const RadioPDF = ({ billData, radiology, userName }) => {
   console.log("BillData", billData);
   const MyPage = ({ children }) => (
     <Page style={styles.page}>
-      <Text>Your Company Logo</Text>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Text>Your Company Logo</Text>
+        <Text style={{ fontSize: "12", fontFamily: "Roboto" }}>
+          Radiology Details
+        </Text>
+      </View>
       <View style={styles.content}>{children}</View>
       <View style={styles.footer} />
       <View style={styles.pageNumber}>

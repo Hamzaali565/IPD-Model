@@ -22,7 +22,19 @@ const ServicesPDF = ({
   console.log("BillData", billData);
   const MyPage = ({ children }) => (
     <Page style={styles.page}>
-      <Image src={logo} style={styles.Image} />
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Text>Your Company Logo</Text>
+        <Text style={{ fontSize: "12", fontFamily: "Roboto" }}>
+          Services Details
+        </Text>
+      </View>
       <View style={styles.content}>{children}</View>
       <View style={styles.footer} />
       <View style={styles.pageNumber}>
