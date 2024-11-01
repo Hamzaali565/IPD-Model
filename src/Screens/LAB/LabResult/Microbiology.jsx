@@ -86,9 +86,11 @@ const Microbiology = () => {
   };
 
   // get Details api
-  const getDetails = async (e) => {
+  const getDetails = async (e, value) => {
     try {
-      e.preventDefault();
+      if (!value) {
+        e.preventDefault();
+      }
       if (!labNo) {
         throw new Error("PLEASE ENTER LAB NO.");
       }
@@ -148,15 +150,26 @@ const Microbiology = () => {
   // const Submit Result
   const submitResult = async (e) => {
     try {
+      if (activeTest === null) {
+        ErrorAlert({ text: "SELECT TEST FIRST", timer: 2000 });
+        return;
+      }
       setOpen(true);
       const response = await axios.post(
-        `${url}/lab/labResultEntry`,
+        `${url}/lab/labResultMicroscopy`,
         {
           mrNo: labData[0]?.mrNo,
           labNo: labData[0]?.labNo,
           resultDepart: labResultData[0]?.department,
           testName: (activeTest?.testName && activeTest?.testName) || "",
-          testId: (activeTest?.testId && activeTest?.testId) || "",
+          testId: (activeTest?._id && activeTest?._id) || "",
+          specimen: specimen?.specimen,
+          znStain: specimen?.specimen,
+          microscopy,
+          culture,
+          gramStain,
+          microscopyData,
+          organism,
         },
         { withCredentials: true }
       );
@@ -165,6 +178,8 @@ const Microbiology = () => {
       await getDetail1(labData[0]?.labNo);
       setTestName("");
       SuccessAlert({ text: "RESULT ENTERED SUCCESSFULLY !!!", timer: 2000 });
+      resetDetails();
+      getDetails("_", "skipEvent");
     } catch (error) {
       console.log("Error of submit result ", error);
       setOpen(false);
@@ -365,6 +380,14 @@ const Microbiology = () => {
         return {
           ...items,
           showChild: items?.showChild === true ? false : true,
+          childData: items?.childData.map((nestedData) => {
+            return {
+              ...nestedData,
+              value1: "",
+              value2: "",
+              value3: "",
+            };
+          }),
         };
       }
       return items;
@@ -372,6 +395,21 @@ const Microbiology = () => {
     console.log("new Arr ", newArr);
 
     setMicroscopyData(newArr);
+  };
+
+  const updateValue = (_id, value, key) => {
+    const newData = microscopyData?.map((items) => {
+      let summary = items?.childData?.map((nestItem) => {
+        if (nestItem?._id === _id) {
+          return { ...nestItem, [key]: value };
+        }
+        return nestItem;
+      });
+      return { ...items, childData: summary };
+    });
+
+    console.log(newData);
+    setMicroscopyData(newData);
   };
 
   return (
@@ -455,9 +493,13 @@ const Microbiology = () => {
       {/* test detail */}
       <div className="bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl">
         <CenterHeading title={"Test Detail"} />
-        <div className="flex flex-col items-center space-y-2 mt-3">
+        <div className="flex flex-col items-center space-y-2 mt-3 ">
           {labResultData.map((items, index) => (
-            <div key={index} onClick={() => setActiveTest(items)}>
+            <div
+              key={index}
+              onClick={() => setActiveTest(items)}
+              className="hover:font-bold hover:text-blue-600 cursor-pointer"
+            >
               <LabeledInput
                 label={"Test Name"}
                 value={`${items?.testName} ${items?.thisIs}`}
@@ -648,7 +690,7 @@ const Microbiology = () => {
         </div>
 
         {/* Microscopy Data */}
-        <div className="md:col-span-2 bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl h-56 overflow-auto">
+        <div className="md:col-span-2 bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-30 shadow-lg my-4 mx-4  p-3 rounded-3xl h-80 overflow-auto">
           <CenterHeading title={"MICROSCOPY DATA"} />
           <div className="flex justify-center my-4">
             <ButtonDis title={"Load Data 🔃"} onClick={getAllMicroscopyData} />
@@ -671,9 +713,36 @@ const Microbiology = () => {
                           className="grid grid-cols-4 gap-x-3 mt-2"
                         >
                           <p>{itemOfShowChild?.name}</p>
-                          <SimpleInput placeholder={"value 1"} />
-                          <SimpleInput placeholder={"value 2"} />
-                          <SimpleInput placeholder={"value 3"} />
+                          <SimpleInput
+                            placeholder={"value 1"}
+                            onChange={(e) =>
+                              updateValue(
+                                itemOfShowChild?._id,
+                                e.target.value,
+                                "value1"
+                              )
+                            }
+                          />
+                          <SimpleInput
+                            placeholder={"value 2"}
+                            onChange={(e) =>
+                              updateValue(
+                                itemOfShowChild?._id,
+                                e.target.value,
+                                "value2"
+                              )
+                            }
+                          />
+                          <SimpleInput
+                            placeholder={"value 3"}
+                            onChange={(e) =>
+                              updateValue(
+                                itemOfShowChild?._id,
+                                e.target.value,
+                                "value3"
+                              )
+                            }
+                          />
                         </div>
                       )
                     )}
